@@ -490,43 +490,7 @@
 								<div class="panel-body">
 									<div class="row">
 										<div class="col-lg-8">
-											<div class="chart-data-selector" id="salesSelectorWrapper">
-												<h2>
-													Sales:
-													<strong>
-														<select class="form-control" id="salesSelector">
-															<option value="JSOFT Admin" selected>JSOFT Admin</option>
-															<option value="JSOFT Drupal" >JSOFT Drupal</option>
-															<option value="JSOFT Wordpress" >JSOFT Wordpress</option>
-														</select>
-													</strong>
-												</h2>
-
-												<div id="salesSelectorItems" class="chart-data-selector-items mt-sm">
-													<!-- Flot: Sales JSOFT Admin -->
-													<div class="chart chart-sm" data-sales-rel="JSOFT Admin" id="flotDashSales1" class="chart-active"></div>
-													<script>
-
-														var flotDashSales1Data = [{
-														    data: [
-														        ["Jan", 140],
-														        ["Feb", 240],
-														        ["Mar", 190],
-														        ["Apr", 140],
-														        ["May", 180],
-														        ["Jun", 320],
-														        ["Jul", 270],
-														        ["Aug", 180]
-														    ],
-														    color: "#0088cc"
-														}];
-
-														// See: assets/javascripts/dashboard/examples.dashboard.js for more settings.
-
-													</script>
-
-													<!-- Flot: Sales JSOFT Drupal -->
-													<div class="chart chart-sm" data-sales-rel="JSOFT Drupal" id="flotDashSales2" class="chart-hidden"></div>
+											
 													<script>
 
 														var flotDashSales2Data = [{
@@ -572,18 +536,7 @@
 
 											</div>
 										</div>
-										<div class="col-lg-4 text-center">
-											<h2 class="panel-title mt-md">Sales Goal</h2>
-											<div class="liquid-meter-wrapper liquid-meter-sm mt-lg">
-												<div class="liquid-meter">
-													<meter min="0" max="100" value="35" id="meterSales"></meter>
-												</div>
-												<div class="liquid-meter-selector" id="meterSalesSel">
-													<a href="#" data-val="35" class="active">Monthly Goal</a>
-													<a href="#" data-val="28">Annual Goal</a>
-												</div>
-											</div>
-										</div>
+										
 									</div>
 								</div>
 							</section>
