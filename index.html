@@ -1,5 +1,6 @@
 <!doctype html>
 <html class="fixed">
+
 <head>
   <meta charset="UTF-8">
   <title>DESKHUB | Items</title>
@@ -24,19 +25,22 @@
   <section class="body">
 
     <!-- Header -->
-    <header class="header">
-      <div class="logo-container">
-        <a href="index.html" class="logo">
-          <img src="assets/images/deskhub.png" height="50" alt="JSOFT Admin" />
-        </a>
-        <div class="visible-xs toggle-sidebar-left"
-             data-toggle-class="sidebar-left-opened"
-             data-target="html"
-             data-fire-event="sidebar-left-opened">
-          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
-        </div>
-      </div>
-    </header>
+<header class="header">
+  <div class="logo-container">
+    <a href="index.html" class="logo">
+      <img src="assets/images/deskhub.png" height="50" alt="JSOFT Admin" />
+    </a>
+    <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
+      <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <span id="userGreeting" class="mt-3 text-dark">Welcome!</span>
+    <button onclick="logout()" class="btn btn-sm btn-danger ml-3">Logout</button>
+  </div>
+</header>
+
 
     <div class="inner-wrapper">
       <!-- Sidebar -->

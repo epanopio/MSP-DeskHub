@@ -1,23 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="fixed">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DESKHUB Login</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Login | DeskHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+  <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
 </head>
 <body>
-  <div class="login-box">
-    <h2>DESKHUB Login</h2>
-    <input type="text" id="username" placeholder="Username" />
-    <div class="password-wrapper">
-      <input type="password" id="password" placeholder="Password" />
-      <span class="toggle-password" onclick="togglePassword()">👁</span>
-    </div>
-    <button onclick="login()">Login</button>
-    <p id="error-msg" style="color:red;"></p>
-  </div>
+  <section class="body-sign">
+    <div class="center-sign">
+      <a href="/" class="logo pull-left">
+        <img src="assets/images/deskhub.png" height="50" alt="JSOFT Admin" />
+      </a>
 
+      <div class="panel panel-sign">
+        <div class="panel-title-sign mt-xl text-right">
+          <h2 class="title text-uppercase text-weight-bold m-none"><i class="fa fa-user mr-xs"></i> DeskHub Login</h2>
+        </div>
+        <div class="panel-body">
+          <form id="loginForm">
+            <div class="form-group mb-lg">
+              <label>Username</label>
+              <input name="username" id="username" type="text" class="form-control input-lg" required />
+            </div>
+
+            <div class="form-group mb-lg">
+              <label>Password</label>
+              <input name="password" id="password" type="password" class="form-control input-lg" required />
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12 text-right">
+                <button type="submit" class="btn btn-primary hidden-xs">Login</button>
+              </div>
+            </div>
+            <p id="errorMsg" class="text-danger text-center mt-md"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="assets/vendor/jquery/jquery.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

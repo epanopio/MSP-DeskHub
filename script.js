@@ -2,32 +2,49 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
   const errorMsg = document.getElementById('errorMsg');
 
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
 
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    try {
-      const response = await fetch('http://localhost:3000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        localStorage.setItem('loggedInUser', JSON.stringify(data.user));
-        window.location.href = 'index.html';
-      } else {
-        errorMsg.textContent = 'Invalid username or password.';
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      errorMsg.textContent = 'Server error. Please try again later.';
-    }
-  });
+      try {
+const res = await fetch('http://localhost:3000/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ username, password })
 });
+
+
+        const data = await res.json();
+        if (data.success) {
+          localStorage.setItem('user', JSON.stringify(data.user));
+          window.location.href = 'index.html';
+        } else {
+          errorMsg.textContent = data.message || 'Invalid username or password.';
+        }
+      } catch (err) {
+        errorMsg.textContent = 'Error connecting to server.';
+      }
+    });
+  }
+
+  // Greet user if logged in
+  const userGreeting = document.getElementById('userGreeting');
+  if (userGreeting) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      window.location.href = 'login.html';
+    } else {
+      userGreeting.textContent = `Welcome, ${user.username}!`;
+    }
+  }
+});
+
+function logout() {
+  fetch('/logout', { method: 'POST' })
+    .then(() => {
+      localStorage.removeItem('user');
+      window.location.href = 'login.html';
+    });
+}
