@@ -1,81 +1,158 @@
-const express = require('express');
-const session = require('express-session');
+// server.js
+const express    = require('express');
 const bodyParser = require('body-parser');
-const path = require('path');
-const { Pool } = require('pg');
+const path       = require('path');
+const pool       = require('./db');
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
-// PostgreSQL DB config
-const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'deskhub',
-  password: 'S0lut10n!',
-  port: 5432,
-});
-
-// Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
 
-// Session middleware
-app.use(session({
-  secret: 'your-secret-key',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false } // set true if using HTTPS
-}));
-
-// Serve static HTML files
+// Serve frontend static files
 app.use(express.static(path.join(__dirname, '..')));
 
-// Login Route
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  console.log('Login attempt:', username, '/', password);
+// --- Items API ---
+app.get('/api/items', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
-
-    if (result.rows.length > 0) {
-      req.session.user = {
-        id: result.rows[0].id,
-        username: result.rows[0].username,
-        role: result.rows[0].role
-      };
-      res.json({ success: true });
-    } else {
-      res.status(401).json({ success: false, message: 'Invalid credentials' });
-    }
+    const { rows } = await pool.query(
+      'SELECT id, name, remarks, last_updated_on, last_updated_by FROM items ORDER BY id'
+    );
+    res.json(rows);
   } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ success: false, message: 'Server error' });
+    console.error('Error fetching items:', err);
+    res.status(500).json({ error: 'Failed to fetch items' });
   }
 });
 
-// Logout Route
-app.post('/logout', (req, res) => {
-  req.session.destroy(err => {
-    if (err) return res.status(500).send('Could not log out.');
-    res.redirect('/login.html');
-  });
+app.post('/api/items', async (req, res) => {
+  const { name, remarks } = req.body;
+  if (!name) {
+    return res.status(400).json({ error: 'Name is required' });
+  }
+  try {
+    const result = await pool.query(
+      'INSERT INTO items (name, remarks, last_updated_by) VALUES ($1, $2, $3) RETURNING id',
+      [name, remarks || '', 'system']
+    );
+    res.status(201).json({ id: result.rows[0].id });
+  } catch (err) {
+    console.error('Error creating item:', err);
+    res.status(500).json({ error: 'Failed to create item' });
+  }
 });
 
-// Middleware to protect routes
-function checkAuth(req, res, next) {
-  if (req.session.user) {
-    next();
-  } else {
-    res.redirect('/login.html');
+app.put('/api/items/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, remarks } = req.body;
+  if (!name) {
+    return res.status(400).json({ error: 'Name is required' });
   }
-}
+  try {
+    await pool.query(
+      `UPDATE items
+       SET name = $1,
+           remarks = $2,
+           last_updated_by = $3,
+           last_updated_on = CURRENT_TIMESTAMP
+       WHERE id = $4`,
+      [name, remarks || '', 'system', id]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error updating item:', err);
+    res.status(500).json({ error: 'Failed to update item' });
+  }
+});
 
-// Protect these routes
-app.get('/index.html', checkAuth);
-app.get('/items.html', checkAuth);
+app.delete('/api/items/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM items WHERE id = $1', [id]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error deleting item:', err);
+    res.status(500).json({ error: 'Failed to delete item' });
+  }
+});
 
-app.listen(port, () => {
-  console.log(`✅ DESKHUB backend running at http://localhost:${port}`);
+// --- Models API ---
+app.get('/api/models', async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      `SELECT m.id,
+              m.item_id,
+              i.name AS item_name,
+              m.model_name,
+              m.remarks,
+              m.updated_on,
+              m.updated_by
+       FROM models m
+       JOIN items i ON m.item_id = i.id
+       ORDER BY m.id`
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching models:', err);
+    res.status(500).json({ error: 'Failed to fetch models' });
+  }
+});
+
+app.post('/api/models', async (req, res) => {
+  const { item_id, model_name, remarks } = req.body;
+  if (!item_id || !model_name) {
+    return res.status(400).json({ error: 'Item and Model are required' });
+  }
+  try {
+    const result = await pool.query(
+      `INSERT INTO models (item_id, model_name, remarks, updated_by)
+       VALUES ($1, $2, $3, $4)
+       RETURNING id`,
+      [item_id, model_name, remarks || '', 'system']
+    );
+    res.status(201).json({ id: result.rows[0].id });
+  } catch (err) {
+    console.error('Error creating model:', err);
+    res.status(500).json({ error: 'Failed to create model' });
+  }
+});
+
+app.put('/api/models/:id', async (req, res) => {
+  const { id } = req.params;
+  const { item_id, model_name, remarks } = req.body;
+  if (!item_id || !model_name) {
+    return res.status(400).json({ error: 'Item and Model are required' });
+  }
+  try {
+    await pool.query(
+      `UPDATE models
+       SET item_id = $1,
+           model_name = $2,
+           remarks = $3,
+           updated_by = $4,
+           updated_on = CURRENT_TIMESTAMP
+       WHERE id = $5`,
+      [item_id, model_name, remarks || '', 'system', id]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error updating model:', err);
+    res.status(500).json({ error: 'Failed to update model' });
+  }
+});
+
+app.delete('/api/models/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM models WHERE id = $1', [id]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error deleting model:', err);
+    res.status(500).json({ error: 'Failed to delete model' });
+  }
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
