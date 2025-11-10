@@ -2,17 +2,26 @@
 <html class="fixed">
 <head>
   <meta charset="UTF-8">
+<<<<<<< HEAD
   <title>DESKHUB | Items</title>
+=======
+  <title>DESKHUB | Units</title>
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
   <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
   <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+<<<<<<< HEAD
+=======
+  <link rel="stylesheet" href="assets/vendor/nanoscroller/nanoscroller.css" />
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
   <link rel="stylesheet" href="assets/stylesheets/theme.css" />
   <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
   <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
   <script src="assets/vendor/modernizr/modernizr.js"></script>
 
   <style>
+<<<<<<< HEAD
     #itemsTable tbody tr:hover {
       background-color: #f0f8ff !important;
       cursor: pointer;
@@ -26,6 +35,15 @@
       text‑overflow: ellipsis;
       max‑width: 400px;
     }
+=======
+    #unitsTable tbody tr:hover {
+      background-color: #f0f8ff !important;
+      cursor: pointer;
+    }
+    #unitsTable tbody tr.selected {
+      background-color: #d0e9ff !important;
+    }
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
   </style>
 </head>
 <body>
@@ -74,10 +92,21 @@
       </aside>
 
       <section role="main" class="content-body">
+<<<<<<< HEAD
         <header class="page-header"><h2>Items</h2></header>
 
         <section class="panel">
           <header class="panel-heading"><h2 class="panel-title">Manage Items</h2></header>
+=======
+        <header class="page-header">
+          <h2>Units</h2>
+        </header>
+
+        <section class="panel">
+          <header class="panel-heading">
+            <h2 class="panel-title">Manage Units</h2>
+          </header>
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
           <div class="panel-body">
             <div class="mb-sm">
               <button class="btn btn-primary" id="btnNew">New</button>
@@ -88,22 +117,38 @@
 
             <div class="row mb-md">
               <div class="col-sm-6">
+<<<<<<< HEAD
                 <label>Show
+=======
+                <label>
+                  Show
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
                   <select id="rowCount" class="form-control input-sm" style="width: auto; display: inline-block;">
                     <option value="10">10</option>
                     <option value="50">50</option>
                     <option value="100">100</option>
+<<<<<<< HEAD
                   </select> entries
                 </label>
               </div>
               <div class="col-sm-6 text-right">
                 <label>Search:
+=======
+                  </select>
+                  entries
+                </label>
+              </div>
+              <div class="col-sm-6 text-right">
+                <label>
+                  Search:
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
                   <input type="text" id="searchInput" class="form-control input-sm" style="width: auto; display: inline-block;">
                   <button class="btn btn-sm btn-default" onclick="filterTable()">Search</button>
                 </label>
               </div>
             </div>
 
+<<<<<<< HEAD
             <table class="table table-hover table-bordered table-striped mb-none" id="itemsTable">
               <thead>
                 <tr>
@@ -115,6 +160,31 @@
                 </tr>
               </thead>
               <tbody id="itemsTableBody">
+=======
+            <table class="table table-hover table-bordered table-striped mb-none" id="unitsTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Item</th>
+                  <th>Model</th>
+                  <th>Serial Number</th>
+                  <th>Brand</th>
+                  <th>Purchase Date</th>
+                  <th>Last Cal.</th>
+                  <th>Next Cal.</th>
+                  <th>PO Number</th>
+                  <th>Invoice Number</th>
+                  <th>Invoice Date</th>
+                  <th>Amount</th>
+                  <th>Subscription Info</th>
+                  <th>Last Updated</th>
+                  <th>Updated By</th>
+                  <th>Remarks</th>
+                </tr>
+              </thead>
+              <tbody id="unitsTableBody">
+                <!-- frontend JS will populate rows -->
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
               </tbody>
             </table>
 
@@ -125,6 +195,7 @@
   </section>
 
   <!-- Modal -->
+<<<<<<< HEAD
   <div class="modal fade" id="itemModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <form id="itemForm" class="modal-content">
@@ -141,36 +212,124 @@
           <div class="form-group">
             <label for="itemRemarks">Remarks</label>
             <textarea class="form-control" id="itemRemarks" rows="10"></textarea>
+=======
+  <div class="modal fade" id="unitModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <form id="unitForm" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">New Unit</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="unitId" />
+
+          <div class="form-group">
+            <label for="unitItem">Item</label>
+            <select class="form-control" id="unitItem" required></select>
+          </div>
+          <div class="form-group">
+            <label for="unitModel">Model</label>
+            <select class="form-control" id="unitModel" required></select>
+          </div>
+          <div class="form-group">
+            <label for="serialNumber">Serial Number</label>
+            <input type="text" class="form-control" id="serialNumber" />
+          </div>
+          <div class="form-group">
+            <label for="brand">Brand</label>
+            <input type="text" class="form-control" id="brand" />
+          </div>
+          <div class="form-group">
+            <label for="purchaseDate">Purchase Date</label>
+            <input type="date" class="form-control" id="purchaseDate" />
+          </div>
+          <div class="form-group">
+            <label for="lastCalibration">Last Calibration</label>
+            <input type="date" class="form-control" id="lastCalibration" />
+          </div>
+          <div class="form-group">
+            <label for="nextCalibration">Next Calibration</label>
+            <input type="date" class="form-control" id="nextCalibration" />
+          </div>
+          <div class="form-group">
+            <label for="poNumber">PO Number</label>
+            <input type="text" class="form-control" id="poNumber" />
+          </div>
+          <div class="form-group">
+            <label for="invoiceNumber">Invoice Number</label>
+            <input type="text" class="form-control" id="invoiceNumber" />
+          </div>
+          <div class="form-group">
+            <label for="invoiceDate">Invoice Date</label>
+            <input type="date" class="form-control" id="invoiceDate" />
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" class="form-control" id="amount" />
+          </div>
+          <div class="form-group">
+            <label for="subscriptionInfo">Subscription Info</label>
+            <input type="text" class="form-control" id="subscriptionInfo" />
+          </div>
+          <div class="form-group">
+            <label for="unitRemarks">Remarks</label>
+            <textarea class="form-control" id="unitRemarks" rows="4"></textarea>
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
           </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" type="submit">Save</button>
+<<<<<<< HEAD
           <button class="btn btn-default" type="button" data‑dismiss="modal">Cancel</button>
+=======
+          <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
         </div>
       </form>
     </div>
   </div>
 
+<<<<<<< HEAD
   <script src="assets/vendor/jquery/jquery.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
   <script src="assets/javascripts/theme.js"></script>
   <script src="assets/javascripts/theme.custom.js"></script>
   <script src="assets/javascripts/theme.init.js"></script>
   <script src="assets/javascripts/items.js"></script>
+=======
+  <!-- Scripts -->
+  <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/nanoscroller/nanoscroller.js"></script>
+  <script src="assets/javascripts/theme.js"></script>
+  <script src="assets/javascripts/theme.custom.js"></script>
+  <script src="assets/javascripts/theme.init.js"></script>
+  <script src="assets/javascripts/units.js"></script>
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
 
   <script>
     function filterTable() {
       const search = document.getElementById("searchInput").value.toLowerCase();
+<<<<<<< HEAD
       const rows = document.querySelectorAll("#itemsTable tbody tr");
+=======
+      const rows = document.querySelectorAll("#unitsTable tbody tr");
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
       rows.forEach(row => {
         const text = row.textContent.toLowerCase();
         row.style.display = text.includes(search) ? "" : "none";
       });
     }
 
+<<<<<<< HEAD
     document.getElementById("rowCount").addEventListener("change", function() {
       const limit = parseInt(this.value);
       const rows  = document.querySelectorAll("#itemsTable tbody tr");
+=======
+    document.getElementById("rowCount").addEventListener("change", function () {
+      const limit = parseInt(this.value);
+      const rows = document.querySelectorAll("#unitsTable tbody tr");
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
       rows.forEach((row, idx) => {
         row.style.display = idx < limit ? "" : "none";
       });
@@ -178,12 +337,22 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("rowCount").dispatchEvent(new Event("change"));
+<<<<<<< HEAD
       const tableBody = document.getElementById("itemsTableBody");
       tableBody.addEventListener('click', e => {
         const row = e.target.closest('tr');
         if(!row) return;
         tableBody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
         row.classList.add('selected');
+=======
+
+      const tableBody = document.getElementById("unitsTableBody");
+      tableBody.addEventListener("click", (e) => {
+        const row = e.target.closest("tr");
+        if (!row) return;
+        document.querySelectorAll("#unitsTable tbody tr").forEach(r => r.classList.remove("selected"));
+        row.classList.add("selected");
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
       });
     });
   </script>

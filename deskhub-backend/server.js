@@ -1,5 +1,10 @@
 // server.js
+<<<<<<< HEAD
 const express    = require('express');
+=======
+
+const express = require('express');
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
 const bodyParser = require('body-parser');
 const path       = require('path');
 const pool       = require('./db');
@@ -7,6 +12,7 @@ const pool       = require('./db');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+<<<<<<< HEAD
 app.use(bodyParser.json());
 
 // Serve frontend static files
@@ -155,4 +161,40 @@ app.delete('/api/models/:id', async (req, res) => {
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+=======
+// PostgreSQL pool setup
+const pool = new Pool({
+  user: 'postgres',           // your PostgreSQL user
+  host: 'localhost',
+  database: 'deskhub',     // your database name
+  password: 'S0lut10n!',  // your database password
+  port: 5432,
+});
+
+// Make pool available in routes
+app.locals.pool = pool;
+
+// Middlewares
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '..'))); // serve frontend files from project root
+
+// Import routers
+const itemsRouter = require('./routes/items');
+const modelsRouter = require('./routes/models');
+const unitsRouter = require('./routes/units');
+
+// Mount API routes
+app.use('/api/items',  itemsRouter);
+app.use('/api/models', modelsRouter);
+app.use('/api/units',  unitsRouter);
+
+// Fallback for unknown routes (optional)
+app.use((req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`✅ Server running at http://localhost:${PORT}`);
+>>>>>>> 0f914b656be943ed05549e2584d6d236ef73df43
 });
