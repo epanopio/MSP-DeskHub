@@ -2,7 +2,7 @@
 <html class="fixed">
 <head>
   <meta charset="UTF-8">
-  <title>DESKHUB | Items</title>
+  <title>DESKHUB | Units</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
   <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
@@ -62,9 +62,9 @@
                 <li class="nav-parent nav-expanded nav-active">
                   <a><i class="fa fa-archive"></i><span>Inventory</span></a>
                   <ul class="nav nav-children">
-                    <li class="nav-active"><a href="items.html">Items</a></li>
+		    <li><a href="items.html">Items</a></li>
                     <li><a href="models.html">Models</a></li>
-                    <li><a href="units.html">Units</a></li>
+                     <li class="nav-active"><a href="units.html">Units</a></li>
                   </ul>
                 </li>
               </ul>
@@ -74,10 +74,10 @@
       </aside>
 
       <section role="main" class="content-body">
-        <header class="page-header"><h2>Items</h2></header>
+        <header class="page-header"><h2>Units</h2></header>
 
         <section class="panel">
-          <header class="panel-heading"><h2 class="panel-title">Manage Items</h2></header>
+          <header class="panel-heading"><h2 class="panel-title">Manage Units</h2></header>
           <div class="panel-body">
             <div class="mb-sm">
               <button class="btn btn-primary" id="btnNew">New</button>
@@ -104,17 +104,28 @@
               </div>
             </div>
 
-            <table class="table table-hover table-bordered table-striped mb-none" id="itemsTable">
+            <table class="table table-hover table-bordered table-striped mb-none" id="UnitsTable">
               <thead>
                 <tr>
                   <th style="width:5%;">ID</th>
-                  <th style="width:15%;">Name</th>
-                  <th style="width:12%;">Last Update</th>
-                  <th style="width:12%;">Last Updated By</th>
-                  <th style="width:56%;">Remarks</th>
+                  <th style="width:15%;">item_id</th>
+                  <th style="width:12%;">model_id</th>
+                  <th style="width:12%;">serial_number</th>
+                  <th style="width:56%;">brand</th>
+                  <th style="width:5%;">purchase_date</th>
+                  <th style="width:15%;">last_calibration</th>
+                  <th style="width:12%;">next_calibration</th>
+                  <th style="width:12%;">po_number</th>
+                  <th style="width:56%;">invoice_number</th>
+                  <th style="width:5%;">invoice_date</th>
+                  <th style="width:15%;">amount</th>
+                  <th style="width:12%;">subscription info</th>
+                  <th style="width:12%;">remarks</th>
+                  <th style="width:56%;">last_update_on</th>
+                  <th style="width:5%;">last_update_by</th>
                 </tr>
               </thead>
-              <tbody id="itemsTableBody">
+              <tbody id="unitsTableBody">
               </tbody>
             </table>
 
@@ -125,31 +136,30 @@
   </section>
 
   <!-- Modal -->
-  <div class="modal fade" id="itemModal" tabindex="-1" role="dialog">
+  <div class="modal fade" id="itemUnits" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <form id="itemForm" class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="itemModalLabel">New Item</h5>
+          <h5 class="modal-title" id="itemModalLabel">New Units</h5>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
           <input type="hidden" id="itemId" />
-          <div class="form-group">
-            <label for="itemName">Item Name</label>
-            <input type="text" class="form-control" id="itemName" required />
-          </div>
-          <div class="form-group">
-            <label for="itemRemarks">Remarks</label>
-            <textarea class="form-control" id="itemRemarks" rows="10"></textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" type="submit">Save</button>
-          <button class="btn btn-default" type="button" data‑dismiss="modal">Cancel</button>
-        </div>
-      </form>
-    </div>
-  </div>
+          
+
+<div class="form-group">
+  <label for="itemSelect">Item</label>
+  <select id="itemSelect" class="form-control" required>
+    <option value="">Loading...</option>
+  </select>
+</div>
+<div class="form-group">
+  <label for="modelSelect">Model</label>
+  <select id="modelSelect" class="form-control" required>
+    <option value="">Loading...</option>
+  </select>
+</div>
+
 
   <script src="assets/vendor/jquery/jquery.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
