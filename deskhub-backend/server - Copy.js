@@ -1,11 +1,30 @@
-// routes/units.js
-
+// server.js
 const express = require('express');
-const router = express.Router();
+const bodyParser = require('body-parser');
+const path = require('path');
+const { Pool } = require('pg');
 
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// PostgreSQL pool setup — adjust your credentials
+const pool = new Pool({
+  user: 'postgres',           // your PostgreSQL user
+  host: 'localhost',
+  database: 'deskhub',     // your database name
+  password: 'S0lut10n!',  // your database password
+  port: 5432,
+});
+
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '..'))); // to serve your HTML/JS/CSS from project root
+
+// Existing routes: items & models (assuming imported or defined elsewhere)
+// Example: app.use('/api/items', itemsRouter); app.use('/api/models', modelsRouter);
+
+// ------------------- UNITS API -------------------
 // GET all units
-router.get('/', async (req, res) => {
-  const pool = req.app.locals.pool;
+app.get('/api/units', async (req, res) => {
   try {
     const sql = `
       SELECT u.id,
@@ -39,9 +58,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST — create unit
-router.post('/', async (req, res) => {
-  const pool = req.app.locals.pool;
+// POST — create new unit
+app.post('/api/units', async (req, res) => {
   const {
     item_id,
     model_id,
@@ -86,7 +104,7 @@ router.post('/', async (req, res) => {
       amount || null,
       subscription_info || null,
       remarks || null,
-      'system'
+      'system'  // replace with real user if available
     ];
     const result = await pool.query(sql, values);
     res.status(201).json({ id: result.rows[0].id });
@@ -96,9 +114,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT — update unit
-router.put('/:id', async (req, res) => {
-  const pool = req.app.locals.pool;
+// PUT — update an existing unit
+app.put('/api/units/:id', async (req, res) => {
   const id = req.params.id;
   const {
     item_id,
@@ -153,7 +170,7 @@ router.put('/:id', async (req, res) => {
       amount || null,
       subscription_info || null,
       remarks || null,
-      'system',
+      'system', // replace with real user
       id
     ];
     await pool.query(sql, values);
@@ -164,11 +181,9 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE — remove unit
-router.delete('/:id', async (req, res) => {
-  const pool = req.app.locals.pool;
+// DELETE — remove a unit
+app.delete('/api/units/:id', async (req, res) => {
   const id = req.params.id;
-
   try {
     await pool.query('DELETE FROM units WHERE id = $1', [id]);
     res.json({ success: true });
@@ -178,4 +193,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});

@@ -4,90 +4,97 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnEdit = document.getElementById("btnEdit");
   const btnDelete = document.getElementById("btnDelete");
   const btnRefresh = document.getElementById("btnRefresh");
-
   const unitForm = document.getElementById("unitForm");
   const unitModalElem = document.getElementById("unitModal");
   const unitModal = new bootstrap.Modal(unitModalElem);
 
-  let selectedRow = null;
-  let units = [];
+  let selectedUnit = null;
+  let unitsList   = [];
 
   function formatDate(iso) {
     if (!iso) return "";
     const d = new Date(iso);
-    return d.toISOString().slice(0, 10); // YYYY-MM-DD
-  }
-
-  function populateTable() {
-    tableBody.innerHTML = "";
-    units.forEach((unit) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${unit.id}</td>
-        <td>${unit.item_name || ""}</td>
-        <td>${unit.model_name || ""}</td>
-        <td>${unit.serial_number || ""}</td>
-        <td>${unit.brand || ""}</td>
-        <td>${formatDate(unit.purchase_date)}</td>
-        <td>${formatDate(unit.last_calibration)}</td>
-        <td>${formatDate(unit.next_calibration)}</td>
-        <td>${unit.po_number || ""}</td>
-        <td>${unit.invoice_number || ""}</td>
-        <td>${formatDate(unit.invoice_date)}</td>
-        <td>${unit.amount || ""}</td>
-        <td>${unit.subscription_info || ""}</td>
-        <td>${formatDate(unit.last_updated)}</td>
-        <td>${unit.last_updated_by || ""}</td>
-        <td>${unit.remarks || ""}</td>
-      `;
-      row.addEventListener("click", () => {
-        document.querySelectorAll("#unitsTable tbody tr").forEach(r => r.classList.remove("selected"));
-        row.classList.add("selected");
-        selectedRow = unit;
-      });
-      tableBody.appendChild(row);
-    });
+    const yyyy = d.getFullYear();
+    const mm   = String(d.getMonth()+1).padStart(2, "0");
+    const dd   = String(d.getDate()).padStart(2, "0");
+    const hh   = String(d.getHours()).padStart(2, "0");
+    const mi   = String(d.getMinutes()).padStart(2, "0");
+    const ss   = String(d.getSeconds()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
   }
 
   async function fetchUnits() {
     try {
-      const res = await fetch("/api/units");
-      units = await res.json();
-      populateTable();
-    } catch (err) {
-      console.error("Error loading units:", err);
+      const resp = await fetch("/api/units");
+      if (!resp.ok) throw new Error("Failed to fetch units");
+      unitsList = await resp.json();
+      renderTable();
+    } catch(err) {
+      console.error("fetchUnits error:", err);
       alert("Failed to load units");
     }
   }
 
   async function loadItems() {
-    const itemSelect = document.getElementById("itemSelect");
-    itemSelect.innerHTML = "";
-    const res = await fetch("/api/items");
-    const items = await res.json();
-    items.forEach(item => {
+    const sel = document.getElementById("unitItem");
+    sel.innerHTML = "";
+    const resp = await fetch("/api/items");
+    const items = await resp.json();
+    items.forEach(i => {
       const opt = document.createElement("option");
-      opt.value = item.id;
-      opt.textContent = item.name;
-      itemSelect.appendChild(opt);
+      opt.value = i.id;
+      opt.textContent = i.name;
+      sel.appendChild(opt);
     });
   }
 
   async function loadModels() {
-    const modelSelect = document.getElementById("modelSelect");
-    modelSelect.innerHTML = "";
-    const res = await fetch("/api/models");
-    const models = await res.json();
-    models.forEach(model => {
+    const sel = document.getElementById("unitModel");
+    sel.innerHTML = "";
+    const resp = await fetch("/api/models");
+    const models = await resp.json();
+    models.forEach(m => {
       const opt = document.createElement("option");
-      opt.value = model.id;
-      opt.textContent = model.name;
-      modelSelect.appendChild(opt);
+      opt.value = m.id;
+      opt.textContent = m.model_name || m.name;
+      sel.appendChild(opt);
     });
   }
 
+  function renderTable() {
+    tableBody.innerHTML = "";
+    unitsList.forEach(u => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${u.id}</td>
+        <td>${u.item_name || ""}</td>
+        <td>${u.model_name || ""}</td>
+        <td>${u.serial_number || ""}</td>
+        <td>${u.brand || ""}</td>
+        <td>${formatDate(u.purchase_date)}</td>
+        <td>${formatDate(u.last_calibration)}</td>
+        <td>${formatDate(u.next_calibration)}</td>
+        <td>${u.po_number || ""}</td>
+        <td>${u.invoice_number || ""}</td>
+        <td>${formatDate(u.invoice_date)}</td>
+        <td>${u.amount || ""}</td>
+        <td>${u.subscription_info || ""}</td>
+        <td>${formatDate(u.last_updated_on)}</td>
+        <td>${u.last_updated_by || ""}</td>
+        <td>${u.remarks || ""}</td>
+      `;
+      tr.addEventListener("click", () => {
+        document.querySelectorAll("#unitsTableBody tr").forEach(r => r.classList.remove("selected"));
+        tr.classList.add("selected");
+        selectedUnit = u;
+      });
+      tableBody.appendChild(tr);
+    });
+    document.getElementById("rowCount").dispatchEvent(new Event("change"));
+  }
+
   btnNew.addEventListener("click", async () => {
-    selectedRow = null;
+    selectedUnit = null;
     unitForm.reset();
     document.getElementById("unitId").value = "";
     await loadItems();
@@ -96,67 +103,82 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   btnEdit.addEventListener("click", async () => {
-    if (!selectedRow) return alert("Select a row to edit.");
+    if (!selectedUnit) {
+      alert("Please select a row to edit");
+      return;
+    }
     await loadItems();
     await loadModels();
-    document.getElementById("unitId").value = selectedRow.id;
-    document.getElementById("itemSelect").value = selectedRow.item_id;
-    document.getElementById("modelSelect").value = selectedRow.model_id;
-    document.getElementById("serialNumber").value = selectedRow.serial_number || "";
-    document.getElementById("brand").value = selectedRow.brand || "";
-    document.getElementById("purchaseDate").value = formatDate(selectedRow.purchase_date);
-    document.getElementById("lastCalibration").value = formatDate(selectedRow.last_calibration);
-    document.getElementById("nextCalibration").value = formatDate(selectedRow.next_calibration);
-    document.getElementById("poNumber").value = selectedRow.po_number || "";
-    document.getElementById("invoiceNumber").value = selectedRow.invoice_number || "";
-    document.getElementById("invoiceDate").value = formatDate(selectedRow.invoice_date);
-    document.getElementById("amount").value = selectedRow.amount || "";
-    document.getElementById("subscriptionInfo").value = selectedRow.subscription_info || "";
-    document.getElementById("unitRemarks").value = selectedRow.remarks || "";
+    document.getElementById("unitId").value         = selectedUnit.id;
+    document.getElementById("unitItem").value       = selectedUnit.item_id;
+    document.getElementById("unitModel").value      = selectedUnit.model_id;
+    document.getElementById("serialNumber").value   = selectedUnit.serial_number || "";
+    document.getElementById("brand").value          = selectedUnit.brand || "";
+    document.getElementById("purchaseDate").value   = selectedUnit.purchase_date?.split("T")[0] || "";
+    document.getElementById("lastCalibration").value= selectedUnit.last_calibration?.split("T")[0] || "";
+    document.getElementById("nextCalibration").value= selectedUnit.next_calibration?.split("T")[0] || "";
+    document.getElementById("poNumber").value       = selectedUnit.po_number || "";
+    document.getElementById("invoiceNumber").value  = selectedUnit.invoice_number || "";
+    document.getElementById("invoiceDate").value    = selectedUnit.invoice_date?.split("T")[0] || "";
+    document.getElementById("amount").value         = selectedUnit.amount || "";
+    document.getElementById("subscriptionInfo").value= selectedUnit.subscription_info || "";
+    document.getElementById("unitRemarks").value    = selectedUnit.remarks || "";
     unitModal.show();
   });
 
   btnDelete.addEventListener("click", async () => {
-    if (!selectedRow) return alert("Select a row to delete.");
-    if (!confirm("Are you sure you want to delete this unit?")) return;
-    await fetch(`/api/units/${selectedRow.id}`, { method: "DELETE" });
-    await fetchUnits();
-  });
-
-  unitForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const unit = {
-      item_id: document.getElementById("itemSelect").value,
-      model_id: document.getElementById("modelSelect").value,
-      serial_number: document.getElementById("serialNumber").value,
-      brand: document.getElementById("brand").value,
-      purchase_date: document.getElementById("purchaseDate").value,
-      last_calibration: document.getElementById("lastCalibration").value,
-      next_calibration: document.getElementById("nextCalibration").value,
-      po_number: document.getElementById("poNumber").value,
-      invoice_number: document.getElementById("invoiceNumber").value,
-      invoice_date: document.getElementById("invoiceDate").value,
-      amount: document.getElementById("amount").value,
-      subscription_info: document.getElementById("subscriptionInfo").value,
-      remarks: document.getElementById("unitRemarks").value
-    };
-
-    const id = document.getElementById("unitId").value;
-    const method = id ? "PUT" : "POST";
-    const url = id ? `/api/units/${id}` : `/api/units`;
-
-    await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(unit)
-    });
-
-    unitModal.hide();
-    await fetchUnits();
+    if (!selectedUnit) {
+      alert("Please select a row to delete");
+      return;
+    }
+    if (!confirm("Delete selected unit?")) return;
+    try {
+      const resp = await fetch(`/api/units/${selectedUnit.id}`, { method: "DELETE" });
+      if (!resp.ok) throw new Error("Delete failed");
+      await fetchUnits();
+    } catch(err) {
+      console.error("Delete error:", err);
+      alert("Delete failed");
+    }
   });
 
   btnRefresh.addEventListener("click", fetchUnits);
 
+  unitForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const payload = {
+      item_id:       document.getElementById("unitItem").value,
+      model_id:      document.getElementById("unitModel").value,
+      serial_number: document.getElementById("serialNumber").value,
+      brand:         document.getElementById("brand").value,
+      purchase_date: document.getElementById("purchaseDate").value,
+      last_calibration: document.getElementById("lastCalibration").value,
+      next_calibration: document.getElementById("nextCalibration").value,
+      po_number:       document.getElementById("poNumber").value,
+      invoice_number:  document.getElementById("invoiceNumber").value,
+      invoice_date:    document.getElementById("invoiceDate").value,
+      amount:          document.getElementById("amount").value,
+      subscription_info: document.getElementById("subscriptionInfo").value,
+      remarks:          document.getElementById("unitRemarks").value
+    };
+    const id = document.getElementById("unitId").value;
+    const url = id ? `/api/units/${id}` : `/api/units`;
+    const method = id ? "PUT" : "POST";
+    try {
+      const resp = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!resp.ok) throw new Error("Save failed");
+      unitModal.hide();
+      await fetchUnits();
+    } catch(err) {
+      console.error("Save error:", err);
+      alert("Save failed");
+    }
+  });
+
+  // initial load
   fetchUnits();
 });
