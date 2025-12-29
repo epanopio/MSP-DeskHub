@@ -1,1 +1,52 @@
-/* Add here all your CSS customizations */
+/* Block hover expansion hard */
+html.sidebar-left-collapsed .sidebar-left:hover,
+html.sidebar-left-collapsed.sidebar-left-opened .sidebar-left:hover,
+html.sidebar-left-collapsed .sidebar-left {
+  width: 55px !important;
+  overflow: hidden !important;
+}
+
+
+/* Remove unwanted white gap when sidebar is collapsed */
+html.sidebar-left-collapsed .inner-wrapper {
+  margin-left: 55px !important; /* Match collapsed sidebar width */
+}
+
+html.sidebar-left-collapsed .content-body {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+
+/* Make header taller */
+.header {
+  height: 100px !important;
+}
+
+/* Make logo-container match header */
+.logo-container {
+  height: 100px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 10px;
+}
+
+/* Make logo image slightly bigger */
+.logo img {
+  height: 80px !important;
+  width: auto;
+}
+
+/* Push content below taller header */
+.inner-wrapper {
+  padding-top: 140px !important; /* Match header height */
+}
+
+/* Push the sidebar toggle button down */
+.sidebar-toggle {
+  top: 111px !important; /* default is too high; adjust as needed */
+}
+
+.page-header {
+  margin-top: 40px !important;
+}

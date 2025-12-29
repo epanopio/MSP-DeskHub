@@ -11,14 +11,14 @@
   <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
   <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
   <script src="assets/vendor/modernizr/modernizr.js"></script>
-
   <style>
-    #itemsTable tbody tr:hover {
+    #UnitsTable tbody tr:hover {
       background-color: #f0f8ff !important;
       cursor: pointer;
     }
-    #itemsTable tbody tr.selected {
-      background-color: #d0e9ff !important;
+    #UnitsTable tbody tr.selected {
+      background-color: #cce5ff !important;
+      
     }
     .remarks‑cell {
       white‑space: nowrap;
@@ -62,9 +62,9 @@
                 <li class="nav-parent nav-expanded nav-active">
                   <a><i class="fa fa-archive"></i><span>Inventory</span></a>
                   <ul class="nav nav-children">
-		    <li><a href="items.html">Items</a></li>
+                    <li><a href="items.html">Items</a></li>
                     <li><a href="models.html">Models</a></li>
-                     <li class="nav-active"><a href="units.html">Units</a></li>
+                    <li class="nav-active"><a href="units.html">Units</a></li>
                   </ul>
                 </li>
               </ul>
@@ -107,28 +107,16 @@
             <table class="table table-hover table-bordered table-striped mb-none" id="UnitsTable">
               <thead>
                 <tr>
-                  <th style="width:5%;">ID</th>
-                  <th style="width:15%;">item_id</th>
-                  <th style="width:12%;">model_id</th>
-                  <th style="width:12%;">serial_number</th>
-                  <th style="width:56%;">brand</th>
-                  <th style="width:5%;">purchase_date</th>
-                  <th style="width:15%;">last_calibration</th>
-                  <th style="width:12%;">next_calibration</th>
-                  <th style="width:12%;">po_number</th>
-                  <th style="width:56%;">invoice_number</th>
-                  <th style="width:5%;">invoice_date</th>
-                  <th style="width:15%;">amount</th>
-                  <th style="width:12%;">subscription info</th>
-                  <th style="width:12%;">remarks</th>
-                  <th style="width:56%;">last_update_on</th>
-                  <th style="width:5%;">last_update_by</th>
+                  <th>ID</th><th>Item</th><th>Model</th><th>Serial Number</th><th>Brand</th>
+                  <th>Purchase Date</th><th>Last Calibration</th><th>Next Calibration</th>
+                  <th>PO</th><th>Invoice</th><th>Invoice Date</th><th>Amount</th>
+                  <th>Subscription</th><th>Remarks</th><th>Last Update</th><th>Update by</th>
                 </tr>
               </thead>
               <tbody id="unitsTableBody">
+                <!-- JS will fill this -->
               </tbody>
             </table>
-
           </div>
         </section>
       </section>
@@ -137,65 +125,116 @@
 
   <!-- Modal -->
   <div class="modal fade" id="itemUnits" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
       <form id="itemForm" class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="itemModalLabel">New Units</h5>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
-          <input type="hidden" id="itemId" />
-          
-
-<div class="form-group">
-  <label for="itemSelect">Item</label>
-  <select id="itemSelect" class="form-control" required>
-    <option value="">Loading...</option>
-  </select>
-</div>
-<div class="form-group">
-  <label for="modelSelect">Model</label>
-  <select id="modelSelect" class="form-control" required>
-    <option value="">Loading...</option>
-  </select>
-</div>
-
+          <div class="row">
+            <input type="hidden" id="unitId" />
+            <div class="form-group col-md-6">
+              <label for="itemSelect">Item</label>
+              <select id="itemSelect" class="form-control" required><option value="">Loading...</option></select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="modelSelect">Model</label>
+              <select id="modelSelect" class="form-control" required><option value="">Loading...</option></select>
+            </div>
+            <div class="form-group col-md-6"><label>Serial Number</label><input type="text" class="form-control" id="serial_number" /></div>
+            <div class="form-group col-md-6"><label>Brand</label><input type="text" class="form-control" id="brand" /></div>
+            <div class="form-group col-md-6"><label>Purchase Date</label><input type="date" class="form-control" id="purchase_date" /></div>
+            <div class="form-group col-md-6"><label>Last Calibration</label><input type="date" class="form-control" id="last_calibration" /></div>
+            <div class="form-group col-md-6"><label>Next Calibration</label><input type="date" class="form-control" id="next_calibration" /></div>
+            <div class="form-group col-md-6"><label>PO Number</label><input type="text" class="form-control" id="po_number" /></div>
+            <div class="form-group col-md-6"><label>Invoice Number</label><input type="text" class="form-control" id="invoice_number" /></div>
+            <div class="form-group col-md-6"><label>Invoice Date</label><input type="date" class="form-control" id="invoice_date" /></div>
+            <div class="form-group col-md-6"><label>Amount</label><input type="number" class="form-control" id="amount" /></div>
+            <div class="form-group col-md-6"><label>Subscription Info</label><input type="text" class="form-control" id="subscription_info" /></div>
+            <div class="form-group col-md-12"><label>Remarks</label><textarea class="form-control" id="remarks"></textarea></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Unit</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script src="assets/vendor/jquery/jquery.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
   <script src="assets/javascripts/theme.js"></script>
   <script src="assets/javascripts/theme.custom.js"></script>
   <script src="assets/javascripts/theme.init.js"></script>
-  <script src="assets/javascripts/items.js"></script>
+  <script src="assets/javascripts/units.js"></script>
+  
+	<script>
+  function filterTable() {
+    const search = document.getElementById("searchInput").value.toLowerCase();
+    const rows = document.querySelectorAll("#UnitsTable tbody tr");
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(search) ? "" : "none";
+    });
+  }
 
-  <script>
-    function filterTable() {
-      const search = document.getElementById("searchInput").value.toLowerCase();
-      const rows = document.querySelectorAll("#itemsTable tbody tr");
-      rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(search) ? "" : "none";
-      });
-    }
+  document.getElementById("rowCount").addEventListener("change", function () {
+    const limit = parseInt(this.value);
+    const rows = document.querySelectorAll("#UnitsTable tbody tr");
+    rows.forEach((row, idx) => {
+      row.style.display = idx < limit ? "" : "none";
+    });
+  });
 
-    document.getElementById("rowCount").addEventListener("change", function() {
-      const limit = parseInt(this.value);
-      const rows  = document.querySelectorAll("#itemsTable tbody tr");
-      rows.forEach((row, idx) => {
-        row.style.display = idx < limit ? "" : "none";
-      });
+  document.addEventListener("DOMContentLoaded", function () {
+    const tbody = document.querySelector("#UnitsTable tbody");
+
+    // Row selection logic
+    tbody.addEventListener("click", function (e) {
+      const clickedRow = e.target.closest("tr");
+      if (!clickedRow) return;
+      tbody.querySelectorAll("tr").forEach(row => row.classList.remove("selected"));
+      clickedRow.classList.add("selected");
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("rowCount").dispatchEvent(new Event("change"));
-      const tableBody = document.getElementById("itemsTableBody");
-      tableBody.addEventListener('click', e => {
-        const row = e.target.closest('tr');
-        if(!row) return;
-        tableBody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
-        row.classList.add('selected');
-      });
+    // Edit button logic
+    document.getElementById("btnEdit").addEventListener("click", function () {
+      const selectedRow = document.querySelector("#UnitsTable tbody tr.selected");
+      if (!selectedRow) {
+        alert("Please select a unit to edit.");
+        return;
+      }
+
+      const cells = selectedRow.querySelectorAll("td");
+
+      document.getElementById("unitId").value = cells[0].textContent.trim();
+      document.getElementById("itemSelect").value = cells[1].textContent.trim();
+      document.getElementById("modelSelect").value = cells[2].textContent.trim();
+      document.getElementById("serial_number").value = cells[3].textContent.trim();
+      document.getElementById("brand").value = cells[4].textContent.trim();
+      document.getElementById("purchase_date").value = cells[5].textContent.trim();
+      document.getElementById("last_calibration").value = cells[6].textContent.trim();
+      document.getElementById("next_calibration").value = cells[7].textContent.trim();
+      document.getElementById("po_number").value = cells[8].textContent.trim();
+      document.getElementById("invoice_number").value = cells[9].textContent.trim();
+      document.getElementById("invoice_date").value = cells[10].textContent.trim();
+      document.getElementById("amount").value = cells[11].textContent.trim();
+      document.getElementById("subscription_info").value = cells[12].textContent.trim();
+      document.getElementById("remarks").value = cells[13].textContent.trim();
+
+      document.getElementById("itemModalLabel").textContent = "Edit Unit";
+      $('#itemUnits').modal('show');
     });
+
+    // Trigger initial row limit
+    document.getElementById("rowCount").dispatchEvent(new Event("change"));
+  });
+</script>
+
+	
+	
   </script>
 </body>
 </html>

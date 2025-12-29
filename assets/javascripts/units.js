@@ -1,186 +1,200 @@
+let editingUnitId = null;
+
 document.addEventListener("DOMContentLoaded", () => {
-  const tableBody = document.getElementById("unitsTableBody");
-  const modal = new bootstrap.Modal(document.getElementById("itemModal"));
-  const form = document.getElementById("itemForm");
-  let selectedId = null;
+  loadDropdowns();
+  loadUnits();
 
-  // ✅ Load Items into dropdown
-  async function loadItems() {
-    try {
-      const res = await fetch("/api/items");
-      const items = await res.json();
-      const itemSelect = document.getElementById("itemName");
-
-      itemSelect.innerHTML = '<option value="">-- Select Item --</option>';
-      items.forEach(item => {
-        const option = document.createElement("option");
-        option.value = item.name;
-        option.textContent = item.name;
-        itemSelect.appendChild(option);
-      });
-    } catch (err) {
-      console.error("Failed to load items:", err);
-    }
-  }
-
-  // ✅ Load Models based on selected Item
-  async function loadModelsForItem(itemName) {
-    try {
-      const res = await fetch("/api/models");
-      const models = await res.json();
-      const modelSelect = document.getElementById("model");
-
-      modelSelect.innerHTML = '<option value="">-- Select Model --</option>';
-      models
-        .filter(model => model.item_name === itemName)
-        .forEach(model => {
-          const option = document.createElement("option");
-          option.value = model.model_name;
-          option.textContent = model.model_name;
-          modelSelect.appendChild(option);
-        });
-    } catch (err) {
-      console.error("Failed to load models:", err);
-    }
-  }
-
-  // 🔁 Load models when item changes
-  document.getElementById("itemName").addEventListener("change", (e) => {
-    loadModelsForItem(e.target.value);
-  });
-
-  // 📄 Fetch and display Units
-  async function fetchUnits() {
-    const res = await fetch("/api/units");
-    const units = await res.json();
-
-    tableBody.innerHTML = "";
-    units.forEach(unit => {
-      const row = document.createElement("tr");
-      row.dataset.id = unit.id;
-
-      row.innerHTML = `
-        <td>${unit.id}</td>
-        <td>${unit.item}</td>
-        <td>${unit.model}</td>
-        <td>${unit.serial}</td>
-        <td>${unit.brand}</td>
-        <td>${unit.purchase_date || ""}</td>
-        <td>${unit.last_calibration || ""}</td>
-        <td>${unit.next_calibration || ""}</td>
-        <td>${unit.po_number}</td>
-        <td>${unit.invoice_number}</td>
-        <td>${unit.invoice_date || ""}</td>
-        <td>${unit.amount}</td>
-        <td>${unit.subscription_info}</td>
-        <td>${unit.remarks}</td>
-        <td>${unit.last_updated || ""}</td>
-      `;
-
-      row.addEventListener("click", () => {
-        [...tableBody.children].forEach(r => r.classList.remove("selected"));
-        row.classList.add("selected");
-        selectedId = unit.id;
-      });
-
-      tableBody.appendChild(row);
-    });
-  }
-
-  // 🧾 Extract form data
-  function getFormData() {
-    return {
-      item: document.getElementById("itemName").value,
-      model: document.getElementById("model").value,
-      serial: document.getElementById("serial").value,
-      brand: document.getElementById("brand").value,
-      purchaseDate: document.getElementById("purchaseDate").value,
-      lastCalibration: document.getElementById("lastCalibration").value,
-      nextCalibration: document.getElementById("nextCalibration").value,
-      poNumber: document.getElementById("poNumber").value,
-      invoiceNumber: document.getElementById("invoiceNumber").value,
-      invoiceDate: document.getElementById("invoiceDate").value,
-      amount: document.getElementById("amount").value,
-      subscriptionInfo: document.getElementById("subscriptionInfo").value,
-      remarks: document.getElementById("itemRemarks").value,
-      lastUpdated: document.getElementById("lastUpdated").value
-    };
-  }
-
-  // 📥 Fill modal with unit data
-  function fillForm(unit) {
-    document.getElementById("itemId").value = unit.id;
-    document.getElementById("itemName").value = unit.item;
-    document.getElementById("model").value = unit.model;
-    document.getElementById("serial").value = unit.serial;
-    document.getElementById("brand").value = unit.brand;
-    document.getElementById("purchaseDate").value = unit.purchase_date || "";
-    document.getElementById("lastCalibration").value = unit.last_calibration || "";
-    document.getElementById("nextCalibration").value = unit.next_calibration || "";
-    document.getElementById("poNumber").value = unit.po_number;
-    document.getElementById("invoiceNumber").value = unit.invoice_number;
-    document.getElementById("invoiceDate").value = unit.invoice_date || "";
-    document.getElementById("amount").value = unit.amount;
-    document.getElementById("subscriptionInfo").value = unit.subscription_info;
-    document.getElementById("itemRemarks").value = unit.remarks;
-    document.getElementById("lastUpdated").value = unit.last_updated || "";
-  }
-
-  // 🆕 New Unit
   document.getElementById("btnNew").addEventListener("click", () => {
-    form.reset();
-    selectedId = null;
-    loadItems();
-    document.getElementById("model").innerHTML = '<option value="">-- Select Model --</option>';
-    modal.show();
+    editingUnitId = null;
+    document.getElementById("itemForm").reset();
+    document.getElementById("itemModalLabel").textContent = "New Unit";
+    $("#itemUnits").modal("show");
   });
 
-  // ✏️ Edit Unit
-  document.getElementById("btnEdit").addEventListener("click", async () => {
-    if (!selectedId) return alert("Please select a unit first.");
-    const res = await fetch("/api/units");
-    const units = await res.json();
-    const unit = units.find(u => u.id == selectedId);
-    if (unit) {
-      await loadItems();
-      await loadModelsForItem(unit.item);
-      fillForm(unit);
-      modal.show();
-    }
+  document.getElementById("btnEdit").addEventListener("click", handleEdit);
+  document.getElementById("btnDelete").addEventListener("click", handleDelete);
+  document.getElementById("btnRefresh").addEventListener("click", loadUnits);
+
+  document.getElementById("itemSelect").addEventListener("change", e => {
+    populateModelDropdown(e.target.value);
   });
 
-  // ❌ Delete Unit
-  document.getElementById("btnDelete").addEventListener("click", async () => {
-    if (!selectedId) return alert("Please select a unit to delete.");
-    if (confirm("Are you sure you want to delete this unit?")) {
-      await fetch(`/api/units/${selectedId}`, { method: "DELETE" });
-      selectedId = null;
-      fetchUnits();
-    }
+  document.getElementById("itemForm").addEventListener("submit", handleSubmit);
+});
+
+// Format datetime as yyyy-mm-dd hh:mm
+function formatDateTime(dateString) {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const hh = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+}
+
+// LOAD ITEMS
+async function loadDropdowns() {
+  const itemsRes = await fetch("/api/items");
+  const items = await itemsRes.json();
+
+  const itemSelect = document.getElementById("itemSelect");
+  itemSelect.innerHTML = `<option value="">Select Item</option>`;
+  items.forEach(item => {
+    const opt = document.createElement("option");
+    opt.value = item.id;
+    opt.textContent = item.name;
+    itemSelect.appendChild(opt);
   });
+}
 
-  // 🔄 Refresh List
-  document.getElementById("btnRefresh").addEventListener("click", fetchUnits);
+// LOAD MODELS BASED ON ITEM
+async function populateModelDropdown(selectedItemId, selectedModelId = null) {
+  const modelSelect = document.getElementById("modelSelect");
+  modelSelect.innerHTML = `<option>Loading models...</option>`;
 
-  // 💾 Save Unit
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const data = getFormData();
+  if (!selectedItemId) return;
 
-    const method = selectedId ? "PUT" : "POST";
-    const url = selectedId ? `/api/units/${selectedId}` : "/api/units";
+  try {
+    const res = await fetch(`/api/models/by-item/${selectedItemId}`);
+    if (!res.ok) throw new Error("Failed to fetch models");
 
-    await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+    const models = await res.json();
+    modelSelect.innerHTML = `<option value="">Select Model</option>`;
+
+    models.forEach(model => {
+      const opt = document.createElement("option");
+      opt.value = model.id;
+      opt.textContent = model.name;
+      modelSelect.appendChild(opt);
     });
 
-    modal.hide();
-    selectedId = null;
-    fetchUnits();
-  });
+    if (selectedModelId) {
+      modelSelect.value = selectedModelId;
+    }
+  } catch (err) {
+    console.error("Error loading models:", err);
+    modelSelect.innerHTML = `<option>Error loading models</option>`;
+  }
+}
 
-  // 🔄 Load table on page load
-  fetchUnits();
-});
+// LOAD TABLE DATA
+function loadUnits() {
+  fetch("/api/units")
+    .then(res => res.json())
+    .then(data => {
+      const tbody = document.getElementById("unitsTableBody");
+      tbody.innerHTML = "";
+
+      data.forEach(unit => {
+        const row = document.createElement("tr");
+        row.dataset.id = unit.id;
+        row.innerHTML = `
+          <td>${unit.id}</td>
+          <td>${unit.item_name}</td>
+          <td>${unit.model_name}</td>
+          <td>${unit.serial_number || ""}</td>
+          <td>${unit.brand || ""}</td>
+          <td>${formatDateTime(unit.purchase_date)}</td>
+          <td>${formatDateTime(unit.last_calibration)}</td>
+          <td>${formatDateTime(unit.next_calibration)}</td>
+          <td>${unit.po_number || ""}</td>
+          <td>${unit.invoice_number || ""}</td>
+          <td>${formatDateTime(unit.invoice_date)}</td>
+          <td>${unit.amount ?? ""}</td>
+          <td>${unit.subscription_info || ""}</td>
+          <td>${unit.remarks || ""}</td>
+          <td>${formatDateTime(unit.last_updated_on)}</td>
+          <td>${unit.last_updated_by || ""}</td>
+        `;
+
+        // ✅ Highlight selected row
+        row.addEventListener("click", () => {
+          document.querySelectorAll("#unitsTableBody tr").forEach(r => r.classList.remove("selected"));
+          row.classList.add("selected");
+        });
+
+        tbody.appendChild(row);
+      });
+    });
+}
+
+// SAVE UNIT
+function handleSubmit(e) {
+  e.preventDefault();
+
+  const data = {
+    item_id: itemSelect.value,
+    model_id: modelSelect.value,
+    serial_number: serial_number.value,
+    brand: brand.value,
+    purchase_date: purchase_date.value || null,
+    last_calibration: last_calibration.value || null,
+    next_calibration: next_calibration.value || null,
+    po_number: po_number.value || null,
+    invoice_number: invoice_number.value || null,
+    invoice_date: invoice_date.value || null,
+    amount: amount.value || null,
+    subscription_info: subscription_info.value || null,
+    remarks: remarks.value || null,
+    last_updated_by: "system"
+  };
+
+  const url = editingUnitId ? `/api/units/${editingUnitId}` : "/api/units";
+  const method = editingUnitId ? "PUT" : "POST";
+
+  fetch(url, {
+    method,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+    .then(res => res.json())
+    .then(() => {
+      $("#itemUnits").modal("hide");
+      loadUnits();
+    })
+    .catch(() => alert("Failed to save unit"));
+}
+
+// EDIT UNIT
+function handleEdit() {
+  const row = document.querySelector("#unitsTableBody tr.selected");
+  if (!row) return alert("Please select a unit.");
+
+  editingUnitId = row.dataset.id;
+
+  fetch(`/api/units/${editingUnitId}`)
+    .then(res => res.json())
+    .then(unit => {
+      document.getElementById("itemModalLabel").textContent = "Edit Unit";
+
+      itemSelect.value = unit.item_id;
+      populateModelDropdown(unit.item_id, unit.model_id);
+
+      serial_number.value = unit.serial_number || "";
+      brand.value = unit.brand || "";
+      purchase_date.value = unit.purchase_date || "";
+      last_calibration.value = unit.last_calibration || "";
+      next_calibration.value = unit.next_calibration || "";
+      po_number.value = unit.po_number || "";
+      invoice_number.value = unit.invoice_number || "";
+      invoice_date.value = unit.invoice_date || "";
+      amount.value = unit.amount || "";
+      subscription_info.value = unit.subscription_info || "";
+      remarks.value = unit.remarks || "";
+
+      $("#itemUnits").modal("show");
+    });
+}
+
+// DELETE UNIT
+function handleDelete() {
+  const row = document.querySelector("#unitsTableBody tr.selected");
+  if (!row) return alert("Select a unit to delete.");
+
+  if (confirm("Delete this unit?")) {
+    fetch(`/api/units/${row.dataset.id}`, { method: "DELETE" })
+      .then(() => loadUnits());
+  }
+}

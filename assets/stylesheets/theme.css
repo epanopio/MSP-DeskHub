@@ -50,7 +50,7 @@ a:active {
 .inner-wrapper {
 	display: table;
 	min-height: 100vh;
-	padding-top: 60px;
+	padding-top: 80px;
 	table-layout: fixed;
 	overflow: hidden;
 	width: 100%;
@@ -65,7 +65,7 @@ a:active {
 }
 
 .content-body > .row + .row {
-	padding-top: 10px;
+	padding-top: 11110px;
 }
 
 /* Layout Base - Page Header */
@@ -176,7 +176,7 @@ a:active {
 
 	/* Layout Fixed - Inner Wrapper */
 	html.fixed .inner-wrapper {
-		padding-top: 110px;
+		padding-top: 100px;
 	}
 
 	/* Layout Fixed - Content Body */
@@ -16893,3 +16893,24 @@ html.dark .thumbnail {
 	background-color: #21262d;
 	border-color: #282d36;
 }
+
+
+/* Added at the end of your existing theme.css */
+
+table {
+  font-size: 10px;
+}
+
+
+/* Prevent sidebar from expanding on hover */
+html.sidebar-left-collapsed .sidebar-left {
+  width: 55px !important;
+  transition: width 0.2s ease;
+}
+
+html.sidebar-left-collapsed .sidebar-left:hover {
+  width: 55px !important;
+}
+
+
+

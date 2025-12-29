@@ -1,0 +1,162 @@
+<!doctype html>
+<html class="fixed">
+<head>
+  <meta charset="UTF-8">
+  <title>DESKHUB | Leave Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+  <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
+  <link rel="stylesheet" href="assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css" />
+
+  <script src="assets/vendor/modernizr/modernizr.js"></script>
+  <style>
+    #modelsTable tbody tr:hover {
+      background-color: #f0f8ff !important;
+      cursor: pointer;
+    }
+    #modelsTable tbody tr.selected {
+      background-color: #d0e9ff !important;
+    }
+    .remarks‑cell {
+      white‑space: nowrap;
+      overflow: hidden;
+      text‑overflow: ellipsis;
+      max‑width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <section class="body">
+    <header class="header">
+      <div class="logo-container">
+        <a href="leaveform.html" class="logo">
+          <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
+        </a>
+        <div class="visible-xs toggle-sidebar-left"
+             data-toggle-class="sidebar-left-opened"
+             data-target="html"
+             data-fire-event="sidebar-left-opened">
+          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+      </div>
+    </header>
+
+    <div class="inner-wrapper">
+      <aside id="sidebar-left" class="sidebar-left">
+        <div class="sidebar-header">
+          <div class="sidebar-toggle hidden-xs"
+               data-toggle-class="sidebar-left-collapsed"
+               data-target="html"
+               data-fire-event="sidebar-left-toggle">
+            <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+          </div>
+        </div>
+
+        <div class="nano">
+          <div class="nano-content">
+            <nav id="menu" class="nav-main">
+              <ul class="nav nav-main">
+                <li><a href="leaveform.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li class="nav-parent nav-expanded nav-active">
+                  <a><i class="fa fa-archive"></i><span>Leave Form</span></a>
+                  <ul class="nav nav-children">
+                    <li class="nav-active"><a href="leaveform.html">Leave Form</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </aside>
+
+      <section role="main" class="content-body">
+        <header class="page-header"><h2>Leave Application Form</h2></header>
+
+        <section class="panel">
+          <header class="panel-heading"><h2 class="panel-title">Leave Application Form</h2></header>
+          <div class="panel-body">
+
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="leavefirstname">First Name</label>
+              <div class="col-md-6">
+                <input type="text" class="form-control" id="leavefirstname">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="leavelastname">Last Name</label>
+              <div class="col-md-6">
+                <input type="text" class="form-control" id="leavelastname">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="inputleavetype">Select Leave type:</label>
+              <div class="col-md-6">
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="leaveoption1" checked>
+                    Annual Leave
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="leaveoption2">
+                    Unpaid Leave
+                  </label>
+                </div>
+              </div>
+            </div>
+
+
+			  
+											<div class="form-group">
+												<label class="col-md-3 control-label"> Leave Dates </label>
+												<div class="col-md-6">
+													<div class="input-daterange input-group" data-plugin-datepicker>
+														<span class="input-group-addon">
+															<i class="fa fa-calendar"></i>
+														</span>
+														<input type="text" class="form-control" name="leavestart">
+														<span class="input-group-addon">to</span>
+														<input type="text" class="form-control" name="leaveend">
+													</div>
+												</div>
+											</div>
+			  
+
+			  
+										<div class="row">
+											<div class="col-sm-9 col-sm-offset-3">
+												<button class="btn btn-primary">Submit Leave</button>
+												
+											</div>			  
+
+			  
+			  
+          </div>
+     </div>
+
+  <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+  <script src="assets/javascripts/theme.js"></script>
+  <script src="assets/javascripts/theme.custom.js"></script>
+  <script src="assets/javascripts/theme.init.js"></script>
+  <script src="assets/javascripts/models.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('[data-plugin-datepicker]').datepicker({
+        format: 'mm/dd/yyyy',
+        autoclose: true,
+        todayHighlight: true
+      });
+    });
+  </script>
+</body>
+</html>

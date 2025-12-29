@@ -1,143 +1,91 @@
-document.addEventListener('DOMContentLoaded', () => {
-  let selectedModel = null;
+const express = require('express');
+const router = express.Router();
+const pool = require('../db'); // assumes db is initialized in db.js
 
-  const tableBody    = document.getElementById('modelsTableBody');
-  const btnNew       = document.getElementById('btnNew');
-  const btnEdit      = document.getElementById('btnEdit');
-  const btnDelete    = document.getElementById('btnDelete');
-  const btnRefresh   = document.getElementById('btnRefresh');
-  const modelForm    = document.getElementById('modelForm');
-  const modalElem    = $('#modelModal');
-  const modelIdInput = document.getElementById('modelId');
-  const itemSelect   = document.getElementById('itemSelect');
-  const modelName    = document.getElementById('modelName');
-  const modelRemarks = document.getElementById('modelRemarks');
-
-  function formatDate(isoString) {
-    if (!isoString) return '';
-    const d   = new Date(isoString);
-    const yyyy= d.getFullYear();
-    const mm  = String(d.getMonth()+1).padStart(2,'0');
-    const dd  = String(d.getDate()).padStart(2,'0');
-    const hh  = String(d.getHours()).padStart(2,'0');
-    const mi  = String(d.getMinutes()).padStart(2,'0');
-    const ss  = String(d.getSeconds()).padStart(2,'0');
-    return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
+// Get all models (with item name)
+router.get('/', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+        m.id,
+        m.item_id,
+        i.name AS item_name,
+        m.model_name AS name,
+        m.remarks,
+        m.updated_on,
+        m.updated_by
+      FROM models m
+      LEFT JOIN items i ON i.id = m.item_id
+      ORDER BY m.id ASC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching models:', err);
+    res.status(500).send('Error fetching models');
   }
-
-  async function loadItemsForDropdown() {
-    try {
-      const res   = await fetch('/api/items');
-      const items = await res.json();
-      itemSelect.innerHTML = '<option value="">-- Select Item --</option>';
-      items.forEach(it => {
-        const opt = document.createElement('option');
-        opt.value   = it.id;
-        opt.textContent = it.name;
-        itemSelect.appendChild(opt);
-      });
-    } catch(err) {
-      console.error('Error loading items:', err);
-      alert('Could not load items list.');
-    }
-  }
-
-  async function fetchModels() {
-    try {
-      const res  = await fetch('/api/models');
-      const data = await res.json();
-      tableBody.innerHTML = '';
-      data.forEach(m => {
-        const row = document.createElement('tr');
-        row.dataset.id = m.id;
-        row.innerHTML = `
-          <td>${m.id}</td>
-          <td>${m.item_name}</td>
-          <td>${m.model_name}</td>
-          <td>${formatDate(m.updated_on)}</td>
-          <td>${m.updated_by || ''}</td>
-          <td class="remarks‑cell" title="${(m.remarks||'').replace(/"/g,'&quot;')}">${(m.remarks||'').split('\n')[0]}</td>
-        `;
-        row.addEventListener('click', () => {
-          tableBody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
-          row.classList.add('selected');
-          selectedModel = m;
-        });
-        tableBody.appendChild(row);
-      });
-      document.getElementById("rowCount").dispatchEvent(new Event("change"));
-    } catch(err) {
-      console.error('Error fetching models:', err);
-      alert('Failed to load models.');
-    }
-  }
-
-  btnNew.addEventListener('click', async () => {
-    selectedModel = null;
-    modelForm.reset();
-    modelIdInput.value = '';
-    await loadItemsForDropdown();
-    modalElem.find('.modal-title').text('New Model');
-    modalElem.modal('show');
-  });
-
-  btnEdit.addEventListener('click', async () => {
-    if (!selectedModel) return alert('Please select a model to edit.');
-    await loadItemsForDropdown();
-    modelIdInput.value      = selectedModel.id;
-    itemSelect.value        = selectedModel.item_id;
-    modelName.value         = selectedModel.model_name;
-    modelRemarks.value      = selectedModel.remarks || '';
-    modalElem.find('.modal-title').text('Edit Model');
-    modalElem.modal('show');
-  });
-
-  btnDelete.addEventListener('click', async () => {
-    if (!selectedModel) return alert('Please select a model to delete.');
-    if (!confirm(`Delete model "${selectedModel.model_name}"?`)) return;
-    try {
-      const res = await fetch(`/api/models/${selectedModel.id}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Delete failed');
-      await fetchModels();
-      selectedModel = null;
-    } catch(err) {
-      console.error('Error deleting model:', err);
-      alert('Failed to delete model.');
-    }
-  });
-
-  btnRefresh.addEventListener('click', fetchModels);
-
-  modelForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const id = modelIdInput.value;
-    const payload = {
-      item_id    : itemSelect.value,
-      model_name : modelName.value.trim(),
-      remarks    : modelRemarks.value.trim()
-    };
-    if (!payload.item_id || !payload.model_name) {
-      alert('Please fill in both Item and Model fields.');
-      return;
-    }
-    try {
-      const url    = id ? `/api/models/${id}` : '/api/models';
-      const method = id ? 'PUT' : 'POST';
-      const res    = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body   : JSON.stringify(payload)
-      });
-      if (!res.ok) throw new Error('Save failed');
-      modalElem.modal('hide');
-      await fetchModels();
-      selectedModel = null;
-    } catch(err) {
-      console.error('Error saving model:', err);
-      alert('Failed to save model.');
-    }
-  });
-
-  // initial load
-  fetchModels();
 });
+
+// Get models by item id
+router.get('/by-item/:itemId', async (req, res) => {
+  const { itemId } = req.params;
+  try {
+    const result = await pool.query(
+      'SELECT id, model_name AS name FROM models WHERE item_id = $1 ORDER BY model_name',
+      [itemId]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching models by item:', err);
+    res.status(500).send('Error fetching models by item');
+  }
+});
+
+// Create new model
+router.post('/', async (req, res) => {
+  const { item_id, model_name, remarks } = req.body;
+  try {
+    const result = await pool.query(
+      `INSERT INTO models (item_id, model_name, remarks, updated_on, updated_by)
+       VALUES ($1, $2, $3, NOW(), 'system')
+       RETURNING *`,
+      [item_id, model_name, remarks]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error creating model:', err);
+    res.status(500).send('Error creating model');
+  }
+});
+
+// Update model
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { item_id, model_name, remarks } = req.body;
+  try {
+    const result = await pool.query(
+      `UPDATE models 
+       SET item_id = $1, model_name = $2, remarks = $3, updated_on = NOW(), updated_by = 'system'
+       WHERE id = $4
+       RETURNING *`,
+      [item_id, model_name, remarks, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error updating model:', err);
+    res.status(500).send('Error updating model');
+  }
+});
+
+// Delete model
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM models WHERE id = $1', [id]);
+    res.sendStatus(204);
+  } catch (err) {
+    console.error('Error deleting model:', err);
+    res.status(500).send('Error deleting model');
+  }
+});
+
+module.exports = router;

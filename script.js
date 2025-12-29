@@ -5,21 +5,29 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const appfunction = document.getElementById('appfunction').value;
 
       try {
-const res = await fetch('http://localhost:3000/login', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ username, password })
-});
-
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
 
         const data = await res.json();
-        if (data.success) {
-          localStorage.setItem('user', JSON.stringify(data.user));
-          window.location.href = 'index.html';
+
+        if (res.ok) {
+          localStorage.setItem('user', JSON.stringify({ username }));
+
+          if (appfunction === 'inventory') {
+            window.location.href = 'index.html';
+          } else if (appfunction === 'leaveform') {
+            window.location.href = 'leaveform.html';
+          } else {
+            errorMsg.textContent = 'Please select a valid access option.';
+          }
         } else {
           errorMsg.textContent = data.message || 'Invalid username or password.';
         }
@@ -29,7 +37,6 @@ const res = await fetch('http://localhost:3000/login', {
     });
   }
 
-  // Greet user if logged in
   const userGreeting = document.getElementById('userGreeting');
   if (userGreeting) {
     const user = JSON.parse(localStorage.getItem('user'));

@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   let selectedModel = null;
-  
+
   const tableBody = document.getElementById('modelsTableBody');
   const btnNew     = document.getElementById('btnNew');
   const btnEdit    = document.getElementById('btnEdit');
   const btnDelete  = document.getElementById('btnDelete');
   const btnRefresh = document.getElementById('btnRefresh');
-  
+
   const modelForm    = document.getElementById('modelForm');
   const modalElem    = $('#modelModal');
   const modelIdInput = document.getElementById('modelId');
@@ -49,26 +49,28 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/models');
       if (!res.ok) throw new Error('Failed to fetch models');
       const data = await res.json();
+
       tableBody.innerHTML = '';
+
       data.forEach(m => {
         const row = document.createElement('tr');
         row.dataset.id = m.id;
         row.innerHTML = `
           <td>${m.id}</td>
           <td>${m.item_name || ''}</td>
-          <td>${m.model_name}</td>
+          <td>${m.name || ''}</td>
           <td>${formatDate(m.updated_on)}</td>
           <td>${m.updated_by || ''}</td>
           <td class="remarks-cell" title="${(m.remarks||'').replace(/"/g, '&quot;')}">${(m.remarks||'').split('\n')[0]}</td>
         `;
         row.addEventListener('click', () => {
-          // deselect others
-          tableBody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
+          document.querySelectorAll('#modelsTableBody tr').forEach(r => r.classList.remove('selected'));
           row.classList.add('selected');
           selectedModel = m;
         });
         tableBody.appendChild(row);
       });
+
       document.getElementById('rowCount').dispatchEvent(new Event('change'));
     } catch(err) {
       console.error('Error fetching models:', err);
@@ -93,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     await loadItemsForDropdown();
     modelIdInput.value   = selectedModel.id;
     itemSelect.value     = selectedModel.item_id;
-    modelName.value      = selectedModel.model_name;
+    modelName.value      = selectedModel.name;
     modelRemarks.value   = selectedModel.remarks || '';
     modalElem.find('.modal-title').text('Edit Model');
     modalElem.modal('show');
@@ -104,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Please select a model row to delete.');
       return;
     }
-    if (!confirm(`Delete model "${selectedModel.model_name}"?`)) return;
+    if (!confirm(`Delete model "${selectedModel.name}"?`)) return;
     try {
       const res = await fetch(`/api/models/${selectedModel.id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Delete failed');

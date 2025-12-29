@@ -2,6 +2,15 @@
 <html class="fixed">
 
 <head>
+
+<script>
+    const user = localStorage.getItem('user');
+    if (!user) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+
   <meta charset="UTF-8">
   <title>DESKHUB | Items</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
