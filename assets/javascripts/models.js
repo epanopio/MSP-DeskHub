@@ -68,6 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
           row.classList.add('selected');
           selectedModel = m;
         });
+        // double-click opens a read-only view modal
+        row.addEventListener('dblclick', () => showModelView(m));
         tableBody.appendChild(row);
       });
 
@@ -151,6 +153,16 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Failed to save model.');
     }
   });
+
+  // Show model details in a read-only modal (double-click)
+  function showModelView(m) {
+    document.getElementById('viewModelId').textContent = m.id;
+    document.getElementById('viewModelItem').textContent = m.item_name || '';
+    document.getElementById('viewModelName').textContent = m.name || '';
+    document.getElementById('viewModelRemarks').textContent = m.remarks || '';
+    document.getElementById('viewModelUpdated').textContent = m.updated_on || '';
+    $('#modelViewModal').modal('show');
+  }
 
   // initial load
   fetchModels();

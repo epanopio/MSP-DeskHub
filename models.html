@@ -50,8 +50,9 @@
           <div class="sidebar-toggle hidden-xs"
                data-toggle-class="sidebar-left-collapsed"
                data-target="html"
-               data-fire-event="sidebar-left-toggle">
-            <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+               data-fire-event="sidebar-left-toggle"
+               title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
           </div>
         </div>
 
@@ -59,7 +60,7 @@
           <div class="nano-content">
             <nav id="menu" class="nav-main">
               <ul class="nav nav-main">
-                <li><a href="index.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
                 <li class="nav-parent nav-expanded nav-active">
                   <a><i class="fa fa-archive"></i><span>Inventory</span></a>
                   <ul class="nav nav-children">
@@ -69,8 +70,9 @@
                     <li><a href="units.html">Units</a></li>
 
                   </ul>
-                </li>
-              </ul>
+                </li>                <li>
+                  <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
+                </li>              </ul>
             </nav>
           </div>
         </div>
@@ -162,12 +164,35 @@
     </div>
   </div>
 
+  <!-- View Modal: Model details (opened on double-click) -->
+  <div class="modal fade" id="modelViewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Model Details</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p><strong>ID:</strong> <span id="viewModelId"></span></p>
+          <p><strong>Item:</strong> <span id="viewModelItem"></span></p>
+          <p><strong>Model:</strong> <span id="viewModelName"></span></p>
+          <p><strong>Remarks:</strong> <span id="viewModelRemarks"></span></p>
+          <p><strong>Last Updated:</strong> <span id="viewModelUpdated"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="assets/vendor/jquery/jquery.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
   <script src="assets/javascripts/theme.js"></script>
   <script src="assets/javascripts/theme.custom.js"></script>
   <script src="assets/javascripts/theme.init.js"></script>
   <script src="assets/javascripts/models.js"></script>
+  <script src="script.js"></script>
 
   <script>
     function filterTable() {

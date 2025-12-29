@@ -32,7 +32,7 @@
   <section class="body">
     <header class="header">
       <div class="logo-container">
-        <a href="index.html" class="logo">
+        <a href="dashboard.html" class="logo">
           <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
         </a>
         <div class="visible-xs toggle-sidebar-left"
@@ -50,15 +50,16 @@
           <div class="sidebar-toggle hidden-xs"
                data-toggle-class="sidebar-left-collapsed"
                data-target="html"
-               data-fire-event="sidebar-left-toggle">
-            <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+               data-fire-event="sidebar-left-toggle"
+               title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
           </div>
         </div>
         <div class="nano">
           <div class="nano-content">
             <nav id="menu" class="nav-main">
               <ul class="nav nav-main">
-                <li><a href="index.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
                 <li class="nav-parent nav-expanded nav-active">
                   <a><i class="fa fa-archive"></i><span>Inventory</span></a>
                   <ul class="nav nav-children">
@@ -66,6 +67,9 @@
                     <li><a href="models.html">Models</a></li>
                     <li><a href="units.html">Units</a></li>
                   </ul>
+                </li>
+                <li>
+                  <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
                 </li>
               </ul>
             </nav>
@@ -148,6 +152,27 @@
           <button class="btn btn-default" type="button" data‑dismiss="modal">Cancel</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- View Modal: Item details (opened on double-click) -->
+  <div class="modal fade" id="itemViewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Item Details</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p><strong>ID:</strong> <span id="viewItemId"></span></p>
+          <p><strong>Name:</strong> <span id="viewItemName"></span></p>
+          <p><strong>Remarks:</strong> <span id="viewItemRemarks"></span></p>
+          <p><strong>Last Updated:</strong> <span id="viewItemUpdated"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
   </div>
 

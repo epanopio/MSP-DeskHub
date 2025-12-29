@@ -1540,28 +1540,35 @@ html.header-dark .header .input-search .input-group-btn .btn-default {
 
 .sidebar-left .sidebar-header .sidebar-toggle {
 	position: absolute;
-	top: 0;
-	right: 0;
-	width: 73px;
-	height: 50px;
-	background-color: #171717;
-	border-radius: 0 0 0 5px;
+	top: 8px;
+	right: 8px;
+	min-width: 36px;
+	min-height: 36px;
+	background-color: transparent; /* removed black background */
+	border-radius: 4px;
+	padding: 6px;
 	text-align: center;
 	cursor: pointer;
+	box-shadow: none;
 }
 
 .sidebar-left .sidebar-header .sidebar-toggle i {
+	display: none; /* Hide the left chevron icon as requested */
 	color: #c3c3c3;
-	font-size: 17px;
-	font-size: 1.7rem;
-	line-height: 50px;
-	-webkit-transition: all 0.15s ease-in-out;
-	-moz-transition: all 0.15s ease-in-out;
-	transition: all 0.15s ease-in-out;
+	font-size: 18px;
+	line-height: 18px;
+	-webkit-transition: transform 0.15s ease-in-out, color 0.15s ease-in-out;
+	-moz-transition: transform 0.15s ease-in-out, color 0.15s ease-in-out;
+	transition: transform 0.15s ease-in-out, color 0.15s ease-in-out;
 }
 
 .sidebar-left .sidebar-header .sidebar-toggle:hover i {
-	color: #cccccc;
+	color: #ffffff;
+}
+
+/* When sidebar is collapsed, rotate the chevron to indicate expand */
+html.sidebar-left-collapsed .sidebar-left .sidebar-toggle i {
+	transform: rotate(180deg);
 }
 
 .sidebar-left hr.separator {

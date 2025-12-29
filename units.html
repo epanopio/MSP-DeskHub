@@ -32,7 +32,7 @@
   <section class="body">
     <header class="header">
       <div class="logo-container">
-        <a href="index.html" class="logo">
+        <a href="dashboard.html" class="logo">
           <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
         </a>
         <div class="visible-xs toggle-sidebar-left"
@@ -50,15 +50,16 @@
           <div class="sidebar-toggle hidden-xs"
                data-toggle-class="sidebar-left-collapsed"
                data-target="html"
-               data-fire-event="sidebar-left-toggle">
-            <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+               data-fire-event="sidebar-left-toggle"
+               title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
           </div>
         </div>
         <div class="nano">
           <div class="nano-content">
             <nav id="menu" class="nav-main">
               <ul class="nav nav-main">
-                <li><a href="index.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
                 <li class="nav-parent nav-expanded nav-active">
                   <a><i class="fa fa-archive"></i><span>Inventory</span></a>
                   <ul class="nav nav-children">
@@ -66,6 +67,9 @@
                     <li><a href="models.html">Models</a></li>
                     <li class="nav-active"><a href="units.html">Units</a></li>
                   </ul>
+                </li>
+                <li>
+                  <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
                 </li>
               </ul>
             </nav>
@@ -104,19 +108,21 @@
               </div>
             </div>
 
-            <table class="table table-hover table-bordered table-striped mb-none" id="UnitsTable">
-              <thead>
-                <tr>
-                  <th>ID</th><th>Item</th><th>Model</th><th>Serial Number</th><th>Brand</th>
-                  <th>Purchase Date</th><th>Last Calibration</th><th>Next Calibration</th>
-                  <th>PO</th><th>Invoice</th><th>Invoice Date</th><th>Amount</th>
-                  <th>Subscription</th><th>Remarks</th><th>Last Update</th><th>Update by</th>
-                </tr>
-              </thead>
-              <tbody id="unitsTableBody">
-                <!-- JS will fill this -->
-              </tbody>
-            </table>
+            <div class="table-scroll" id="unitsTableScroll">
+              <table class="table table-hover table-bordered table-striped mb-none" id="UnitsTable">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>Item</th><th>Model</th><th>Serial Number</th><th>Brand</th>
+                    <th>Purchase Date</th><th>Last Calibration</th><th>Next Calibration</th>
+                    <th>PO</th><th>Invoice</th><th>Invoice Date</th><th>Amount</th>
+                    <th>Subscription</th><th>Remarks</th><th>Last Update</th><th>Update by</th>
+                  </tr>
+                </thead>
+                <tbody id="unitsTableBody">
+                  <!-- JS will fill this -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
       </section>
@@ -163,12 +169,45 @@
     </div>
   </div>
 
+  <!-- View Modal: Unit details (opened on double-click) -->
+  <div class="modal fade" id="unitViewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Unit Details</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p><strong>ID:</strong> <span id="viewUnitId"></span></p>
+          <p><strong>Item:</strong> <span id="viewUnitItem"></span></p>
+          <p><strong>Model:</strong> <span id="viewUnitModel"></span></p>
+          <p><strong>Serial #:</strong> <span id="viewUnitSerial"></span></p>
+          <p><strong>Brand:</strong> <span id="viewUnitBrand"></span></p>
+          <p><strong>Purchase Date:</strong> <span id="viewUnitPurchase"></span></p>
+          <p><strong>Last Calibration:</strong> <span id="viewUnitLastCal"></span></p>
+          <p><strong>Next Calibration:</strong> <span id="viewUnitNextCal"></span></p>
+          <p><strong>PO:</strong> <span id="viewUnitPO"></span></p>
+          <p><strong>Invoice:</strong> <span id="viewUnitInvoice"></span></p>
+          <p><strong>Invoice Date:</strong> <span id="viewUnitInvoiceDate"></span></p>
+          <p><strong>Amount:</strong> <span id="viewUnitAmount"></span></p>
+          <p><strong>Subscription:</strong> <span id="viewUnitSubscription"></span></p>
+          <p><strong>Remarks:</strong> <span id="viewUnitRemarks"></span></p>
+          <p><strong>Last Updated:</strong> <span id="viewUnitUpdated"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="assets/vendor/jquery/jquery.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
   <script src="assets/javascripts/theme.js"></script>
   <script src="assets/javascripts/theme.custom.js"></script>
   <script src="assets/javascripts/theme.init.js"></script>
   <script src="assets/javascripts/units.js"></script>
+  <script src="script.js"></script>
   
 	<script>
   function filterTable() {
@@ -186,6 +225,53 @@
     rows.forEach((row, idx) => {
       row.style.display = idx < limit ? "" : "none";
     });
+  });
+
+  // Drag-to-scroll support for the table-scroll container
+  document.addEventListener('DOMContentLoaded', function () {
+    const scroller = document.getElementById('unitsTableScroll');
+    if (!scroller) return;
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    scroller.addEventListener('mousedown', (e) => {
+      isDown = true;
+      scroller.classList.add('dragging');
+      startX = e.pageX - scroller.offsetLeft;
+      scrollLeft = scroller.scrollLeft;
+    });
+
+    scroller.addEventListener('mouseleave', () => {
+      isDown = false;
+      scroller.classList.remove('dragging');
+    });
+
+    scroller.addEventListener('mouseup', () => {
+      isDown = false;
+      scroller.classList.remove('dragging');
+    });
+
+    scroller.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - scroller.offsetLeft;
+      const walk = (x - startX) * 1; // scroll-fast factor
+      scroller.scrollLeft = scrollLeft - walk;
+    });
+
+    // Touch support
+    scroller.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].pageX - scroller.offsetLeft;
+      scrollLeft = scroller.scrollLeft;
+    }, { passive: true });
+
+    scroller.addEventListener('touchmove', (e) => {
+      const x = e.touches[0].pageX - scroller.offsetLeft;
+      const walk = (x - startX) * 1;
+      scroller.scrollLeft = scrollLeft - walk;
+    }, { passive: true });
   });
 
   document.addEventListener("DOMContentLoaded", function () {

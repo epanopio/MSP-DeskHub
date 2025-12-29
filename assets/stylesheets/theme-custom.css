@@ -50,3 +50,165 @@ html.sidebar-left-collapsed .content-body {
 .page-header {
   margin-top: 40px !important;
 }
+
+/* Increase table text size by ~2px (affects table cells and headers only) */
+.table th,
+.table td {
+  font-size: 1.125rem !important;
+}
+
+/* Ensure small table text (if any) scales as well */
+.table small {
+  font-size: 0.95rem !important;
+}
+
+/* Units table: tuned column width defaults (sum ≈ 100%)
+   - Percentages chosen so columns won't collapse and headers won't stack
+   - Adjust percentages below as needed
+   Column mapping (nth-child index -> header):
+     1: ID
+     2: Item
+     3: Model
+     4: Serial Number
+     5: Brand
+     6: Purchase Date
+     7: Last Calibration
+     8: Next Calibration
+     9: PO
+    10: Invoice
+    11: Invoice Date
+    12: Amount
+    13: Subscription
+    14: Remarks
+    15: Last Updated On
+    16: Last Updated By
+*/
+#UnitsTable th:nth-child(1), #UnitsTable td:nth-child(1) { width: 6%;  min-width: 40px; }   /* 1: ID */
+#UnitsTable th:nth-child(2), #UnitsTable td:nth-child(2) { width: 20%; min-width: 120px; }  /* 2: Item */
+#UnitsTable th:nth-child(3), #UnitsTable td:nth-child(3) { width: 25%; min-width: 100px; }  /* 3: Model */
+#UnitsTable th:nth-child(4), #UnitsTable td:nth-child(4) { width: 25%;  min-width: 90px; }   /* 4: Serial Number */
+#UnitsTable th:nth-child(5), #UnitsTable td:nth-child(5) { width: 25%;  min-width: 100px; }   /* 5: Brand */
+#UnitsTable th:nth-child(6), #UnitsTable td:nth-child(6) { width: 15%;  min-width: 75px; }   /* 6: Purchase Date */
+#UnitsTable th:nth-child(7), #UnitsTable td:nth-child(7) { width: 15%;  min-width: 75px; }   /* 7: Last Calibration */
+#UnitsTable th:nth-child(8), #UnitsTable td:nth-child(8) { width: 15%;  min-width: 75px; }   /* 8: Next Calibration */
+#UnitsTable th:nth-child(9), #UnitsTable td:nth-child(9) { width: 15%;  min-width: 70px; }   /* 9: PO */
+#UnitsTable th:nth-child(10), #UnitsTable td:nth-child(10) { width: 15%; min-width: 70px; }  /* 10: Invoice */
+#UnitsTable th:nth-child(11), #UnitsTable td:nth-child(11) { width: 15%; min-width: 75px; }  /* 11: Invoice Date */
+#UnitsTable th:nth-child(12), #UnitsTable td:nth-child(12) { width: 15%; min-width: 70px; }  /* 12: Amount */
+#UnitsTable th:nth-child(13), #UnitsTable td:nth-child(13) { width: 20%; min-width: 75px; }  /* 13: Subscription */
+#UnitsTable th:nth-child(14), #UnitsTable td:nth-child(14) { width: 20%; min-width: 100px; } /* 14: Remarks */
+#UnitsTable th:nth-child(15), #UnitsTable td:nth-child(15) { width: 15%; min-width: 70px; }  /* 15: Last Updated On */
+#UnitsTable th:nth-child(16), #UnitsTable td:nth-child(16) { width: 15%; min-width: 60px; }  /* 16: Last Updated By */
+
+/* Keep table layout stable */
+#UnitsTable { table-layout: fixed; }
+
+/* Body cells: keep single-line with ellipsis to avoid wrapping long content */
+#UnitsTable td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Header cells: allow wrapping and clamp to two lines, center text */
+#UnitsTable th {
+  /* Display headers inline (single-line) and truncate with ellipsis if too long */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+
+  /* Align headers horizontally to match data cells */
+  text-align: left;
+  vertical-align: middle;
+
+  /* Spacing */
+  padding-top: 8px;
+  padding-bottom: 8px;
+  line-height: 1.15;
+
+  /* Keep a small readable minimum width */
+  min-width: 48px;
+}
+
+/* Two-line header helper: allow explicit <br> breaks and show up to two lines */
+#UnitsTable th.two-line {
+  white-space: normal; /* allow wrapping at <br> */
+  overflow: visible;
+  text-overflow: clip;
+  display: block;
+  text-align: left; /* match data alignment */
+  line-height: 1.1;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  max-height: 3.0em; /* roughly two lines */
+  overflow: hidden;
+}
+
+/* Responsive adjustment: allow horizontal scroll on small screens */
+@media (max-width: 900px) {
+  #UnitsTable { table-layout: auto; display: block; overflow-x: auto; }
+  /* allow wrapping on small screens for both headers and cells */
+  #UnitsTable th, #UnitsTable td { white-space: normal; }
+}
+
+/* Horizontal scroll container for Units table */
+.table-scroll {
+  width: 100%;
+  display: block;
+  overflow-x: scroll; /* always show horizontal scrollbar */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  padding-bottom: 12px; /* room for scrollbar */
+}
+.table-scroll.dragging { cursor: grabbing; }
+
+/* Ensure table has a minimum width to allow horizontal scrolling when needed */
+#UnitsTable { min-width: 1600px; }
+
+/* Make scrollbar more visible on desktop (WebKit) */
+.table-scroll::-webkit-scrollbar {
+  height: 16px; /* thicker */
+}
+.table-scroll::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.03);
+}
+.table-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.35);
+  border-radius: 8px;
+  border: 3px solid rgba(255,255,255,0.6);
+}
+
+/* Firefox scrollbar width and color */
+.table-scroll {
+  scrollbar-width: auto; /* 'auto' is thicker than 'thin' */
+  scrollbar-color: rgba(0,0,0,0.35) rgba(0,0,0,0.03);
+}
+
+/* Units page: thicker, dark-blue scrollbar */
+#unitsTableScroll { padding-bottom: 20px; }
+#unitsTableScroll::-webkit-scrollbar {
+  height: 20px; /* slightly thicker for Units page */
+}
+#unitsTableScroll::-webkit-scrollbar-track {
+  background: rgba(10,61,145,0.06); /* subtle light-blue track */
+}
+#unitsTableScroll::-webkit-scrollbar-thumb {
+  background-color: #172844; /* dark blue */
+  border-radius: 10px;
+  border: 4px solid rgba(255,255,255,0.6); /* inner padding look */
+}
+#unitsTableScroll {
+  scrollbar-width: auto; /* Firefox: prefer auto for a thicker bar */
+  scrollbar-color: #27354b rgba(10,61,145,0.06);
+}
+
+/* Increase table font sizes for Items, Models and Units tables by approx. 2px */
+#itemsTable th, #itemsTable td,
+#modelsTable th, #modelsTable td,
+#UnitsTable th, #UnitsTable td {
+  font-size: 1.25rem !important; /* adjust if you prefer px */
+}
+
+/* Adjust small text inside these tables slightly */
+#itemsTable small, #modelsTable small, #UnitsTable small { font-size: 1.02rem !important; }
+

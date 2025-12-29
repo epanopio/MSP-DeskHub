@@ -17,7 +17,7 @@
   <section class="body">
     <header class="header">
       <div class="logo-container">
-        <a href="leaveform.html" class="logo">
+        <a href="dashboard.html" class="logo">
           <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
         </a>
         <div class="visible-xs toggle-sidebar-left"
@@ -35,8 +35,9 @@
           <div class="sidebar-toggle hidden-xs"
                data-toggle-class="sidebar-left-collapsed"
                data-target="html"
-               data-fire-event="sidebar-left-toggle">
-            <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+               data-fire-event="sidebar-left-toggle"
+               title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
           </div>
         </div>
 
@@ -44,12 +45,16 @@
           <div class="nano-content">
             <nav id="menu" class="nav-main">
               <ul class="nav nav-main">
-                <li><a href="leaveform.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
                 <li class="nav-parent nav-expanded nav-active">
                   <a><i class="fa fa-archive"></i><span>Leave Form</span></a>
                   <ul class="nav nav-children">
                     <li class="nav-active"><a href="leaveform.html">Leave Form</a></li>
                   </ul>
+                </li>
+                <!-- Logout button: calls logout() and redirects to login page -->
+                <li>
+                  <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
                 </li>
               </ul>
             </nav>
@@ -154,6 +159,7 @@
   <script src="assets/javascripts/theme.js"></script>
   <script src="assets/javascripts/theme.custom.js"></script>
   <script src="assets/javascripts/theme.init.js"></script>
+  <script src="script.js"></script>
 
   <script>
     $(document).ready(function () {

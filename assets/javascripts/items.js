@@ -32,6 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedItem = null;
   }
 
+  // Show item details in a view-only modal (opened on double-click)
+  function showItemView(item) {
+    document.getElementById('viewItemId').textContent = item.id;
+    document.getElementById('viewItemName').textContent = item.name || '';
+    document.getElementById('viewItemRemarks').textContent = item.remarks || '';
+    document.getElementById('viewItemUpdated').textContent = item.last_updated_on || '';
+    $('#itemViewModal').modal('show');
+  }
+
   function fetchItems() {
     fetch('/api/items')
       .then(res => res.json())
