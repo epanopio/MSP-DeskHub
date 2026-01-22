@@ -1,0 +1,406 @@
+<!doctype html>
+<html class="fixed">
+<head>
+  <meta charset="UTF-8">
+  <title>DESKHUB | Application Forms</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      const allowed = user && user.allowedApps ? user.allowedApps : [];
+      const canView = allowed.includes('controlpanel') || (user && user.isAdmin);
+      if (!canView) {
+        window.location.href = 'login.html';
+      }
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+  <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
+  <script src="assets/vendor/modernizr/modernizr.js"></script>
+  <style>
+    .nav-tabs { margin-bottom: 12px; }
+    .tab-pane .table { margin-bottom: 0; }
+    .status-approved { color: #1a7f37; font-weight: 700; }
+    .status-declined { color: #c62828; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <section class="body">
+    <header class="header">
+      <div class="logo-container">
+        <a href="dashboard.html" class="logo">
+          <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
+        </a>
+        <div class="visible-xs toggle-sidebar-left"
+             data-toggle-class="sidebar-left-opened"
+             data-target="html"
+             data-fire-event="sidebar-left-opened">
+          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+      </div>
+    </header>
+
+    <div class="inner-wrapper">
+      <aside id="sidebar-left" class="sidebar-left">
+        <div class="sidebar-header">
+          <div class="sidebar-toggle hidden-xs"
+               data-toggle-class="sidebar-left-collapsed"
+               data-target="html"
+               data-fire-event="sidebar-left-toggle"
+               title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
+          </div>
+        </div>
+        <div class="nano">
+          <div class="nano-content">
+            <nav id="menu" class="nav-main">
+              <ul class="nav nav-main">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-archive"></i><span>Inventory</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="items.html">Items</a></li>
+                    <li><a href="models.html">Models</a></li>
+                    <li><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent nav-expanded nav-active"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li class="nav-active"><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
+                  </ul>
+                </li>
+                <li><a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a></li>
+              </ul>
+            </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>Powered by:<br>Monitoring Solution Providers Pte. Ltd.
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section role="main" class="content-body">
+        <header class="page-header">
+          <h2>Application Forms</h2>
+          <div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
+        </header>
+
+        <section class="panel">
+          <header class="panel-heading">
+            <h2 class="panel-title">Application Forms</h2>
+          </header>
+          <div class="panel-body">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#tab-night-access" data-toggle="tab">Night Access</a></li>
+              <li><a href="#tab-leave" data-toggle="tab">Leave</a></li>
+              <li><a href="#tab-overtime" data-toggle="tab">Overtime</a></li>
+              <li><a href="#tab-time-off" data-toggle="tab">Time Off</a></li>
+              <li><a href="#tab-mc" data-toggle="tab">MC</a></li>
+            </ul>
+
+            <div class="tab-content">
+              <div class="tab-pane active" id="tab-night-access">
+                <table class="table table-bordered table-striped" id="table-night-access">
+                  <thead>
+                    <tr>
+                      <th>Control #</th>
+                      <th>#</th>
+                      <th>Submitted On</th>
+                      <th>Submitted By</th>
+                      <th>Status</th>
+                      <th>Application Status</th>
+                      <th>Send Email</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="tab-leave">
+                <table class="table table-bordered table-striped" id="table-leave">
+                  <thead>
+                    <tr>
+                      <th>Control #</th>
+                      <th>#</th>
+                      <th>Submitted On</th>
+                      <th>Submitted By</th>
+                      <th>Status</th>
+                      <th>Application Status</th>
+                      <th>Send Email</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="tab-overtime">
+                <table class="table table-bordered table-striped" id="table-overtime">
+                  <thead>
+                    <tr>
+                      <th>Control #</th>
+                      <th>#</th>
+                      <th>Submitted On</th>
+                      <th>Submitted By</th>
+                      <th>Status</th>
+                      <th>Application Status</th>
+                      <th>Send Email</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="tab-time-off">
+                <table class="table table-bordered table-striped" id="table-time-off">
+                  <thead>
+                    <tr>
+                      <th>Control #</th>
+                      <th>#</th>
+                      <th>Submitted On</th>
+                      <th>Submitted By</th>
+                      <th>Status</th>
+                      <th>Application Status</th>
+                      <th>Send Email</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="tab-mc">
+                <table class="table table-bordered table-striped" id="table-mc">
+                  <thead>
+                    <tr>
+                      <th>Control #</th>
+                      <th>#</th>
+                      <th>Submitted On</th>
+                      <th>Submitted By</th>
+                      <th>Status</th>
+                      <th>Application Status</th>
+                      <th>Send Email</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </section>
+
+  <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="assets/javascripts/theme.js"></script>
+  <script src="assets/javascripts/theme.custom.js"></script>
+  <script src="assets/javascripts/theme.init.js"></script>
+  <script src="script.js"></script>
+  <div class="modal fade" id="statusConfirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Confirm Action</h4>
+        </div>
+        <div class="modal-body">
+          <p id="statusConfirmText" style="margin:0;"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="statusConfirmOk">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function() {
+      const $confirmModal = $('#statusConfirmModal');
+      const $confirmText = $('#statusConfirmText');
+      const $confirmOk = $('#statusConfirmOk');
+      let pendingAction = null;
+
+      const $tables = {
+        'night_access': $('#table-night-access tbody'),
+        'leave': $('#table-leave tbody'),
+        'overtime': $('#table-overtime tbody'),
+        'time_off': $('#table-time-off tbody'),
+        'mc_form': $('#table-mc tbody')
+      };
+
+      function renderEmpty($tbody, message) {
+        $tbody.html(`<tr><td colspan="7" class="text-center">${message}</td></tr>`);
+      }
+
+      function formatDate(value) {
+        if (!value) return '';
+        const dt = new Date(value);
+        if (Number.isNaN(dt.getTime())) return value;
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const yyyy = dt.getFullYear();
+        const mmm = months[dt.getMonth()];
+        const dd = String(dt.getDate()).padStart(2, '0');
+        return `${yyyy}-${mmm}-${dd}`;
+      }
+
+      Object.values($tables).forEach(tb => renderEmpty(tb, 'Loading...'));
+
+      fetch('/api/forms/records')
+        .then(res => res.ok ? res.json() : Promise.reject())
+        .then(records => {
+          const grouped = {
+            night_access: [],
+            leave: [],
+            overtime: [],
+            time_off: [],
+            mc_form: []
+          };
+          (records || []).forEach(rec => {
+            const key = rec.formType || '';
+            if (grouped[key]) grouped[key].push(rec);
+          });
+
+          Object.keys($tables).forEach(key => {
+            const rows = grouped[key] || [];
+            const $tbody = $tables[key];
+            if (!rows.length) {
+              renderEmpty($tbody, 'No records');
+              return;
+            }
+            $tbody.empty();
+            rows.forEach((rec, idx) => {
+              const submittedBy = rec.full_name || rec.username || '';
+              const submittedOn = formatDate(rec.submitted_on);
+              const status = rec.status || '';
+              let statusClass = '';
+              if (status.toLowerCase() === 'approved') statusClass = 'status-approved';
+              if (status.toLowerCase() === 'declined') statusClass = 'status-declined';
+              $tbody.append(`
+                <tr>
+                  <td>${rec.control_number || ''}</td>
+                  <td>${idx + 1}</td>
+                  <td>${submittedOn}</td>
+                  <td>${submittedBy}</td>
+                  <td class="status-cell ${statusClass}">${status}</td>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-success btn-approve"
+                            data-id="${rec.id}"
+                            data-control="${rec.control_number || ''}"
+                            data-form="${rec.formType || ''}"
+                            data-name="${submittedBy}">Approve</button>
+                    <button type="button" class="btn btn-xs btn-danger btn-decline"
+                            data-id="${rec.id}"
+                            data-control="${rec.control_number || ''}"
+                            data-form="${rec.formType || ''}"
+                            data-name="${submittedBy}">Decline</button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-info btn-send-email"
+                            data-id="${rec.id}">Send Email</button>
+                  </td>
+                </tr>
+              `);
+            });
+          });
+        })
+        .catch(() => {
+          Object.values($tables).forEach(tb => renderEmpty(tb, 'Failed to load records'));
+        });
+
+      $(document).on('click', '.btn-approve, .btn-decline', function() {
+        const $btn = $(this);
+        const action = $btn.hasClass('btn-approve') ? 'Approve' : 'Decline';
+        const recordId = $btn.data('id');
+        const control = $btn.data('control') || 'N/A';
+        const formType = $btn.data('form') || 'N/A';
+        const submittedBy = $btn.data('name') || 'N/A';
+        pendingAction = { action, recordId, control, formType, submittedBy, row: $btn.closest('tr') };
+        $confirmText.text(`${action} ${control} (${formType}) submitted by ${submittedBy}?`);
+        $confirmModal.modal('show');
+      });
+
+      $confirmOk.on('click', function() {
+        if (!pendingAction) return;
+        const newStatus = pendingAction.action === 'Approve' ? 'Approved' : 'Declined';
+        $confirmOk.prop('disabled', true).text('Saving...');
+        fetch(`/api/forms/records/${pendingAction.recordId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        })
+          .then(res => res.ok ? res.json() : Promise.reject())
+          .then((data) => {
+            const $cell = pendingAction.row.find('.status-cell');
+            $cell.text(newStatus)
+              .removeClass('status-approved status-declined')
+              .addClass(newStatus === 'Approved' ? 'status-approved' : 'status-declined');
+            $confirmModal.modal('hide');
+            if (data && data.emailError) {
+              alert(`Status updated, but email failed: ${data.emailError}`);
+            }
+            pendingAction = null;
+          })
+          .catch(() => {
+            alert('Failed to update status.');
+          })
+          .finally(() => {
+            $confirmOk.prop('disabled', false).text('OK');
+          });
+      });
+
+      $(document).on('click', '.btn-send-email', function() {
+        const $btn = $(this);
+        const recordId = $btn.data('id');
+        $btn.prop('disabled', true).text('Sending...');
+        fetch(`/api/forms/records/${recordId}/send-status-email`, {
+          method: 'POST'
+        })
+          .then(res => res.ok ? res.json() : Promise.reject())
+          .then(() => {
+            alert('Email sent.');
+          })
+          .catch(() => {
+            alert('Failed to send email.');
+          })
+          .finally(() => {
+            $btn.prop('disabled', false).text('Send Email');
+          });
+      });
+    });
+  </script>
+</body>
+</html>

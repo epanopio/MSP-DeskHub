@@ -14,8 +14,8 @@
 (function($) {
   'use strict';
 
- // $('[data-toggle-class][data-target]').on('click', function(e) {
-  //  e.preventDefault();
+  $('[data-toggle-class][data-target]').on('click', function(e) {
+    e.preventDefault();
 
     var $this = $(this),
         toggleClass = $this.data('toggle-class'),

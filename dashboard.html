@@ -1,9 +1,10 @@
-<!doctype html>
+﻿<!doctype html>
 <html class="fixed">
 
 <head>
   <meta charset="UTF-8">
   <title>DESKHUB | Dashboard</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Web Fonts -->
@@ -17,6 +18,7 @@
   <link rel="stylesheet" href="assets/stylesheets/theme.css" />
   <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
   <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
+  <link rel="stylesheet" href="assets/vendor/fullcalendar/fullcalendar.css" />
   <script src="assets/vendor/modernizr/modernizr.js"></script>
 </head>
 
@@ -57,6 +59,43 @@
                     <li><a href="items.html">Items</a></li>
                     <li><a href="models.html">Models</a></li>
                     <li><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                  </ul>
+                                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                    
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                                <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
                   </ul>
                 </li>
                 <li>
@@ -64,6 +103,11 @@
                 </li>
               </ul>
             </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
           </div>
         </div>
       </aside>
@@ -72,44 +116,100 @@
       <section role="main" class="content-body">
         <header class="page-header">
           <h2>Dashboard</h2>
+          <div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
         </header>
 
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-6">
+            <section class="panel">
+              <header class="panel-heading">
+                <h2 class="panel-title">Calendar <span id="dashboard-cal-month-year" style="font-size:13px;font-weight:400;margin-left:8px;"></span></h2>
+              </header>
+              <div class="panel-body">
+                <div id="dashboardCalendar"></div>
+                <div class="table-responsive" style="margin-top:16px;">
+                  <h4 style="margin:0 0 8px;">Operations Events</h4>
+                  <table class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Event</th>
+                        <th>Date From</th>
+                        <th>Date To</th>
+                        <th>Time</th>
+                        <th>Remarks</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dashboardOpsEventsBody">
+                      <tr><td colspan="5" class="text-center text-muted">No events</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="table-responsive" style="margin-top:16px;">
+                  <h4 style="margin:0 0 8px;">Leave Events</h4>
+                  <table class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Event</th>
+                        <th>Date From</th>
+                        <th>Date To</th>
+                        <th>Time</th>
+                        <th>Remarks</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dashboardLeaveEventsBody">
+                      <tr><td colspan="5" class="text-center text-muted">No events</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="table-responsive" style="margin-top:16px;">
+                  <h4 style="margin:0 0 8px;">Reports Events</h4>
+                  <table class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Event</th>
+                        <th>Date From</th>
+                        <th>Date To</th>
+                        <th>Time</th>
+                        <th>Remarks</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dashboardReportsEventsBody">
+                      <tr><td colspan="5" class="text-center text-muted">No events</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="col-md-6">
             <section class="panel">
               <header class="panel-heading">
                 <h2 class="panel-title">Welcome to Deskhub</h2>
               </header>
               <div class="panel-body">
                 <p>This is the dashboard. Add widgets or summary panels here as needed.</p>
-
                 <div class="row">
-                  <div class="col-sm-6 col-lg-3">
+                  <div class="col-sm-12">
                     <section class="panel">
                       <div class="panel-body">
-                        <h4>Items</h4>
-                        <h3 id="dashboardItemsCount">--</h3>
-                      </div>
-                    </section>
-                  </div>
-                  <div class="col-sm-6 col-lg-3">
-                    <section class="panel">
-                      <div class="panel-body">
-                        <h4>Models</h4>
-                        <h3 id="dashboardModelsCount">--</h3>
-                      </div>
-                    </section>
-                  </div>
-                  <div class="col-sm-6 col-lg-3">
-                    <section class="panel">
-                      <div class="panel-body">
-                        <h4>Units</h4>
-                        <h3 id="dashboardUnitsCount">--</h3>
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <h4>Items</h4>
+                            <h3 id="dashboardItemsCount">--</h3>
+                          </div>
+                          <div class="col-sm-4">
+                            <h4>Models</h4>
+                            <h3 id="dashboardModelsCount">--</h3>
+                          </div>
+                          <div class="col-sm-4">
+                            <h4>Units</h4>
+                            <h3 id="dashboardUnitsCount">--</h3>
+                          </div>
+                        </div>
                       </div>
                     </section>
                   </div>
                 </div>
-
               </div>
             </section>
           </div>
@@ -123,12 +223,200 @@
   <script src="assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
   <script src="assets/vendor/nanoscroller/nanoscroller.js"></script>
+  <script src="assets/vendor/fullcalendar/lib/moment.min.js"></script>
+  <script src="assets/vendor/fullcalendar/fullcalendar.min.js"></script>
 
   <!-- Theme JS -->
   <script src="assets/javascripts/theme.js"></script>
   <script src="assets/javascripts/theme.custom.js"></script>
   <script src="assets/javascripts/theme.init.js"></script>
   <script src="script.js"></script>
+  <script>
+    $(document).ready(function () {
+      if ($('#dashboardCalendar').length) {
+        const $opsBody = $('#dashboardOpsEventsBody');
+        const $leaveBody = $('#dashboardLeaveEventsBody');
+        const $reportsBody = $('#dashboardReportsEventsBody');
+        let lastView = null;
+        const calendarLabels = {
+          operations: 'Operations',
+          leave: 'Leave',
+          reports: 'Reports'
+        };
+
+        function formatDate(value) {
+          if (!value) return '';
+          const d = new Date(value);
+          if (Number.isNaN(d.getTime())) {
+            const text = String(value);
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            return text.replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g, (_m, y, m, d2) => {
+              const mi = parseInt(m, 10) - 1;
+              if (mi < 0 || mi > 11) return `${y}-${m}-${d2}`;
+              return `${y}-${months[mi]}-${d2}`;
+            });
+          }
+          const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          const yyyy = d.getFullYear();
+          const mmm = months[d.getMonth()];
+          const dd = String(d.getDate()).padStart(2, '0');
+          return `${yyyy}-${mmm}-${dd}`;
+        }
+
+        function normalizeDateRange(ev) {
+          const from = ev.eventFrom || formatDate(ev.start);
+          let to = ev.eventTo || formatDate(ev.end);
+          if (!to && from) to = from;
+          return { from, to };
+        }
+
+        function toDateValue(value) {
+          if (!value) return null;
+          if (value instanceof Date) return value;
+          if (value._isAMomentObject && typeof value.toDate === 'function') return value.toDate();
+          const parsed = new Date(value);
+          return Number.isNaN(parsed.getTime()) ? null : parsed;
+        }
+
+        function eventInMonth(ev, monthStart, monthEnd) {
+          const range = normalizeDateRange(ev);
+          if (!range.from) return false;
+          const start = toDateValue(range.from);
+          const end = toDateValue(range.to || range.from);
+          if (!start || !end) return false;
+          const startMs = start.getTime();
+          const endMs = end.getTime();
+          return startMs <= monthEnd.getTime() && endMs >= monthStart.getTime();
+        }
+
+        function renderEventsTable($tbody, events, monthStart, monthEnd) {
+          if (!$tbody.length) return;
+          const list = (events || []).filter(ev => eventInMonth(ev, monthStart, monthEnd));
+          if (!list.length) {
+            $tbody.html('<tr><td colspan="5" class="text-center text-muted">No events</td></tr>');
+            return;
+          }
+          $tbody.empty();
+          list
+            .sort((a, b) => {
+              const ra = normalizeDateRange(a);
+              const rb = normalizeDateRange(b);
+              const ta = toDateValue(ra.from);
+              const tb = toDateValue(rb.from);
+              return (ta ? ta.getTime() : 0) - (tb ? tb.getTime() : 0);
+            })
+            .forEach(ev => {
+            const range = normalizeDateRange(ev);
+            $tbody.append(`
+              <tr>
+                <td>
+                  <span style="display:inline-block;width:10px;height:10px;background:${ev.color || '#3498db'};margin-right:6px;border-radius:2px;"></span>
+                  ${ev.title || 'Event'}
+                </td>
+                <td>${formatDate(range.from || '')}</td>
+                <td>${formatDate(range.to || '')}</td>
+                <td>${ev.time || ''}</td>
+                <td>${ev.remarks || ''}</td>
+              </tr>
+            `);
+          });
+        }
+
+        function loadMonthlyEvents(view) {
+          const base = (view && (view.intervalStart || view.start)) ? (view.intervalStart || view.start) : $('#dashboardCalendar').fullCalendar('getDate');
+          const monthStartMoment = moment(base).startOf('month');
+          const monthEndMoment = moment(base).endOf('month');
+          const monthStart = monthStartMoment.toDate();
+          const monthEnd = monthEndMoment.toDate();
+          const titleText = (view && view.title) ? view.title : monthStartMoment.format('MMMM YYYY');
+          $('#dashboard-cal-month-year').text(titleText);
+
+          const fallbackOps = $('#dashboardCalendar')
+            .fullCalendar('clientEvents')
+            .map(ev => ({
+              title: ev.title,
+              start: ev.start,
+              end: ev.end,
+              eventFrom: ev.start ? ev.start.format('YYYY-MM-DD') : '',
+              eventTo: ev.end ? ev.end.format('YYYY-MM-DD') : (ev.start ? ev.start.format('YYYY-MM-DD') : ''),
+              time: ev.time || '',
+              remarks: ev.remarks || '',
+              color: ev.color || '#3498db',
+              calendarType: 'operations'
+            }));
+
+          const fetchCal = (type) =>
+            fetch(`/api/calendar/${type}`)
+              .then(res => res.ok ? res.json().catch(() => []) : [])
+              .catch(() => []);
+
+          Promise.all([fetchCal('operations'), fetchCal('leave'), fetchCal('reports')])
+            .then(([ops, leave, reports]) => {
+              const all = []
+                .concat((ops || []).map(ev => ({ ...ev, calendarType: 'operations', color: ev.color || '#3498db' })))
+                .concat((leave || []).map(ev => ({ ...ev, calendarType: 'leave', color: ev.color || '#3498db' })))
+                .concat((reports || []).map(ev => ({ ...ev, calendarType: 'reports', color: ev.color || '#3498db' })));
+              const opsList = (ops && ops.length) ? ops.map(ev => ({ ...ev, calendarType: 'operations', color: ev.color || '#3498db' })) : fallbackOps;
+              const leaveList = (leave || []).map(ev => ({ ...ev, calendarType: 'leave', color: ev.color || '#3498db' }));
+              const reportsList = (reports || []).map(ev => ({ ...ev, calendarType: 'reports', color: ev.color || '#3498db' }));
+              renderEventsTable($opsBody, opsList, monthStart, monthEnd);
+              renderEventsTable($leaveBody, leaveList, monthStart, monthEnd);
+              renderEventsTable($reportsBody, reportsList, monthStart, monthEnd);
+            })
+            .catch(() => {
+              renderEventsTable($opsBody, fallbackOps, monthStart, monthEnd);
+              renderEventsTable($leaveBody, [], monthStart, monthEnd);
+              renderEventsTable($reportsBody, [], monthStart, monthEnd);
+            });
+        }
+
+        $('#dashboardCalendar').fullCalendar({
+          header: { left: 'prev,next today', center: 'title', right: 'month,agendaWeek,agendaDay' },
+          defaultDate: moment().format('YYYY-MM-DD'),
+          defaultView: 'month',
+          timezone: 'Asia/Singapore',
+          editable: false,
+          eventLimit: true,
+          height: 380,
+          events: function(start, end, timezone, callback) {
+            fetch('/api/calendar/operations')
+              .then(res => res.ok ? res.json() : [])
+              .then(data => {
+                const events = (data || []).map(ev => ({
+                  title: ev.title || 'Event',
+                  start: ev.start || ev.date || ev.datetime || null,
+                  end: ev.end || null,
+                  allDay: !!ev.allDay,
+                  color: ev.color || '#3498db',
+                  backgroundColor: ev.color || '#3498db',
+                  borderColor: ev.color || '#3498db'
+                }));
+                callback(events);
+                loadMonthlyEvents($('#dashboardCalendar').fullCalendar('getView'));
+              })
+              .catch(() => callback([]));
+          },
+          viewRender: function(view) {
+            lastView = view;
+            loadMonthlyEvents(view);
+          },
+          eventAfterAllRender: function() {
+            loadMonthlyEvents(lastView || $('#dashboardCalendar').fullCalendar('getView'));
+          }
+        });
+      }
+    });
+  </script>
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+

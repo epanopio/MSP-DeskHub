@@ -1,0 +1,300 @@
+﻿<!doctype html>
+<html class="fixed">
+<head>
+  <meta charset="UTF-8">
+  <title>DESKHUB | Forms Records</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+  <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
+  <script src="assets/vendor/modernizr/modernizr.js"></script>
+  <style>
+    .status-approved { color: #1a7f37; font-weight: 700; }
+    .status-declined { color: #c62828; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <section class="body">
+    <header class="header">
+      <div class="logo-container">
+        <a href="dashboard.html" class="logo">
+          <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
+        </a>
+        <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
+          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+      </div>
+    </header>
+
+    <div class="inner-wrapper">
+      <!-- Sidebar -->
+      <aside id="sidebar-left" class="sidebar-left">
+        <div class="sidebar-header">
+          <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle" title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
+          </div>
+        </div>
+
+        <div class="nano">
+          <div class="nano-content">
+            <nav id="menu" class="nav-main">
+              <ul class="nav nav-main">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-archive"></i><span>Inventory</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="items.html">Items</a></li>
+                    <li><a href="models.html">Models</a></li>
+                    <li><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                    
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent nav-expanded nav-active"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li class="nav-active"><a href="formsrecords.html">Forms Records</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
+                </li>
+              </ul>
+            </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section role="main" class="content-body">
+        <header class="page-header">
+          <h2>Forms Records</h2>
+          <div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
+        </header>
+
+        <div class="row">
+          <div class="col-md-12">
+            <section class="panel">
+              <header class="panel-heading">
+                <h2 class="panel-title">Forms Records</h2>
+              </header>
+              <div class="panel-body">
+                <ul class="nav nav-tabs" id="formTabs">
+                  <li class="active"><a data-type="all" href="#">All</a></li>
+                  <li><a data-type="night_access" href="#">Night Access</a></li>
+                  <li><a data-type="leave" href="#">Leave</a></li>
+                  <li><a data-type="overtime" href="#">Overtime</a></li>
+                  <li><a data-type="time_off" href="#">Time Off</a></li>
+                  <li><a data-type="mc_form" href="#">MC</a></li>
+                </ul>
+                <div class="table-responsive" style="margin-top:12px;">
+                  <table class="table table-bordered table-striped" id="formsRecordsTable">
+                    <thead>
+                      <tr>
+                        <th>Control #</th>
+                        <th>#</th>
+                        <th>Form</th>
+                        <th>Submitted On</th>
+                        <th>Project / Date</th>
+                        <th>From</th>
+                        <th>To / Time</th>
+                        <th>Remarks / Details</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td colspan="9" class="text-center">No records yet.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="assets/javascripts/theme.js"></script>
+  <script src="assets/javascripts/theme.custom.js"></script>
+  <script src="assets/javascripts/theme.init.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      if (!user || !user.username) {
+        window.location.href = 'login.html';
+        return;
+      }
+      const welcomeName = document.querySelector('.welcome-name');
+      if (welcomeName) welcomeName.textContent = user.fullName || user.username;
+
+      const tbody = document.querySelector('#formsRecordsTable tbody');
+      const statusRow = (text, muted = true) => `<tr><td colspan="9" class="text-center ${muted ? 'text-muted' : 'text-danger'}">${text}</td></tr>`;
+
+      let allRecords = [];
+
+      function formatDateText(text) {
+        if (!text) return '';
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        let out = String(text);
+        out = out.replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g, (_m, y, m, d) => {
+          const mi = parseInt(m, 10) - 1;
+          if (mi < 0 || mi > 11) return `${y}-${m}-${d}`;
+          return `${y}-${months[mi]}-${d}`;
+        });
+        out = out.replace(/\b(\d{2})\/(\d{2})\/(\d{4})\b/g, (_m, mm, dd, yyyy) => {
+          const mi = parseInt(mm, 10) - 1;
+          if (mi < 0 || mi > 11) return `${mm}/${dd}/${yyyy}`;
+          return `${yyyy}-${months[mi]}-${dd}`;
+        });
+        return out;
+      }
+
+      function fmtDate(val) {
+        return formatDateText(val || '');
+      }
+
+      function buildRow(r, idx) {
+        const type = (r.formType || r.type || '').toLowerCase();
+        const submitted = fmtDate(r.submitted_on || r.submittedOn || '');
+        const status = r.status || 'Submitted';
+        const p = r.payload || {};
+        let colProject = '';
+        let colFrom = '';
+        let colTo = '';
+        let colRemarks = '';
+
+        if (type === 'night_access') {
+          colProject = formatDateText(p.project || '');
+          colFrom = formatDateText(`${fmtDate(p.from_date)} ${p.from_am ? '[x] AM' : '[ ] AM'} ${p.from_pm ? '[x] PM' : '[ ] PM'}`);
+          colTo = formatDateText(`${fmtDate(p.to_date)} ${p.to_am ? '[x] AM' : '[ ] AM'} ${p.to_pm ? '[x] PM' : '[ ] PM'}`);
+          colRemarks = formatDateText([p.location, p.station, p.bound, p.task, p.remarks].filter(Boolean).join(' | '));
+        } else if (type === 'overtime') {
+          colProject = fmtDate(p.overtime_date);
+          colFrom = formatDateText(p.time_from || '');
+          colTo = formatDateText(p.time_to || '');
+          colRemarks = formatDateText([`Hours: ${p.total_hours || ''}`, p.remarks].filter(Boolean).join(' | '));
+        } else if (type === 'leave') {
+          colProject = formatDateText(p.leaveType || '');
+          colFrom = formatDateText(fmtDate(p.fromDate));
+          colTo = formatDateText(fmtDate(p.toDate));
+          colRemarks = formatDateText([p.leaveremarks, p.leavenumberdays ? `Days: ${p.leavenumberdays}` : ''].filter(Boolean).join(' | '));
+        } else if (type === 'time_off') {
+          colProject = fmtDate(p.date);
+          colFrom = formatDateText((p.am ? '[x] AM' : '[ ] AM'));
+          colTo = formatDateText((p.pm ? '[x] PM' : '[ ] PM'));
+          colRemarks = formatDateText([p.time_off, p.remarks].filter(Boolean).join(' | '));
+        } else if (type === 'mc_form') {
+          colProject = 'MC';
+          colFrom = formatDateText(`${fmtDate(p.from_date)} ${p.from_am ? '[x] AM' : '[ ] AM'} ${p.from_pm ? '[x] PM' : '[ ] PM'}`);
+          colTo = formatDateText(`${fmtDate(p.to_date)} ${p.to_am ? '[x] AM' : '[ ] AM'} ${p.to_pm ? '[x] PM' : '[ ] PM'}`);
+          colRemarks = formatDateText(p.remarks || '');
+        } else {
+          colProject = formatDateText(p.project || '');
+          colFrom = formatDateText(fmtDate(p.from_date || p.fromDate));
+          colTo = formatDateText(fmtDate(p.to_date || p.toDate));
+          colRemarks = formatDateText(p.remarks || p.leaveremarks || '');
+        }
+
+        let statusClass = '';
+        if (status.toLowerCase() === 'approved') statusClass = 'status-approved';
+        if (status.toLowerCase() === 'declined') statusClass = 'status-declined';
+        return `<tr>
+          <td>${r.control_number || ''}</td>
+          <td>${idx + 1}</td>
+          <td>${r.formType || r.type || 'Form'}</td>
+          <td>${submitted}</td>
+          <td>${colProject}</td>
+          <td>${colFrom}</td>
+          <td>${colTo}</td>
+          <td>${colRemarks}</td>
+          <td class="${statusClass}">${status}</td>
+        </tr>`;
+      }
+
+      function render(filterType) {
+        const recs = filterType === 'all' ? allRecords : allRecords.filter(r => (r.formType || r.type) === filterType);
+        if (!recs.length) {
+          tbody.innerHTML = statusRow('No records yet.');
+          return;
+        }
+        tbody.innerHTML = recs.map((r, idx) => buildRow(r, idx)).join('');
+      }
+
+      async function loadRecords() {
+        tbody.innerHTML = statusRow('Loading...');
+        try {
+          const res = await fetch(`/api/forms/records?user=${encodeURIComponent(user.username)}`);
+          if (!res.ok) throw new Error('Failed to load records');
+          allRecords = await res.json();
+          render('all');
+        } catch (err) {
+          console.error(err);
+          tbody.innerHTML = statusRow('Failed to load records.', false);
+        }
+      }
+
+      const tabs = document.querySelectorAll('#formTabs a[data-type]');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          e.preventDefault();
+          tabs.forEach(t => t.parentElement.classList.remove('active'));
+          tab.parentElement.classList.add('active');
+          const type = tab.getAttribute('data-type');
+          render(type);
+        });
+      });
+
+      loadRecords();
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+

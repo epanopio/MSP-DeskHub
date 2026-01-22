@@ -1,0 +1,659 @@
+﻿<!doctype html>
+<html class="fixed">
+<head>
+  <meta charset="UTF-8">
+  <title>DESKHUB | Inventory Location</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+  <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
+  <script src="assets/vendor/modernizr/modernizr.js"></script>
+</head>
+<body>
+  <section class="body">
+    <header class="header">
+      <div class="logo-container">
+        <a href="dashboard.html" class="logo">
+          <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
+        </a>
+        <div class="visible-xs toggle-sidebar-left"
+             data-toggle-class="sidebar-left-opened"
+             data-target="html"
+             data-fire-event="sidebar-left-opened">
+          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+      </div>
+    </header>
+
+    <div class="inner-wrapper">
+      <aside id="sidebar-left" class="sidebar-left">
+        <div class="sidebar-header">
+          <div class="sidebar-toggle hidden-xs"
+               data-toggle-class="sidebar-left-collapsed"
+               data-target="html"
+               data-fire-event="sidebar-left-toggle"
+               title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
+          </div>
+        </div>
+        <div class="nano">
+          <div class="nano-content">
+            <nav id="menu" class="nav-main">
+              <ul class="nav nav-main">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li class="nav-parent nav-expanded">
+                  <a><i class="fa fa-archive"></i><span>Inventory</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="items.html">Items</a></li>
+                    <li><a href="models.html">Models</a></li>
+                    <li><a href="units.html">Units</a></li>
+                    <li class="nav-active"><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                  </ul>
+                                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                    
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                                <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
+                </li>
+              </ul>
+            </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section role="main" class="content-body">
+        <header class="page-header">
+          <h2>Inventory Location</h2><div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
+        </header>
+
+        <section class="panel">
+          <header class="panel-heading"><h2 class="panel-title">Inventory Location</h2></header>
+          <div class="panel-body">
+            <div class="row mb-sm">
+              <div class="col-sm-6">
+                <button class="btn btn-primary" id="btnAddInv">New</button>
+                <button class="btn btn-default" id="btnEditInv">Edit</button>
+                <button class="btn btn-danger" id="btnDeleteInv">Delete</button>
+                <button class="btn btn-info" id="btnRefreshInv">Refresh</button>
+              </div>
+              <div class="col-sm-6 text-right">
+                <label style="margin-right:8px;">
+                  <span style="margin-right:6px;">Search:</span>
+                  <input type="text" class="form-control input-sm" id="searchInv" style="width: auto; display: inline-block;">
+                  <button class="btn btn-sm btn-default" id="btnSearchInv">Search</button>
+                </label>
+                <button class="btn btn-sm btn-success" id="btnDownloadInv">Download (Excel)</button>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6">
+                <span id="pageInfoTopInv"></span>
+              </div>
+              <div class="col-sm-6 text-right">
+                <button class="btn btn-default btn-sm" id="btnPrevPageTopInv">Previous</button>
+                <button class="btn btn-default btn-sm" id="btnNextPageTopInv">Next</button>
+              </div>
+            </div>
+
+            <table class="table table-bordered table-hover" id="inventoryTable">
+              <thead>
+                <tr>
+                  <th style="width:50px;">#</th>
+                  <th>Inventory</th>
+                  <th>Date</th>
+                  <th>From</th>
+                  <th>Time</th>
+                  <th>To</th>
+                  <th>Item</th>
+                  <th>Model</th>
+                  <th>Unit</th>
+                  <th>Quantity</th>
+                  <th>Name</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+
+            <div class="row">
+              <div class="col-sm-6">
+                <span id="pageInfoInv"></span>
+              </div>
+              <div class="col-sm-6 text-right">
+                <button class="btn btn-default btn-sm" id="btnPrevPageInv">Previous</button>
+                <button class="btn btn-default btn-sm" id="btnNextPageInv">Next</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </section>
+
+  <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="assets/javascripts/theme.js"></script>
+  <script src="assets/javascripts/theme.custom.js"></script>
+  <script src="assets/javascripts/theme.init.js"></script>
+  <script src="script.js"></script>
+  <script>
+    $(function() {
+      const tableBody = $('#inventoryTable tbody');
+      const modal = $('#invModal');
+      const form = $('#invForm');
+      let entries = [];
+      let selectedIndex = -1;
+      let searchTerm = '';
+      let currentPage = 1;
+      const pageSize = 100;
+      let itemsMap = {};
+      const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
+
+      // option sources
+      const projectSelectFrom = $('#invFrom');
+      const projectSelectTo = $('#invTo');
+      const fromOther = $('#invFromOther');
+      const toOther = $('#invToOther');
+      const itemSelect = $('#invItem');
+      const modelSelect = $('#invModel');
+      const unitSelect = $('#invUnit');
+      const unitOther = $('#invUnitOther');
+
+      const fields = {
+        inventory: $('#invInventory'),
+        date: $('#invDate'),
+        from: $('#invFrom'),
+        time: $('#invTime'),
+        to: $('#invTo'),
+        item: $('#invItem'),
+        model: $('#invModel'),
+        unit: $('#invUnit'),
+        unitOther: $('#invUnitOther'),
+        quantity: $('#invQuantity'),
+        name: $('#invName'),
+        idx: $('#invIndex')
+      };
+
+      async function loadEntries() {
+        try {
+          const res = await fetch('/api/inventory-inout');
+          if (!res.ok) throw new Error('Failed to load');
+          entries = await res.json();
+          currentPage = 1;
+          render();
+        } catch (err) {
+          console.error(err);
+          alert('Failed to load entries.');
+        }
+      }
+
+      function filteredEntries() {
+        const t = (searchTerm || '').trim().toLowerCase();
+        if (!t) return entries;
+        return entries.filter(e =>
+        Object.values(e).some(v => (v || '').toString().toLowerCase().includes(t))
+      );
+      }
+
+      function formatDateDisplay(val) {
+        if (!val) return '';
+        const d = new Date(val);
+        if (Number.isNaN(d.getTime())) return val;
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const yyyy = d.getFullYear();
+        const mmm = months[d.getMonth()];
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mmm}-${dd}`;
+      }
+
+      function render() {
+        const list = filteredEntries();
+        const totalPages = Math.max(1, Math.ceil(list.length / pageSize));
+        if (currentPage > totalPages) currentPage = totalPages;
+        const start = (currentPage - 1) * pageSize;
+        const visible = list.slice(start, start + pageSize);
+
+        tableBody.empty();
+        visible.forEach((e, idxLocal) => {
+          const realIdx = entries.indexOf(e);
+          const itemName = itemsMap[e.item_id] || e.item || e.item_id || '';
+          const tr = $(`
+            <tr data-idx="${realIdx}">
+              <td>${realIdx + 1}</td>
+              <td>${e.inventory || ''}</td>
+              <td>${formatDateDisplay(e.date || '')}</td>
+              <td>${e.from_location || ''}</td>
+              <td>${e.time || ''}</td>
+              <td>${e.to_location || ''}</td>
+              <td>${itemName}</td>
+              <td>${e.model || ''}</td>
+              <td>${e.unit_serial || ''}</td>
+              <td>${e.quantity || ''}</td>
+              <td>${e.name || ''}</td>
+            </tr>
+          `);
+          if (realIdx === selectedIndex) tr.addClass('info');
+          tr.on('click', function() {
+            const idx = parseInt($(this).data('idx'), 10);
+            if (isNaN(idx)) return;
+            selectedIndex = idx;
+            // apply selection styling without full re-render
+            $('#inventoryTable tbody tr').removeClass('info');
+            $(this).addClass('info');
+          });
+          tableBody.append(tr);
+        });
+
+        const pageLabel = `Page ${currentPage} of ${Math.max(1, Math.ceil(list.length / pageSize))}`;
+        $('#pageInfoInv, #pageInfoTopInv').text(pageLabel);
+        const atStart = currentPage <= 1;
+        const atEnd = currentPage >= Math.max(1, Math.ceil(list.length / pageSize));
+        $('#btnPrevPageInv, #btnPrevPageTopInv').prop('disabled', atStart);
+        $('#btnNextPageInv, #btnNextPageTopInv').prop('disabled', atEnd);
+      }
+
+      function openAdd() {
+        fields.idx.val('');
+        Object.keys(fields).forEach(k => { if (k !== 'idx') fields[k].val(''); });
+        fromOther.hide().val('');
+        toOther.hide().val('');
+        unitOther.hide().val('');
+        if (currentUser) {
+          const nameVal = currentUser.fullName || currentUser.username || '';
+          fields.name.val(nameVal);
+        }
+        $('#invModalTitle').text('Add Entry');
+        modal.modal('show');
+      }
+
+      function openEdit() {
+        if (selectedIndex < 0 || selectedIndex >= entries.length) {
+          alert('Select an entry to edit.');
+          return;
+        }
+        const e = entries[selectedIndex];
+        fields.idx.val(selectedIndex);
+        fields.inventory.val(e.inventory || '');
+        fields.date.val(e.date || '');
+        fields.from.val(e.from_location || '');
+        fields.time.val(e.time || '');
+        fields.to.val(e.to_location || '');
+        fields.item.val(e.item_id || '');
+        loadModelsForItem(e.item_id).then(() => {
+          fields.model.val(e.model || '');
+        });
+        fields.unit.val(e.unit_serial || '');
+        fields.quantity.val(e.quantity || '');
+        const nameVal = e.name || (currentUser ? (currentUser.fullName || currentUser.username || '') : '');
+        fields.name.val(nameVal);
+        // Reset other fields
+        fromOther.hide().val('');
+        toOther.hide().val('');
+        unitOther.hide().val('');
+        $('#invModalTitle').text('Edit Entry');
+        modal.modal('show');
+      }
+
+      function deleteEntry() {
+        if (selectedIndex < 0 || selectedIndex >= entries.length) {
+          alert('Select an entry to delete.');
+          return;
+        }
+        if (!confirm('Delete selected entry?')) return;
+        const id = entries[selectedIndex].id;
+        selectedIndex = -1;
+        fetch(`/api/inventory-inout/${id}`, { method: 'DELETE' })
+          .then(r => { if (!r.ok) throw new Error(); })
+          .then(() => loadEntries())
+          .catch(() => alert('Failed to delete entry.'));
+      }
+
+      function applySearch() {
+        searchTerm = $('#searchInv').val() || '';
+        currentPage = 1;
+        render();
+      }
+
+      function toCsvValue(val) {
+        const s = String(val ?? '').replace(/"/g, '""');
+        return `"${s}"`;
+      }
+
+      function downloadInventoryCsv() {
+        const headers = ["Inventory","Date","From","Time","To","Item","Model","Unit/Serial","Quantity","Name"];
+        const rows = entries.map(e => [
+          e.inventory || '',
+          e.date || '',
+          e.from_location || '',
+          e.time || '',
+          e.to_location || '',
+          itemsMap[e.item_id] || e.item_id || '',
+          e.model || '',
+          e.unit_serial || '',
+          e.quantity || '',
+          e.name || ''
+        ]);
+        const csv = [headers, ...rows].map(r => r.map(toCsvValue).join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'inventory_in_out.csv';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      $('#btnAddInv').on('click', openAdd);
+      $('#btnEditInv').on('click', openEdit);
+      $('#btnDeleteInv').on('click', deleteEntry);
+      $('#btnRefreshInv').on('click', loadEntries);
+      $('#btnPrevPageInv, #btnPrevPageTopInv').on('click', () => { if (currentPage > 1) { currentPage--; render(); } });
+      $('#btnNextPageInv, #btnNextPageTopInv').on('click', () => {
+        const totalPages = Math.max(1, Math.ceil(filteredEntries().length / pageSize));
+        if (currentPage < totalPages) { currentPage++; render(); }
+      });
+      $('#btnSearchInv').on('click', applySearch);
+      $('#searchInv').on('keyup', function(e) { if (e.key === 'Enter') applySearch(); });
+      $('#btnDownloadInv').on('click', downloadInventoryCsv);
+
+      // Delegated double-click to ensure modal opens reliably
+      tableBody.off('dblclick').on('dblclick', 'tr', function(e) {
+        e.preventDefault();
+        const idx = parseInt($(this).data('idx'), 10);
+        if (isNaN(idx)) return;
+        selectedIndex = idx;
+        $('#inventoryTable tbody tr').removeClass('info');
+        $(this).addClass('info');
+        openEdit();
+      });
+
+      form.on('submit', function(e) {
+        e.preventDefault();
+        const inventoryVal = fields.inventory.val().trim();
+        const fromVal = fields.from.val();
+        const toVal = fields.to.val();
+        const unitVal = fields.unit.val();
+        const otherFromVal = fromOther.is(':visible') ? fromOther.val().trim() : '';
+        const otherToVal = toOther.is(':visible') ? toOther.val().trim() : '';
+        const otherUnitVal = unitOther.is(':visible') ? unitOther.val().trim() : '';
+        const data = {
+          inventory: inventoryVal,
+          date: fields.date.val().trim(),
+          time: fields.time.val().trim(),
+          from_location: fromVal === 'other' ? otherFromVal : fromVal,
+          to_location: toVal === 'other' ? otherToVal : toVal,
+          item_id: fields.item.val() || null,
+          model: fields.model.val(),
+          unit_serial: unitVal === 'new' ? otherUnitVal : unitVal,
+          quantity: fields.quantity.val().trim(),
+          name: fields.name.val().trim()
+        };
+        if (!data.inventory) return alert('Inventory Location is required.');
+        if (!data.name) return alert('Name is required.');
+        if (!data.item_id) return alert('Item is required.');
+        if (fromVal === 'other' && !otherFromVal) return alert('Please enter From location for Other.');
+        if (toVal === 'other' && !otherToVal) return alert('Please enter To location for Other.');
+        if (unitVal === 'new' && !otherUnitVal) return alert('Please enter Unit/Serial Number for New.');
+
+        const idx = fields.idx.val();
+        const method = idx === '' ? 'POST' : 'PUT';
+        const url = idx === '' ? '/api/inventory-inout' : `/api/inventory-inout/${entries[parseInt(idx, 10)].id}`;
+
+        fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+        .then(() => {
+          modal.modal('hide');
+          if (fromVal === 'other' || toVal === 'other' || unitVal === 'new') {
+            alert('Note: You selected Other/New. Please add the new entries to the database if needed.');
+          }
+          loadEntries();
+        })
+        .catch(() => alert('Failed to save entry.'));
+      });
+
+      // populate selects
+      async function loadProjectsToSelects() {
+        try {
+          const res = await fetch('/api/projects');
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          const opts = data.map(p => `<option value="${p.name || ''}">${p.name || ''}</option>`).join('');
+          projectSelectFrom.html(`<option value="">Select...</option><option value="other">Other (add new)</option>${opts}`);
+          projectSelectTo.html(`<option value="">Select...</option><option value="other">Other (add new)</option>${opts}`);
+        } catch (err) {
+          projectSelectFrom.html('<option value="">Select...</option><option value="other">Other (add new)</option>');
+          projectSelectTo.html('<option value="">Select...</option><option value="other">Other (add new)</option>');
+        }
+      }
+
+      async function loadItems() {
+        try {
+          const res = await fetch('/api/items');
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          itemsMap = {};
+          const opts = data.map(i => {
+            itemsMap[i.id] = i.name || '';
+            return `<option value="${i.id}">${i.name || ''}</option>`;
+          }).join('');
+          itemSelect.html(`<option value="">Select item</option>${opts}`);
+        } catch (err) {
+          itemSelect.html('<option value="">Select item</option>');
+        }
+      }
+
+      async function loadModelsForItem(itemId) {
+        if (!itemId) { modelSelect.html('<option value="">Select model</option>'); return; }
+        try {
+          const res = await fetch(`/api/models/by-item/${itemId}`);
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          const opts = data.map(m => `<option value="${m.name}">${m.name}</option>`).join('');
+          modelSelect.html(`<option value="">Select model</option>${opts}`);
+        } catch (err) {
+          modelSelect.html('<option value="">Select model</option>');
+        }
+      }
+
+      async function loadUnits() {
+        try {
+          const res = await fetch('/api/units');
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          const opts = data.map(u => `<option value="${u.serial_number || ''}">${u.serial_number || ''}</option>`).join('');
+          unitSelect.html(`<option value="">Select unit/serial</option><option value="new">New (enter serial)</option>${opts}`);
+        } catch (err) {
+          unitSelect.html('<option value="">Select unit/serial</option><option value="new">New (enter serial)</option>');
+        }
+      }
+
+      itemSelect.on('change', function() {
+        loadModelsForItem(this.value);
+      });
+
+      projectSelectFrom.on('change', function() {
+        if (this.value === 'other') { fromOther.show(); } else { fromOther.hide().val(''); }
+      });
+      projectSelectTo.on('change', function() {
+        if (this.value === 'other') { toOther.show(); } else { toOther.hide().val(''); }
+      });
+      unitSelect.on('change', function() {
+        if (this.value === 'new') { unitOther.show(); } else { unitOther.hide().val(''); }
+      });
+
+      // preload name from user
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      if (user && user.fullName) {
+        fields.name.val(user.fullName);
+      } else if (user && user.username) {
+        fields.name.val(user.username);
+      }
+
+      loadProjectsToSelects();
+      loadItems();
+      loadUnits();
+      loadEntries();
+    });
+  </script>
+
+  <!-- Modal -->
+  <div class="modal fade" id="invModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <form class="modal-content" id="invForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="invModalTitle">Inventory Location</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="invIndex">
+          <div class="row">
+            <div class="col-sm-6">
+          <div class="form-group">
+            <label>Inventory</label>
+            <select class="form-control" id="invInventory" required>
+              <option value="">Select</option>
+              <option value="In">In</option>
+              <option value="Out">Out</option>
+            </select>
+          </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Date</label>
+                <input type="date" class="form-control" id="invDate">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+          <div class="form-group">
+            <label>From</label>
+            <select class="form-control" id="invFrom"></select>
+            <input type="text" class="form-control" id="invFromOther" placeholder="Enter location" style="margin-top:6px; display:none;">
+          </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Time</label>
+                <input type="time" class="form-control" id="invTime">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+          <div class="form-group">
+            <label>To</label>
+            <select class="form-control" id="invTo"></select>
+            <input type="text" class="form-control" id="invToOther" placeholder="Enter location" style="margin-top:6px; display:none;">
+          </div>
+            </div>
+            <div class="col-sm-6">
+          <div class="form-group">
+            <label>Item</label>
+            <select class="form-control" id="invItem" required></select>
+          </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Model</label>
+                <select class="form-control" id="invModel"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+          <div class="form-group">
+            <label>Unit/Serial Number</label>
+            <select class="form-control" id="invUnit"></select>
+            <input type="text" class="form-control" id="invUnitOther" placeholder="Enter new serial number" style="margin-top:6px; display:none;">
+          </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" class="form-control" id="invQuantity">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" id="invName" required>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

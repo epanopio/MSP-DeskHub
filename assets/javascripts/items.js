@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const itemId = document.getElementById('itemId');
   const itemName = document.getElementById('itemName');
   const itemRemarks = document.getElementById('itemRemarks');
+  const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
 
   function formatDate(isoString) {
     if (!isoString) return '';
@@ -36,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function showItemView(item) {
     document.getElementById('viewItemId').textContent = item.id;
     document.getElementById('viewItemName').textContent = item.name || '';
-    document.getElementById('viewItemRemarks').textContent = item.remarks || '';
+    document.getElementById('viewItemRemarks').textContent = item.items_remarks1 || item.remarks || '';
     document.getElementById('viewItemUpdated').textContent = item.last_updated_on || '';
     $('#itemViewModal').modal('show');
   }
@@ -47,14 +48,15 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(data => {
         tableBody.innerHTML = '';
         data.forEach(item => {
+          const remarkText = item.items_remarks1 || item.remarks || '';
           const row = document.createElement('tr');
           row.innerHTML = `
             <td>${item.id}</td>
             <td>${item.name}</td>
             <td>${formatDate(item.last_updated_on)}</td>
             <td>${item.last_updated_by || ''}</td>
-            <td class="remarks-cell" title="${(item.remarks || '').replace(/"/g, '&quot;')}">
-              ${(item.remarks || '').split('\n')[0]}
+            <td class="remarks-cell" title="${remarkText.replace(/"/g, '&quot;')}">
+              ${remarkText.split('\n')[0]}
             </td>
           `;
           row.addEventListener('click', () => {
@@ -85,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!selectedItem) return alert('Please select an item to edit.');
     itemId.value = selectedItem.id;
     itemName.value = selectedItem.name;
-    itemRemarks.value = selectedItem.remarks || '';
+    itemRemarks.value = selectedItem.items_remarks1 || selectedItem.remarks || '';
     modal.find('.modal-title').text('Edit Item');
     modal.modal('show');
   });
@@ -105,7 +107,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const id = itemId.value;
     const payload = {
       name: itemName.value.trim(),
-      remarks: itemRemarks.value.trim()
+      remarks: itemRemarks.value.trim(),
+      items_remarks1: itemRemarks.value.trim(),
+      updated_by: currentUser ? (currentUser.fullName || currentUser.username || 'system') : 'system'
     };
 
     const method = id ? 'PUT' : 'POST';
@@ -124,6 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch(() => alert('Failed to save item.'));
   });
+
+  // Ensure Cancel closes the modal in case data-dismiss is blocked
+  const cancelBtn = document.getElementById('btnItemCancel');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', () => modal.modal('hide'));
+  }
 
   fetchItems();
 });

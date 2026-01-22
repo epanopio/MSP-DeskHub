@@ -1,8 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html class="fixed">
 <head>
   <meta charset="UTF-8">
   <title>DESKHUB | Items</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
   <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
@@ -20,11 +21,11 @@
     #itemsTable tbody tr.selected {
       background-color: #d0e9ff !important;
     }
-    .remarks‑cell {
-      white‑space: nowrap;
+    .remarksâ€‘cell {
+      whiteâ€‘space: nowrap;
       overflow: hidden;
-      text‑overflow: ellipsis;
-      max‑width: 400px;
+      textâ€‘overflow: ellipsis;
+      maxâ€‘width: 400px;
     }
   </style>
 </head>
@@ -66,6 +67,43 @@
                     <li class="nav-active"><a href="items.html">Items</a></li>
                     <li><a href="models.html">Models</a></li>
                     <li><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                  </ul>
+                                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                    
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
                   </ul>
                 </li>
                 <li>
@@ -73,12 +111,17 @@
                 </li>
               </ul>
             </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
           </div>
         </div>
       </aside>
 
       <section role="main" class="content-body">
-        <header class="page-header"><h2>Items</h2></header>
+        <header class="page-header"><h2>Items</h2><div class="welcome-banner">Welcome, <span class="welcome-name"></span></div></header>
 
         <section class="panel">
           <header class="panel-heading"><h2 class="panel-title">Manage Items</h2></header>
@@ -115,7 +158,7 @@
                   <th style="width:15%;">Name</th>
                   <th style="width:12%;">Last Update</th>
                   <th style="width:12%;">Last Updated By</th>
-                  <th style="width:56%;">Remarks</th>
+                  <th style="width:56%;">Items Remarks</th>
                 </tr>
               </thead>
               <tbody id="itemsTableBody">
@@ -143,13 +186,13 @@
             <input type="text" class="form-control" id="itemName" required />
           </div>
           <div class="form-group">
-            <label for="itemRemarks">Remarks</label>
+            <label for="itemRemarks">Items Remarks</label>
             <textarea class="form-control" id="itemRemarks" rows="10"></textarea>
           </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" type="submit">Save</button>
-          <button class="btn btn-default" type="button" data‑dismiss="modal">Cancel</button>
+          <button class="btn btn-default" type="button" id="btnItemCancel" data-dismiss="modal">Cancel</button>
         </div>
       </form>
     </div>
@@ -216,3 +259,12 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+

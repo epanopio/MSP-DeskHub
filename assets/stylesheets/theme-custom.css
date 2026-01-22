@@ -21,6 +21,7 @@ html.sidebar-left-collapsed .content-body {
 /* Make header taller */
 .header {
   height: 100px !important;
+  position: relative;
 }
 
 /* Make logo-container match header */
@@ -202,6 +203,32 @@ html.sidebar-left-collapsed .content-body {
   scrollbar-color: #27354b rgba(10,61,145,0.06);
 }
 
+/* Sidebar footer pinned to bottom */
+.sidebar-left .nano-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.sidebar-left .nav-main {
+  flex: 1 1 auto;
+}
+.sidebar-footer {
+  margin-top: auto !important;
+  padding: 16px !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+
+/* Welcome banner styling */
+.welcome-banner {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  color: #fff;
+  font-weight: 600;
+  margin: 0;
+}
+
 /* Increase table font sizes for Items, Models and Units tables by approx. 2px */
 #itemsTable th, #itemsTable td,
 #modelsTable th, #modelsTable td,
@@ -211,4 +238,80 @@ html.sidebar-left-collapsed .content-body {
 
 /* Adjust small text inside these tables slightly */
 #itemsTable small, #modelsTable small, #UnitsTable small { font-size: 1.02rem !important; }
+
+/* Sortable table header styles */
+.table th { cursor: pointer; position: relative; }
+.table th.sort-asc::after {
+  content: " ▲";
+  color: #0a3d91;
+  font-size: 0.85rem;
+  position: relative;
+  margin-left: 6px;
+}
+.table th.sort-desc::after {
+  content: " ▼";
+  color: #0a3d91;
+  font-size: 0.85rem;
+  position: relative;
+  margin-left: 6px;
+}
+.table th.sort-asc, .table th.sort-desc { background-color: rgba(10,61,145,0.03); }
+.table th:hover { background-color: rgba(10,61,145,0.02); }
+
+/* Header full name (top right) */
+.header-full-name {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* User profile labels stacking fix */
+.profile-name {
+  position: absolute;
+  bottom: -42px;
+  left: 0;
+  z-index: 3;
+  background: #202a30;
+  color: #fff;
+  padding: 6px 10px;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.profile-role {
+  position: absolute;
+  bottom: -68px;
+  left: 0;
+  background: #0099d6;
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+/* Lighter active/expanded menu highlight */
+.sidebar-left .nav-main > li.nav-active > a,
+.sidebar-left .nav-main > li.nav-expanded > a {
+  background: #4c6b82 !important;
+  color: #fff !important;
+}
+.sidebar-left .nav-main > li.nav-active > a i,
+.sidebar-left .nav-main > li.nav-expanded > a i {
+  color: #fff !important;
+}
+
+/* Smooth expand/collapse for submenus */
+.nav-main .nav-children {
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+  max-height: 0;
+}
+.nav-main .nav-parent.nav-expanded > .nav-children {
+  max-height: 500px; /* large enough to show children */
+}
 

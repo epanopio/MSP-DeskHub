@@ -1,8 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html class="fixed">
 <head>
   <meta charset="UTF-8">
   <title>DESKHUB | Units</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
   <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
@@ -20,11 +21,11 @@
       background-color: #cce5ff !important;
       
     }
-    .remarks‑cell {
-      white‑space: nowrap;
+    .remarksâ€‘cell {
+      whiteâ€‘space: nowrap;
       overflow: hidden;
-      text‑overflow: ellipsis;
-      max‑width: 400px;
+      textâ€‘overflow: ellipsis;
+      maxâ€‘width: 400px;
     }
   </style>
 </head>
@@ -66,6 +67,43 @@
                     <li><a href="items.html">Items</a></li>
                     <li><a href="models.html">Models</a></li>
                     <li class="nav-active"><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                  </ul>
+                                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                    
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                                <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
                   </ul>
                 </li>
                 <li>
@@ -73,12 +111,17 @@
                 </li>
               </ul>
             </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
           </div>
         </div>
       </aside>
 
       <section role="main" class="content-body">
-        <header class="page-header"><h2>Units</h2></header>
+        <header class="page-header"><h2>Units</h2><div class="welcome-banner">Welcome, <span class="welcome-name"></span></div></header>
 
         <section class="panel">
           <header class="panel-heading"><h2 class="panel-title">Manage Units</h2></header>
@@ -90,12 +133,19 @@
               <button class="btn btn-info" id="btnRefresh">Refresh</button>
             </div>
 
+            <ul class="nav nav-tabs mb-md" id="unitsTabs">
+              <li class="active"><a href="#" data-tab="all">All</a></li>
+              <li><a href="#" data-tab="total">Total Station</a></li>
+              <li><a href="#" data-tab="sim">Sim Cards</a></li>
+              <li><a href="#" data-tab="others">Others</a></li>
+            </ul>
+
             <div class="row mb-md">
               <div class="col-sm-6">
                 <label>Show
                   <select id="rowCount" class="form-control input-sm" style="width: auto; display: inline-block;">
                     <option value="10">10</option>
-                    <option value="50">50</option>
+                    <option value="50" selected>50</option>
                     <option value="100">100</option>
                   </select> entries
                 </label>
@@ -105,6 +155,16 @@
                   <input type="text" id="searchInput" class="form-control input-sm" style="width: auto; display: inline-block;">
                   <button class="btn btn-sm btn-default" onclick="filterTable()">Search</button>
                 </label>
+                <button class="btn btn-sm btn-success" onclick="downloadUnits()">Download (Excel)</button>
+              </div>
+            </div>
+
+            <div class="row mb-xs">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6 text-right">
+                <span id="pageInfoUnitsTop"></span>
+                <button class="btn btn-default btn-sm" id="btnPrevUnitsTop">Previous</button>
+                <button class="btn btn-default btn-sm" id="btnNextUnitsTop">Next</button>
               </div>
             </div>
 
@@ -115,7 +175,7 @@
                     <th>ID</th><th>Item</th><th>Model</th><th>Serial Number</th><th>Brand</th>
                     <th>Purchase Date</th><th>Last Calibration</th><th>Next Calibration</th>
                     <th>PO</th><th>Invoice</th><th>Invoice Date</th><th>Amount</th>
-                    <th>Subscription</th><th>Remarks</th><th>Last Update</th><th>Update by</th>
+                    <th>Subscription</th><th>Remarks 1</th><th>Remarks 2</th><th>Remarks 3</th><th>Last Update</th><th>Update by</th>
                   </tr>
                 </thead>
                 <tbody id="unitsTableBody">
@@ -148,17 +208,19 @@
               <label for="modelSelect">Model</label>
               <select id="modelSelect" class="form-control" required><option value="">Loading...</option></select>
             </div>
-            <div class="form-group col-md-6"><label>Serial Number</label><input type="text" class="form-control" id="serial_number" /></div>
             <div class="form-group col-md-6"><label>Brand</label><input type="text" class="form-control" id="brand" /></div>
-            <div class="form-group col-md-6"><label>Purchase Date</label><input type="date" class="form-control" id="purchase_date" /></div>
+            <div class="form-group col-md-6"><label>Serial Number</label><input type="text" class="form-control" id="serial_number" /></div>
             <div class="form-group col-md-6"><label>Last Calibration</label><input type="date" class="form-control" id="last_calibration" /></div>
             <div class="form-group col-md-6"><label>Next Calibration</label><input type="date" class="form-control" id="next_calibration" /></div>
-            <div class="form-group col-md-6"><label>PO Number</label><input type="text" class="form-control" id="po_number" /></div>
-            <div class="form-group col-md-6"><label>Invoice Number</label><input type="text" class="form-control" id="invoice_number" /></div>
+            <div class="form-group col-md-6"><label>Purchase Date</label><input type="date" class="form-control" id="purchase_date" /></div>
             <div class="form-group col-md-6"><label>Invoice Date</label><input type="date" class="form-control" id="invoice_date" /></div>
+            <div class="form-group col-md-6"><label>Invoice Number</label><input type="text" class="form-control" id="invoice_number" /></div>
+            <div class="form-group col-md-6"><label>PO Number</label><input type="text" class="form-control" id="po_number" /></div>
             <div class="form-group col-md-6"><label>Amount</label><input type="number" class="form-control" id="amount" /></div>
-            <div class="form-group col-md-6"><label>Subscription Info</label><input type="text" class="form-control" id="subscription_info" /></div>
-            <div class="form-group col-md-12"><label>Remarks</label><textarea class="form-control" id="remarks"></textarea></div>
+            <div class="form-group col-md-12"><label>Subscription Info</label><textarea class="form-control" id="subscription_info" rows="2"></textarea></div>
+            <div class="form-group col-md-12"><label>Remarks 1</label><textarea class="form-control" id="remarks1" rows="2"></textarea></div>
+            <div class="form-group col-md-12"><label>Remarks 2</label><textarea class="form-control" id="remarks2" rows="2"></textarea></div>
+            <div class="form-group col-md-12"><label>Remarks 3</label><textarea class="form-control" id="remarks3" rows="2"></textarea></div>
           </div>
         </div>
         <div class="modal-footer">
@@ -191,7 +253,9 @@
           <p><strong>Invoice Date:</strong> <span id="viewUnitInvoiceDate"></span></p>
           <p><strong>Amount:</strong> <span id="viewUnitAmount"></span></p>
           <p><strong>Subscription:</strong> <span id="viewUnitSubscription"></span></p>
-          <p><strong>Remarks:</strong> <span id="viewUnitRemarks"></span></p>
+          <p><strong>Remarks 1:</strong> <span id="viewUnitRemarks1"></span></p>
+          <p><strong>Remarks 2:</strong> <span id="viewUnitRemarks2"></span></p>
+          <p><strong>Remarks 3:</strong> <span id="viewUnitRemarks3"></span></p>
           <p><strong>Last Updated:</strong> <span id="viewUnitUpdated"></span></p>
         </div>
         <div class="modal-footer">
@@ -204,12 +268,44 @@
   <script src="assets/vendor/jquery/jquery.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
   <script src="assets/javascripts/theme.js"></script>
-  <script src="assets/javascripts/theme.custom.js"></script>
-  <script src="assets/javascripts/theme.init.js"></script>
-  <script src="assets/javascripts/units.js"></script>
-  <script src="script.js"></script>
+<script src="assets/javascripts/theme.custom.js"></script>
+<script src="assets/javascripts/theme.init.js"></script>
+<script src="assets/javascripts/units.js"></script>
+<script src="script.js"></script>
   
 	<script>
+  let currentUnitsPage = 1;
+
+  async function downloadUnits() {
+    try {
+      const res = await fetch('/api/units');
+      if (!res.ok) throw new Error('Failed to load units');
+      const data = await res.json();
+      const headers = ["ID","Item","Model","Serial Number","Brand","Purchase Date","Last Calibration","Next Calibration","PO","Invoice","Invoice Date","Amount","Subscription","Remarks 1","Remarks 2","Remarks 3","Last Update","Update by"];
+      const rows = data.map(u => [
+        u.id, u.item_name || '', u.model_name || '', u.serial_number || '', u.brand || '',
+        u.purchase_date || '', u.last_calibration || '', u.next_calibration || '',
+        u.po_number || '', u.invoice_number || '', u.invoice_date || '',
+        u.amount || '', u.subscription_info || '',
+        (u.remarks1 ?? u.unit_remarks1 ?? u.remarks ?? '').replace(/[\r\n]+/g,' '),
+        (u.remarks2 ?? u.unit_remarks2 ?? '').replace(/[\r\n]+/g,' '),
+        (u.remarks3 ?? u.unit_remarks3 ?? '').replace(/[\r\n]+/g,' '),
+        u.last_updated_on || '', u.last_updated_by || ''
+      ]);
+      const csv = [headers, ...rows].map(r => r.map(v => `"${String(v ?? '').replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'units.csv';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      alert('Download failed.');
+      console.error(err);
+    }
+  }
+
   function filterTable() {
     const search = document.getElementById("searchInput").value.toLowerCase();
     const rows = document.querySelectorAll("#UnitsTable tbody tr");
@@ -220,12 +316,38 @@
   }
 
   document.getElementById("rowCount").addEventListener("change", function () {
-    const limit = parseInt(this.value);
-    const rows = document.querySelectorAll("#UnitsTable tbody tr");
-    rows.forEach((row, idx) => {
-      row.style.display = idx < limit ? "" : "none";
-    });
+    currentUnitsPage = 1;
+    applyUnitsPagination();
   });
+
+  function applyUnitsPagination() {
+    const limit = parseInt(document.getElementById("rowCount").value) || 50;
+    const rows = Array.from(document.querySelectorAll("#UnitsTable tbody tr"));
+    const totalPages = Math.max(1, Math.ceil(rows.length / limit));
+    if (currentUnitsPage > totalPages) currentUnitsPage = totalPages;
+    const start = (currentUnitsPage - 1) * limit;
+    const end = start + limit;
+    rows.forEach((row, idx) => {
+      row.style.display = (idx >= start && idx < end) ? "" : "none";
+    });
+    const info = document.getElementById("pageInfoUnitsTop");
+    if (info) info.textContent = `Page ${currentUnitsPage} of ${totalPages}`;
+    const prev = document.getElementById("btnPrevUnitsTop");
+    const next = document.getElementById("btnNextUnitsTop");
+    if (prev) prev.disabled = currentUnitsPage <= 1;
+    if (next) next.disabled = currentUnitsPage >= totalPages;
+  }
+
+  const prevBtn = document.getElementById("btnPrevUnitsTop");
+  const nextBtn = document.getElementById("btnNextUnitsTop");
+  if (prevBtn) prevBtn.addEventListener("click", () => {
+    if (currentUnitsPage > 1) { currentUnitsPage--; applyUnitsPagination(); }
+  });
+  if (nextBtn) nextBtn.addEventListener("click", () => {
+    currentUnitsPage++; applyUnitsPagination();
+  });
+  // expose for reuse after data reload
+  window.applyUnitsPagination = applyUnitsPagination;
 
   // Drag-to-scroll support for the table-scroll container
   document.addEventListener('DOMContentLoaded', function () {
@@ -285,42 +407,29 @@
       clickedRow.classList.add("selected");
     });
 
-    // Edit button logic
-    document.getElementById("btnEdit").addEventListener("click", function () {
-      const selectedRow = document.querySelector("#UnitsTable tbody tr.selected");
-      if (!selectedRow) {
-        alert("Please select a unit to edit.");
-        return;
-      }
-
-      const cells = selectedRow.querySelectorAll("td");
-
-      document.getElementById("unitId").value = cells[0].textContent.trim();
-      document.getElementById("itemSelect").value = cells[1].textContent.trim();
-      document.getElementById("modelSelect").value = cells[2].textContent.trim();
-      document.getElementById("serial_number").value = cells[3].textContent.trim();
-      document.getElementById("brand").value = cells[4].textContent.trim();
-      document.getElementById("purchase_date").value = cells[5].textContent.trim();
-      document.getElementById("last_calibration").value = cells[6].textContent.trim();
-      document.getElementById("next_calibration").value = cells[7].textContent.trim();
-      document.getElementById("po_number").value = cells[8].textContent.trim();
-      document.getElementById("invoice_number").value = cells[9].textContent.trim();
-      document.getElementById("invoice_date").value = cells[10].textContent.trim();
-      document.getElementById("amount").value = cells[11].textContent.trim();
-      document.getElementById("subscription_info").value = cells[12].textContent.trim();
-      document.getElementById("remarks").value = cells[13].textContent.trim();
-
-      document.getElementById("itemModalLabel").textContent = "Edit Unit";
-      $('#itemUnits').modal('show');
-    });
+    // Edit button logic: delegate to units.js handleEdit
+    const inlineEditBtn = document.getElementById("btnEdit");
+    if (inlineEditBtn && typeof handleEdit === 'function') {
+      inlineEditBtn.addEventListener("click", handleEdit);
+    }
 
     // Trigger initial row limit
     document.getElementById("rowCount").dispatchEvent(new Event("change"));
   });
-</script>
+  </script>
 
 	
 	
-  </script>
+  
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+

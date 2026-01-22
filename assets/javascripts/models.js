@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   let selectedModel = null;
+  let modelsCache = [];
 
   const tableBody = document.getElementById('modelsTableBody');
   const btnNew     = document.getElementById('btnNew');
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const itemSelect   = document.getElementById('itemSelect');
   const modelName    = document.getElementById('modelName');
   const modelRemarks = document.getElementById('modelRemarks');
+  const currentUser  = JSON.parse(localStorage.getItem('user') || 'null');
 
   function formatDate(isoString) {
     if (!isoString) return '';
@@ -49,10 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/models');
       if (!res.ok) throw new Error('Failed to fetch models');
       const data = await res.json();
+      modelsCache = data;
 
       tableBody.innerHTML = '';
 
       data.forEach(m => {
+        const modelRemark = m.models_remarks1 || m.remarks || '';
         const row = document.createElement('tr');
         row.dataset.id = m.id;
         row.innerHTML = `
@@ -61,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>${m.name || ''}</td>
           <td>${formatDate(m.updated_on)}</td>
           <td>${m.updated_by || ''}</td>
-          <td class="remarks-cell" title="${(m.remarks||'').replace(/"/g, '&quot;')}">${(m.remarks||'').split('\n')[0]}</td>
+          <td class="remarks-cell" title="${modelRemark.replace(/"/g, '&quot;')}">${modelRemark.split('\n')[0]}</td>
         `;
         row.addEventListener('click', () => {
           document.querySelectorAll('#modelsTableBody tr').forEach(r => r.classList.remove('selected'));
@@ -73,7 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBody.appendChild(row);
       });
 
-      document.getElementById('rowCount').dispatchEvent(new Event('change'));
+      if (typeof window.applyModelsPagination === 'function') {
+        window.applyModelsPagination();
+      } else {
+        document.getElementById('rowCount').dispatchEvent(new Event('change'));
+      }
     } catch(err) {
       console.error('Error fetching models:', err);
       alert('Failed to load models.');
@@ -98,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modelIdInput.value   = selectedModel.id;
     itemSelect.value     = selectedModel.item_id;
     modelName.value      = selectedModel.name;
-    modelRemarks.value   = selectedModel.remarks || '';
+    modelRemarks.value   = selectedModel.models_remarks1 || selectedModel.remarks || '';
     modalElem.find('.modal-title').text('Edit Model');
     modalElem.modal('show');
   });
@@ -130,10 +138,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const payload    = {
       item_id   : itemSelect.value,
       model_name: modelName.value.trim(),
-      remarks   : modelRemarks.value.trim()
+      remarks   : modelRemarks.value.trim(),
+      models_remarks1: modelRemarks.value.trim(),
+      updated_by: currentUser ? (currentUser.fullName || currentUser.username || 'system') : 'system'
     };
     if (!payload.item_id || !payload.model_name) {
       alert('Please fill Item and Model name.');
+      return;
+    }
+    // duplicate check by model name (case-insensitive), ignore current editing id
+    const dup = modelsCache.find(m =>
+      (m.name || '').toLowerCase() === payload.model_name.toLowerCase() &&
+      String(m.id) !== String(id || '')
+    );
+    if (dup) {
+      alert('Model name already exists.');
       return;
     }
     try {
@@ -154,12 +173,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Ensure Cancel closes the modal in case data-dismiss is blocked
+  const cancelBtn = document.getElementById('btnModelCancel');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', () => modalElem.modal('hide'));
+  }
+
   // Show model details in a read-only modal (double-click)
   function showModelView(m) {
     document.getElementById('viewModelId').textContent = m.id;
     document.getElementById('viewModelItem').textContent = m.item_name || '';
     document.getElementById('viewModelName').textContent = m.name || '';
-    document.getElementById('viewModelRemarks').textContent = m.remarks || '';
+    document.getElementById('viewModelRemarks').textContent = m.models_remarks1 || m.remarks || '';
     document.getElementById('viewModelUpdated').textContent = m.updated_on || '';
     $('#modelViewModal').modal('show');
   }

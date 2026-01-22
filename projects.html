@@ -1,0 +1,423 @@
+﻿<!doctype html>
+<html class="fixed">
+<head>
+  <meta charset="UTF-8">
+  <title>DESKHUB | Projects</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+  <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
+  <script src="assets/vendor/modernizr/modernizr.js"></script>
+</head>
+<body>
+  <section class="body">
+    <header class="header">
+      <div class="logo-container">
+        <a href="dashboard.html" class="logo">
+          <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
+        </a>
+        <div class="visible-xs toggle-sidebar-left"
+             data-toggle-class="sidebar-left-opened"
+             data-target="html"
+             data-fire-event="sidebar-left-opened">
+          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+      </div>
+    </header>
+
+    <div class="inner-wrapper">
+      <aside id="sidebar-left" class="sidebar-left">
+        <div class="sidebar-header">
+          <div class="sidebar-toggle hidden-xs"
+               data-toggle-class="sidebar-left-collapsed"
+               data-target="html"
+               data-fire-event="sidebar-left-toggle"
+               title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
+          </div>
+        </div>
+        <div class="nano">
+          <div class="nano-content">
+            <nav id="menu" class="nav-main">
+              <ul class="nav nav-main">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-archive"></i><span>Inventory</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="items.html">Items</a></li>
+                    <li><a href="models.html">Models</a></li>
+                    <li><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent nav-expanded nav-active">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li class="nav-active"><a href="projects.html">Projects</a></li>
+                  </ul>
+                                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                    
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                                <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
+                </li>
+              </ul>
+            </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section role="main" class="content-body">
+        <header class="page-header">
+          <h2>Projects</h2><div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
+        </header>
+
+        <section class="panel">
+          <header class="panel-heading"><h2 class="panel-title">Projects</h2></header>
+          <div class="panel-body">
+            <div class="row mb-sm">
+              <div class="col-sm-6">
+                <button class="btn btn-primary" id="btnAddProject">Add Project</button>
+                <button class="btn btn-default" id="btnEditProject">Edit</button>
+                <button class="btn btn-danger" id="btnDeleteProject">Delete</button>
+              </div>
+              <div class="col-sm-6 text-right">
+                <div class="input-group" style="max-width: 320px; float: right;">
+                  <input type="text" class="form-control" id="searchProjects" placeholder="Search projects...">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" id="btnSearch">Search</button>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6">
+                <span id="pageInfoTop"></span>
+              </div>
+              <div class="col-sm-6 text-right">
+                <button class="btn btn-default btn-sm" id="btnPrevPageTop">Previous</button>
+                <button class="btn btn-default btn-sm" id="btnNextPageTop">Next</button>
+              </div>
+            </div>
+
+            <table class="table table-bordered table-hover" id="projectsTable">
+              <thead>
+                <tr>
+                  <th style="width:60px;">#</th>
+                  <th style="width:22%;">Project Name</th>
+                  <th>Location</th>
+                  <th>Number of Stations</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+
+            <div class="row">
+              <div class="col-sm-6">
+                <span id="pageInfo"></span>
+              </div>
+              <div class="col-sm-6 text-right">
+                <button class="btn btn-default btn-sm" id="btnPrevPage">Previous</button>
+                <button class="btn btn-default btn-sm" id="btnNextPage">Next</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </section>
+
+  <!-- Project Modal -->
+  <div class="modal fade" id="projectModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <form class="modal-content" id="projectForm">
+        <div class="modal-header">
+          <h5 class="modal-title">Project</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="projectIndex">
+          <div class="form-group">
+            <label>Project Name</label>
+            <input type="text" class="form-control" id="projectName" required>
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" class="form-control" id="projectLocation" required>
+          </div>
+          <div class="form-group">
+            <label>Number of Stations</label>
+            <input type="number" min="0" class="form-control" id="projectStations" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="assets/javascripts/theme.js"></script>
+  <script src="assets/javascripts/theme.custom.js"></script>
+  <script src="assets/javascripts/theme.init.js"></script>
+  <script src="script.js"></script>
+  <script>
+    $(function() {
+      const tableBody = $('#projectsTable tbody');
+      const modal = $('#projectModal');
+      const form = $('#projectForm');
+      const nameInput = $('#projectName');
+      const locInput = $('#projectLocation');
+      const stationsInput = $('#projectStations');
+      const idxInput = $('#projectIndex');
+      let selectedIndex = -1;
+      let projects = [];
+      let searchTerm = '';
+      let currentPage = 1;
+      const pageSize = 100;
+
+      async function loadProjects() {
+        try {
+          const res = await fetch('/api/projects');
+          if (!res.ok) throw new Error('Failed to load');
+          projects = await res.json();
+          currentPage = 1;
+          render();
+        } catch (err) {
+          console.error(err);
+          alert('Failed to load projects.');
+        }
+      }
+
+      async function saveProjects(action, payload) {
+        try {
+          let res;
+          if (action === 'create') {
+            res = await fetch('/api/projects', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+          } else if (action === 'update') {
+            res = await fetch(`/api/projects/${payload.id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+          } else if (action === 'delete') {
+            res = await fetch(`/api/projects/${payload.id}`, { method: 'DELETE' });
+          }
+          if (!res.ok) throw new Error('Save failed');
+          await loadProjects();
+        } catch (err) {
+          console.error(err);
+          alert('Failed to save project.');
+        }
+      }
+
+      function render() {
+        tableBody.empty();
+        const filtered = projects.filter(p => {
+          const t = searchTerm.trim().toLowerCase();
+          if (!t) return true;
+          return (p.name || '').toLowerCase().includes(t) ||
+                 (p.location || '').toLowerCase().includes(t);
+        });
+        const priorityNames = [
+          'MSP Office',
+          'H3 Geospatial Technologies Pte Ltd'
+        ];
+        const sorted = filtered.slice().sort((a, b) => {
+          const nameA = (a.name || '').trim();
+          const nameB = (b.name || '').trim();
+          const priA = priorityNames.findIndex(n => n.toLowerCase() === nameA.toLowerCase());
+          const priB = priorityNames.findIndex(n => n.toLowerCase() === nameB.toLowerCase());
+          const rankA = priA === -1 ? 2 : priA;
+          const rankB = priB === -1 ? 2 : priB;
+          if (rankA !== rankB) return rankA - rankB;
+          return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
+        });
+        const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
+        if (currentPage > totalPages) currentPage = totalPages;
+        const startIdx = (currentPage - 1) * pageSize;
+        const visible = sorted.slice(startIdx, startIdx + pageSize);
+        visible.forEach((p, localIdx) => {
+          // map back to original index for selection/edit
+          const idx = projects.indexOf(p);
+          const tr = $(`
+            <tr data-idx="${idx}">
+              <td>${idx + 1}</td>
+              <td>${p.name || ''}</td>
+              <td>${p.location || ''}</td>
+              <td>${p.stations || ''}</td>
+            </tr>
+          `);
+          if (idx === selectedIndex) tr.addClass('info');
+          tr.on('click', function() {
+            selectedIndex = parseInt($(this).data('idx'), 10);
+            render();
+          });
+          tr.on('dblclick', function() {
+            selectedIndex = parseInt($(this).data('idx'), 10);
+            render();
+            openEdit();
+          });
+          tableBody.append(tr);
+        });
+
+        const pageLabel = `Page ${currentPage} of ${Math.max(1, Math.ceil(filtered.length / pageSize))}`;
+        $('#pageInfo').text(pageLabel);
+        $('#pageInfoTop').text(pageLabel);
+        const atStart = currentPage <= 1;
+        const atEnd = currentPage >= Math.max(1, Math.ceil(filtered.length / pageSize));
+        $('#btnPrevPage, #btnPrevPageTop').prop('disabled', atStart);
+        $('#btnNextPage, #btnNextPageTop').prop('disabled', atEnd);
+      }
+
+      function openAdd() {
+        idxInput.val('');
+        nameInput.val('');
+        locInput.val('');
+        stationsInput.val('');
+        modal.find('.modal-title').text('Add Project');
+        modal.modal('show');
+      }
+
+      function openEdit() {
+        if (selectedIndex < 0 || selectedIndex >= projects.length) {
+          alert('Select a project to edit.');
+          return;
+        }
+        const p = projects[selectedIndex];
+        idxInput.val(selectedIndex);
+        nameInput.val(p.name || '');
+        locInput.val(p.location || '');
+        stationsInput.val(p.stations || '');
+        modal.find('.modal-title').text('Edit Project');
+        modal.modal('show');
+      }
+
+      function deleteProject() {
+        if (selectedIndex < 0 || selectedIndex >= projects.length) {
+          alert('Select a project to delete.');
+          return;
+        }
+        if (!confirm('Delete selected project?')) return;
+        const id = projects[selectedIndex].id;
+        selectedIndex = -1;
+        saveProjects('delete', { id });
+      }
+
+      $('#btnAddProject').on('click', openAdd);
+      $('#btnEditProject').on('click', openEdit);
+      $('#btnDeleteProject').on('click', deleteProject);
+      $('#btnPrevPage').on('click', () => { if (currentPage > 1) { currentPage--; render(); } });
+      $('#btnNextPage').on('click', () => {
+        const filteredCount = projects.filter(p => {
+          const t = searchTerm.trim().toLowerCase();
+          if (!t) return true;
+          return (p.name || '').toLowerCase().includes(t) ||
+                 (p.location || '').toLowerCase().includes(t);
+        }).length;
+        const totalPages = Math.max(1, Math.ceil(filteredCount / pageSize));
+        if (currentPage < totalPages) { currentPage++; render(); }
+      });
+      $('#btnPrevPageTop').on('click', () => { if (currentPage > 1) { currentPage--; render(); } });
+      $('#btnNextPageTop').on('click', () => {
+        const filteredCount = projects.filter(p => {
+          const t = searchTerm.trim().toLowerCase();
+          if (!t) return true;
+          return (p.name || '').toLowerCase().includes(t) ||
+                 (p.location || '').toLowerCase().includes(t);
+        }).length;
+        const totalPages = Math.max(1, Math.ceil(filteredCount / pageSize));
+        if (currentPage < totalPages) { currentPage++; render(); }
+      });
+
+      function applySearch() {
+        searchTerm = $('#searchProjects').val() || '';
+        currentPage = 1;
+        render();
+      }
+      $('#btnSearch').on('click', applySearch);
+      $('#searchProjects').on('keyup', function(e) {
+        if (e.key === 'Enter') applySearch();
+      });
+
+      form.on('submit', function(e) {
+        e.preventDefault();
+        const data = {
+          name: nameInput.val().trim(),
+          location: locInput.val().trim(),
+          stations: stationsInput.val().trim()
+        };
+        if (!data.name || !data.location || data.stations === '') {
+          alert('Please fill in all fields.');
+          return;
+        }
+        const idx = idxInput.val();
+        if (idx === '') {
+          saveProjects('create', { name: data.name, location: data.location, stationcounts: data.stations });
+        } else {
+          const id = projects[parseInt(idx, 10)].id;
+          saveProjects('update', { id, name: data.name, location: data.location, stationcounts: data.stations });
+        }
+        modal.modal('hide');
+      });
+
+      loadProjects();
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

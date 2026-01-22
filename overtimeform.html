@@ -1,0 +1,275 @@
+﻿<!doctype html>
+<html class="fixed">
+<head>
+  <meta charset="UTF-8">
+  <title>DESKHUB | Overtime Form</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+  <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
+  <link rel="stylesheet" href="assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css" />
+  <script src="assets/vendor/modernizr/modernizr.js"></script>
+</head>
+<body>
+  <section class="body">
+    <header class="header">
+      <div class="logo-container">
+        <a href="dashboard.html" class="logo">
+          <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
+        </a>
+        <div class="visible-xs toggle-sidebar-left"
+             data-toggle-class="sidebar-left-opened"
+             data-target="html"
+             data-fire-event="sidebar-left-opened">
+          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+      </div>
+    </header>
+
+    <div class="inner-wrapper">
+      <aside id="sidebar-left" class="sidebar-left">
+        <div class="sidebar-header">
+          <div class="sidebar-toggle hidden-xs"
+               data-toggle-class="sidebar-left-collapsed"
+               data-target="html"
+               data-fire-event="sidebar-left-toggle"
+               title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
+          </div>
+        </div>
+        <div class="nano">
+          <div class="nano-content">
+            <nav id="menu" class="nav-main">
+              <ul class="nav nav-main">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-archive"></i><span>Inventory</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="items.html">Items</a></li>
+                    <li><a href="models.html">Models</a></li>
+                    <li><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent nav-expanded nav-active">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li class="nav-active"><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                  </ul>
+                                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                    
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                                <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
+                </li>
+              </ul>
+            </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section role="main" class="content-body">
+        <header class="page-header">
+          <h2>Overtime Form</h2><div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
+        </header>
+
+        <section class="panel">
+          <header class="panel-heading"><h2 class="panel-title">Overtime Form</h2></header>
+          <div class="panel-body">
+            <form class="form-horizontal" id="otForm">
+              <div class="form-group">
+                <label class="col-md-3 control-label">Overtime Date:</label>
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input type="text" class="form-control datepicker" id="otDate" placeholder="mm/dd/yyyy">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Overtime Time From:</label>
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                    <input type="time" class="form-control" id="otTimeFrom">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Overtime Time To:</label>
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                    <input type="time" class="form-control" id="otTimeTo">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Total Hours:</label>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" id="otTotalHours" readonly placeholder="Auto calculated">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Remarks:</label>
+                <div class="col-md-6">
+                  <textarea class="form-control" rows="4" id="otRemarks" placeholder="Remarks"></textarea>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-9 col-sm-offset-3">
+                  <button type="submit" class="btn btn-primary" id="otSubmit">Submit</button>
+                  <div id="otStatus" class="alert mt-md" style="display:none; margin-top:10px;"></div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </section>
+      </section>
+    </div>
+  </section>
+
+  <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+  <script src="assets/javascripts/theme.js"></script>
+  <script src="assets/javascripts/theme.custom.js"></script>
+  <script src="assets/javascripts/theme.init.js"></script>
+  <script src="script.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('.datepicker').datepicker({
+        format: 'mm/dd/yyyy',
+        autoclose: true,
+        todayHighlight: true
+      });
+
+      function calcHours() {
+        const from = document.getElementById('otTimeFrom').value;
+        const to = document.getElementById('otTimeTo').value;
+        if (!from || !to) {
+          document.getElementById('otTotalHours').value = '';
+          return;
+        }
+        const [fh, fm] = from.split(':').map(Number);
+        const [th, tm] = to.split(':').map(Number);
+        const start = new Date(2000, 0, 1, fh, fm, 0);
+        let end = new Date(2000, 0, 1, th, tm, 0);
+        if (end < start) end.setDate(end.getDate() + 1); // cross midnight
+        const diffMs = end - start;
+        const hours = diffMs / (1000 * 60 * 60);
+        document.getElementById('otTotalHours').value = hours.toFixed(2);
+      }
+      document.getElementById('otTimeFrom').addEventListener('change', calcHours);
+      document.getElementById('otTimeTo').addEventListener('change', calcHours);
+
+      async function resolveUserEmail(currentUser) {
+        if (currentUser && currentUser.email) return currentUser.email;
+        try {
+          const res = await fetch('/api/users');
+          if (!res.ok) throw new Error('load users failed');
+          const list = await res.json();
+          const found = list.find(u => (u.username || '').toLowerCase() === (currentUser && currentUser.username || '').toLowerCase());
+          if (found && found.email) {
+            const updatedUser = { ...(currentUser || {}), email: found.email };
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            return found.email;
+          }
+        } catch (err) {
+          console.warn('Could not resolve user email', err);
+        }
+        return '';
+      }
+
+      const otForm = document.getElementById('otForm');
+      const otStatus = document.getElementById('otStatus');
+
+      otForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        otStatus.style.display = 'none';
+        const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
+        const fullName = currentUser ? (currentUser.fullName || currentUser.username || '') : '';
+        const userEmail = await resolveUserEmail(currentUser);
+        const submittedOn = new Date().toISOString().slice(0, 10);
+        const payload = {
+          formType: 'overtime',
+          username: currentUser && currentUser.username ? currentUser.username : '',
+          userEmail,
+          full_name: fullName,
+          submitted_on: submittedOn,
+          office: currentUser && currentUser.office ? currentUser.office : null,
+          ot_date: document.getElementById('otDate').value,
+          time_from: document.getElementById('otTimeFrom').value,
+          time_to: document.getElementById('otTimeTo').value,
+          total_hours: document.getElementById('otTotalHours').value,
+          remarks: document.getElementById('otRemarks').value
+        };
+        try {
+          const res = await fetch('/api/send-leave-pdf', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            otStatus.textContent = `Form submitted successfully. A copy was emailed${userEmail ? ' to ' + userEmail : ''}.`;
+            otStatus.className = 'alert alert-success mt-md';
+          } else {
+            otStatus.textContent = 'Failed to submit form.';
+            otStatus.className = 'alert alert-danger mt-md';
+          }
+        } catch (err) {
+          otStatus.textContent = 'Error connecting to server.';
+          otStatus.className = 'alert alert-warning mt-md';
+        }
+        otStatus.style.display = 'block';
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+

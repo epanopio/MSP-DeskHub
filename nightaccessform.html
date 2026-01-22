@@ -1,0 +1,320 @@
+﻿<!doctype html>
+<html class="fixed">
+<head>
+  <meta charset="UTF-8">
+  <title>DESKHUB | Night Access Form</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+  <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
+  <link rel="stylesheet" href="assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css" />
+  <script src="assets/vendor/modernizr/modernizr.js"></script>
+</head>
+<body>
+  <section class="body">
+    <header class="header">
+      <div class="logo-container">
+        <a href="dashboard.html" class="logo">
+          <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
+        </a>
+        <div class="visible-xs toggle-sidebar-left"
+             data-toggle-class="sidebar-left-opened"
+             data-target="html"
+             data-fire-event="sidebar-left-opened">
+          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+      </div>
+    </header>
+
+    <div class="inner-wrapper">
+      <aside id="sidebar-left" class="sidebar-left">
+        <div class="sidebar-header">
+          <div class="sidebar-toggle hidden-xs"
+               data-toggle-class="sidebar-left-collapsed"
+               data-target="html"
+               data-fire-event="sidebar-left-toggle"
+               title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
+          </div>
+        </div>
+
+        <div class="nano">
+          <div class="nano-content">
+            <nav id="menu" class="nav-main">
+              <ul class="nav nav-main">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-archive"></i><span>Inventory</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="items.html">Items</a></li>
+                    <li><a href="models.html">Models</a></li>
+                    <li><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent nav-expanded nav-active">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li class="nav-active"><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                    
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
+                </li>
+              </ul>
+            </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section role="main" class="content-body">
+        <header class="page-header">
+          <h2>Night Access Form</h2><div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
+        </header>
+
+        <section class="panel">
+          <header class="panel-heading"><h2 class="panel-title">Night Access Form</h2></header>
+          <div class="panel-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-md-3 control-label">Project:</label>
+                <div class="col-md-6">
+                  <select class="form-control" id="naProject">
+                    <option value="">Select Project</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Location:</label>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" id="naLocation" placeholder="Location">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Station:</label>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" id="naStation" placeholder="Station">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Bound:</label>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" id="naBound" placeholder="Bound">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Task:</label>
+                <div class="col-md-6">
+                  <select class="form-control" id="naTask">
+                    <option>Maintenance</option>
+                    <option>Manual Survey</option>
+                    <option>Post Con Survey</option>
+                    <option>Geometry Survey</option>
+                    <option>Others</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Access Date From:</label>
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input type="text" class="form-control datepicker" id="naFromDate" placeholder="mm/dd/yyyy">
+                  </div>
+                  <div style="margin-top:8px;">
+                    <label class="checkbox-inline"><input type="checkbox" id="naFromAm"> AM</label>
+                    <label class="checkbox-inline"><input type="checkbox" id="naFromPm"> PM</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Night Access To:</label>
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input type="text" class="form-control datepicker" id="naToDate" placeholder="mm/dd/yyyy">
+                  </div>
+                  <div style="margin-top:8px;">
+                    <label class="checkbox-inline"><input type="checkbox" id="naToAm"> AM</label>
+                    <label class="checkbox-inline"><input type="checkbox" id="naToPm"> PM</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Remarks:</label>
+                <div class="col-md-6">
+                  <textarea class="form-control" rows="4" id="naRemarks" placeholder="Remarks"></textarea>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-9 col-sm-offset-3">
+                  <button type="submit" class="btn btn-primary" id="naSubmit">Submit</button>
+                  <div id="naStatus" class="alert mt-md" style="display:none; margin-top:10px;"></div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </section>
+      </section>
+    </div>
+  </section>
+
+  <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+  <script src="assets/javascripts/theme.js"></script>
+  <script src="assets/javascripts/theme.custom.js"></script>
+  <script src="assets/javascripts/theme.init.js"></script>
+  <script src="script.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('.datepicker').datepicker({
+        format: 'mm/dd/yyyy',
+        autoclose: true,
+        todayHighlight: true
+      });
+
+      async function loadProjects() {
+        try {
+          const res = await fetch('/api/projects');
+          if (!res.ok) throw new Error('Failed to load projects');
+          const data = await res.json();
+          const select = document.getElementById('naProject');
+          select.innerHTML = '<option value=\"\">Select Project</option>';
+          data.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.name || '';
+            opt.textContent = p.name || '';
+            select.appendChild(opt);
+          });
+        } catch (err) {
+          console.error(err);
+          // leave the default option if load fails
+        }
+      }
+      loadProjects();
+
+      const naForm = document.querySelector('form');
+      const naStatus = document.getElementById('naStatus');
+      naForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        naStatus.style.display = 'none';
+        const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
+        async function resolveUserEmail() {
+          if (currentUser && currentUser.email) return currentUser.email;
+          try {
+            const res = await fetch('/api/users');
+            if (!res.ok) throw new Error('load users failed');
+            const list = await res.json();
+            const found = list.find(u => (u.username || '').toLowerCase() === (currentUser && currentUser.username || '').toLowerCase());
+            if (found && found.email) {
+              const updatedUser = { ...(currentUser || {}), email: found.email };
+              localStorage.setItem('user', JSON.stringify(updatedUser));
+              return found.email;
+            }
+          } catch (err) {
+            console.warn('Could not resolve user email', err);
+          }
+          return '';
+        }
+        const userEmail = await resolveUserEmail();
+        const fullName = currentUser ? (currentUser.fullName || currentUser.username || '') : '';
+        const submittedOn = new Date().toISOString().slice(0, 10);
+        const payload = {
+          formType: 'night_access',
+          username: currentUser && currentUser.username ? currentUser.username : '',
+          userEmail,
+          full_name: fullName,
+          submitted_on: submittedOn,
+          office: currentUser && currentUser.office ? currentUser.office : null,
+          project: document.getElementById('naProject').value,
+          location: document.getElementById('naLocation').value,
+          station: document.getElementById('naStation').value,
+          bound: document.getElementById('naBound').value,
+          task: document.getElementById('naTask').value,
+          from_date: document.getElementById('naFromDate').value,
+          from_am: document.getElementById('naFromAm').checked,
+          from_pm: document.getElementById('naFromPm').checked,
+          to_date: document.getElementById('naToDate').value,
+          to_am: document.getElementById('naToAm').checked,
+          to_pm: document.getElementById('naToPm').checked,
+          remarks: document.getElementById('naRemarks').value
+        };
+        try {
+          const res = await fetch('/api/send-leave-pdf', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            naStatus.textContent = `Form submitted successfully. A copy was emailed${userEmail ? ' to ' + userEmail : ''}.`;
+            naStatus.className = 'alert alert-success mt-md';
+          } else {
+            naStatus.textContent = 'Failed to submit form.';
+            naStatus.className = 'alert alert-danger mt-md';
+          }
+        } catch (err) {
+          naStatus.textContent = 'Error connecting to server.';
+          naStatus.className = 'alert alert-warning mt-md';
+        }
+        naStatus.style.display = 'block';
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+

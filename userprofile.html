@@ -1,0 +1,405 @@
+﻿<!doctype html>
+<html class="fixed">
+<head>
+  <meta charset="UTF-8">
+  <title>DESKHUB | User Profile</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+  <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
+  <script src="assets/vendor/modernizr/modernizr.js"></script>
+  <style>
+    .profile-cover {
+      width: 100%;
+      height: 240px;
+      background: #f1f1f1;
+      border: 1px solid #e0e0e0;
+    }
+    .profile-name {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      background: rgba(0,0,0,0.8);
+      color: #fff;
+      padding: 8px 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .profile-role {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      margin-top: 6px;
+      display: inline-block;
+      background: #0099d6;
+      color: #fff;
+      padding: 4px 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .status-bar {
+      height: 8px;
+      background: #e9ecef;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    .status-bar .filled { width: 60%; background: #0099d6; height: 100%; }
+    .profile-actions li { padding: 4px 0; color: #5a5a5a; }
+    .profile-actions li i { margin-right: 6px; color: #0099d6; }
+    .info-card {
+      background: #018bd3;
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+    }
+    .info-card h5 { margin: 0 0 8px; font-weight: 700; }
+    .info-card p { margin: 0; font-size: 13px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+  <section class="body">
+    <header class="header">
+      <div class="logo-container">
+        <a href="dashboard.html" class="logo">
+          <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
+        </a>
+        <div class="visible-xs toggle-sidebar-left"
+             data-toggle-class="sidebar-left-opened"
+             data-target="html"
+             data-fire-event="sidebar-left-opened">
+          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+      </div>
+    </header>
+
+    <div class="inner-wrapper">
+      <aside id="sidebar-left" class="sidebar-left">
+        <div class="sidebar-header">
+          <div class="sidebar-toggle hidden-xs"
+               data-toggle-class="sidebar-left-collapsed"
+               data-target="html"
+               data-fire-event="sidebar-left-toggle"
+               title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
+          </div>
+        </div>
+        <div class="nano">
+          <div class="nano-content">
+            <nav id="menu" class="nav-main">
+              <ul class="nav nav-main">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-archive"></i><span>Inventory</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="items.html">Items</a></li>
+                    <li><a href="models.html">Models</a></li>
+                    <li><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                  </ul>
+                                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                    
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent nav-expanded nav-active"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li class="nav-active"><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
+                </li>
+              </ul>
+            </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section role="main" class="content-body">
+        <header class="page-header">
+          <h2>User Profile</h2><div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
+        </header>
+
+        <div class="row">
+          <div class="col-md-3">
+            <section class="panel">
+              <div class="panel-body" style="position: relative; padding-bottom: 70px;">
+                <div class="profile-cover" style="position: relative;"></div>
+                <div class="profile-name" id="profileName">User</div>
+                <div class="profile-role" id="profileRole">Role</div>
+                <div class="status-bar"><div class="filled"></div></div>
+              </div>
+            </section>
+          </div>
+
+          <div class="col-md-6">
+            <section class="panel">
+              <header class="panel-heading">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a>Profile</a></li>
+                </ul>
+              </header>
+              <div class="panel-body">
+                <form id="profileForm">
+                  <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" class="form-control" id="username" placeholder="Username">
+                  </div>
+                  <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" class="form-control" id="fullName" placeholder="Full name">
+                  </div>
+                  <div class="form-group">
+                    <label>NRIC/FIN:</label>
+                    <input type="text" class="form-control" id="nricFin" placeholder="NRIC/FIN">
+                  </div>
+                  <div class="form-group">
+                    <label>Mobile No.:</label>
+                    <input type="text" class="form-control" id="mobileNo" placeholder="Mobile number">
+                  </div>
+                  <div class="form-group">
+                    <label>Address:</label>
+                    <input type="text" class="form-control" id="address1" placeholder="address1">
+                    <input type="text" class="form-control" id="address2" placeholder="address2" style="margin-top:6px;">
+                    <input type="text" class="form-control" id="address3" placeholder="address3" style="margin-top:6px;">
+                  </div>
+                  <div class="form-group">
+                    <label>Birthdate:</label>
+                    <input type="date" class="form-control" id="birthdate">
+                  </div>
+                <div class="form-group">
+                  <label>Email:</label>
+                  <input type="email" class="form-control" id="email" placeholder="email@example.com">
+                </div>
+                <div class="form-group">
+                  <label>Office:</label><br>
+                  <label class="radio-inline"><input type="radio" name="officeRadio" id="officeSG"> Singapore</label>
+                  <label class="radio-inline" style="margin-left:12px;"><input type="radio" name="officeRadio" id="officeKL"> Kuala Lumpur</label>
+                </div>
+                <div class="form-group" style="margin-top:12px;">
+                  <button type="submit" class="btn btn-primary">Save Profile</button>
+                </div>
+                <span id="profileStatus" style="margin-left:10px; font-size:13px;"></span>
+              </form>
+              </div>
+            </section>
+          </div>
+
+          <div class="col-md-3">
+            <div class="info-card">
+              <h5>Total Leaves</h5>
+              <p>Total Leaves: <span id="leaveTotal"></span></p>
+              <p>Used Leaves: <span id="leaveUsed"></span></p>
+              <p>Balance: <span id="leaveBalance"></span></p>
+            </div>
+            <div class="info-card">
+              <h5>Total Claim Offs</h5>
+              <p>Total Claim Offs: <span id="claimTotal"></span></p>
+              <p>Used Claim Offs: <span id="claimUsed"></span></p>
+              <p>Balance: <span id="claimBalance"></span></p>
+            </div>
+            <div class="info-card">
+              <h5>Total Child Care</h5>
+              <p>Total Child Care: <span id="childTotal"></span></p>
+              <p>Used Child Care: <span id="childUsed"></span></p>
+              <p>Balance: <span id="childBalance"></span></p>
+            </div>
+            <div class="info-card">
+              <h5>Total MC</h5>
+              <p>Total MC: <span id="mcTotal"></span></p>
+              <p>Used MC: <span id="mcUsed"></span></p>
+              <p>Balance: <span id="mcBalance"></span></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="assets/javascripts/theme.js"></script>
+  <script src="assets/javascripts/theme.custom.js"></script>
+  <script src="assets/javascripts/theme.init.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      if (!user || !user.username) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const profileStatus = document.getElementById('profileStatus');
+      const form = document.getElementById('profileForm');
+        const fields = {
+          username: document.getElementById('username'),
+          fullName: document.getElementById('fullName'),
+          nricFin: document.getElementById('nricFin'),
+          mobileNo: document.getElementById('mobileNo'),
+          address1: document.getElementById('address1'),
+          address2: document.getElementById('address2'),
+          address3: document.getElementById('address3'),
+          birthdate: document.getElementById('birthdate'),
+          email: document.getElementById('email'),
+          officeSG: document.getElementById('officeSG'),
+          officeKL: document.getElementById('officeKL')
+        };
+
+      let currentUser = null;
+
+      function showStatus(msg, ok) {
+        profileStatus.textContent = msg;
+        profileStatus.style.color = ok ? 'green' : 'red';
+      }
+
+      async function loadProfile() {
+        try {
+          const res = await fetch('/api/users');
+          if (!res.ok) throw new Error('Failed to load users');
+          const list = await res.json();
+          currentUser = list.find(u => (u.username || '').toLowerCase() === user.username.toLowerCase());
+          if (!currentUser) {
+            showStatus('User record not found.', false);
+            return;
+          }
+          fields.username.value = currentUser.username || '';
+          fields.fullName.value = currentUser.full_name || currentUser.username || '';
+          fields.nricFin.value = currentUser.nric_fin || '';
+          fields.mobileNo.value = currentUser.mobile_no || '';
+          fields.address1.value = currentUser.address1 || '';
+          fields.address2.value = currentUser.address2 || '';
+          fields.address3.value = currentUser.address3 || '';
+          fields.birthdate.value = currentUser.birthdate ? currentUser.birthdate.split('T')[0] : '';
+          fields.email.value = currentUser.email || '';
+          fields.officeSG.checked = currentUser.office === 'SG' || currentUser.office === 'Singapore';
+          fields.officeKL.checked = currentUser.office === 'KL' || currentUser.office === 'Kuala Lumpur';
+          const nameEl = document.getElementById('profileName');
+          const roleEl = document.getElementById('profileRole');
+          if (nameEl) nameEl.textContent = currentUser.full_name || currentUser.username || 'User';
+          if (roleEl) roleEl.textContent = (currentUser.role || '').toUpperCase() || 'ROLE';
+          const leaveTotal = document.getElementById('leaveTotal');
+          const leaveUsed = document.getElementById('leaveUsed');
+          const leaveBalance = document.getElementById('leaveBalance');
+          const claimTotal = document.getElementById('claimTotal');
+          const claimUsed = document.getElementById('claimUsed');
+          const claimBalance = document.getElementById('claimBalance');
+          const childTotal = document.getElementById('childTotal');
+          const childUsed = document.getElementById('childUsed');
+          const childBalance = document.getElementById('childBalance');
+          const mcTotal = document.getElementById('mcTotal');
+          const mcUsed = document.getElementById('mcUsed');
+          const mcBalance = document.getElementById('mcBalance');
+          if (leaveTotal) leaveTotal.textContent = currentUser.user_leave_total ?? '';
+          if (leaveUsed) leaveUsed.textContent = currentUser.user_leave_used ?? '';
+          if (leaveBalance) leaveBalance.textContent = currentUser.user_leave_balance ?? '';
+          if (claimTotal) claimTotal.textContent = currentUser.user_claimoff_total ?? '';
+          if (claimUsed) claimUsed.textContent = currentUser.user_claimoff_used ?? '';
+          if (claimBalance) claimBalance.textContent = currentUser.user_claimoff_balance ?? '';
+          if (childTotal) childTotal.textContent = currentUser.user_childcare_total ?? '';
+          if (childUsed) childUsed.textContent = currentUser.user_childcare_used ?? '';
+          if (childBalance) childBalance.textContent = currentUser.user_childcare_balance ?? '';
+          if (mcTotal) mcTotal.textContent = currentUser.user_mc_total ?? '';
+          if (mcUsed) mcUsed.textContent = currentUser.user_mc_used ?? '';
+          if (mcBalance) mcBalance.textContent = currentUser.user_mc_balance ?? '';
+        } catch (err) {
+          console.error(err);
+          showStatus('Failed to load profile.', false);
+        }
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentUser || !currentUser.id) {
+          showStatus('Cannot save: user not loaded.', false);
+          return;
+        }
+        const payload = {
+          username: fields.username.value.trim() || currentUser.username,
+          full_name: fields.fullName.value.trim() || currentUser.full_name || currentUser.username,
+          email: fields.email.value.trim(),
+          role: currentUser.role || 'user',
+          is_active: currentUser.is_active !== false,
+          updated_by: user.username,
+          nric_fin: fields.nricFin.value.trim() || null,
+          mobile_no: fields.mobileNo.value.trim() || null,
+          address1: fields.address1.value.trim() || null,
+          address2: fields.address2.value.trim() || null,
+          address3: fields.address3.value.trim() || null,
+          birthdate: fields.birthdate.value || null,
+          office: fields.officeSG.checked ? 'SG' : fields.officeKL.checked ? 'KL' : null
+        };
+        try {
+          const res = await fetch(`/api/users/${currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error('Save failed');
+          const saved = await res.json();
+          currentUser = saved;
+          // update stored user so greetings reflect the full name
+          const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
+          if (storedUser && storedUser.username && storedUser.username.toLowerCase() === (saved.username || '').toLowerCase()) {
+            storedUser.fullName = saved.full_name || saved.username;
+            localStorage.setItem('user', JSON.stringify(storedUser));
+          }
+          showStatus('Profile saved.', true);
+        } catch (err) {
+          console.error(err);
+          showStatus('Failed to save profile.', false);
+        }
+      });
+
+      loadProfile();
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

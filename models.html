@@ -1,8 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html class="fixed">
 <head>
   <meta charset="UTF-8">
   <title>DESKHUB | Models</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
   <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
@@ -19,11 +20,11 @@
     #modelsTable tbody tr.selected {
       background-color: #d0e9ff !important;
     }
-    .remarks‑cell {
-      white‑space: nowrap;
+    .remarksâ€‘cell {
+      whiteâ€‘space: nowrap;
       overflow: hidden;
-      text‑overflow: ellipsis;
-      max‑width: 300px;
+      textâ€‘overflow: ellipsis;
+      maxâ€‘width: 300px;
     }
   </style>
 </head>
@@ -64,22 +65,63 @@
                 <li class="nav-parent nav-expanded nav-active">
                   <a><i class="fa fa-archive"></i><span>Inventory</span></a>
                   <ul class="nav nav-children">
-                 <li><a href="items.html">Items</a></li>
-		 <li class="nav-active"><a href="models.html">Models</a></li>
-                 
+                    <li><a href="items.html">Items</a></li>
+                    <li class="nav-active"><a href="models.html">Models</a></li>
                     <li><a href="units.html">Units</a></li>
-
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
                   </ul>
-                </li>                <li>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                  </ul>
+                                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                    
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                                <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
+                  </ul>
+                </li>
+                <li>
                   <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
                 </li>              </ul>
             </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
           </div>
         </div>
       </aside>
 
       <section role="main" class="content-body">
-        <header class="page-header"><h2>Models</h2></header>
+        <header class="page-header"><h2>Models</h2><div class="welcome-banner">Welcome, <span class="welcome-name"></span></div></header>
 
         <section class="panel">
           <header class="panel-heading"><h2 class="panel-title">Manage Models</h2></header>
@@ -97,7 +139,7 @@
                   <select id="rowCount" class="form-control input-sm"
                           style="width: auto; display: inline-block;">
                     <option value="10">10</option>
-                    <option value="50">50</option>
+                    <option value="50" selected>50</option>
                     <option value="100">100</option>
                   </select> entries
                 </label>
@@ -109,6 +151,16 @@
                          style="width: auto; display: inline-block;">
                   <button class="btn btn-sm btn-default" onclick="filterTable()">Search</button>
                 </label>
+                <button class="btn btn-sm btn-success" onclick="downloadModels()">Download (Excel)</button>
+              </div>
+            </div>
+
+            <div class="row mb-xs">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6 text-right">
+                <span id="pageInfoModelsTop"></span>
+                <button class="btn btn-default btn-sm" id="btnPrevModelsTop">Previous</button>
+                <button class="btn btn-default btn-sm" id="btnNextModelsTop">Next</button>
               </div>
             </div>
 
@@ -120,7 +172,7 @@
                   <th style="width:15%;">Model</th>
                   <th style="width:10%;">Last Update</th>
                   <th style="width:10%;">Updated By</th>
-                  <th style="width:35%;">Remarks</th>
+                  <th style="width:35%;">Models Remarks</th>
                 </tr>
               </thead>
               <tbody id="modelsTableBody">
@@ -158,7 +210,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" type="submit">Save</button>
-          <button class="btn btn-default" type="button" data‑dismiss="modal">Cancel</button>
+          <button class="btn btn-default" type="button" id="btnModelCancel" data-dismiss="modal">Cancel</button>
         </div>
       </form>
     </div>
@@ -176,7 +228,7 @@
           <p><strong>ID:</strong> <span id="viewModelId"></span></p>
           <p><strong>Item:</strong> <span id="viewModelItem"></span></p>
           <p><strong>Model:</strong> <span id="viewModelName"></span></p>
-          <p><strong>Remarks:</strong> <span id="viewModelRemarks"></span></p>
+          <p><strong>Models Remarks:</strong> <span id="viewModelRemarks"></span></p>
           <p><strong>Last Updated:</strong> <span id="viewModelUpdated"></span></p>
         </div>
         <div class="modal-footer">
@@ -193,8 +245,9 @@
   <script src="assets/javascripts/theme.init.js"></script>
   <script src="assets/javascripts/models.js"></script>
   <script src="script.js"></script>
-
-  <script>
+  
+	<script>
+    let currentModelsPage = 1;
     function filterTable() {
       const search = document.getElementById("searchInput").value.toLowerCase();
       const rows   = document.querySelectorAll("#modelsTable tbody tr");
@@ -204,13 +257,63 @@
       });
     }
 
-    document.getElementById("rowCount").addEventListener("change", function() {
-      const limit = parseInt(this.value);
-      const rows  = document.querySelectorAll("#modelsTable tbody tr");
-      rows.forEach((row, idx) => {
-        row.style.display = idx < limit ? "" : "none";
-      });
+  document.getElementById("rowCount").addEventListener("change", function() {
+      currentModelsPage = 1;
+      applyModelsPagination();
     });
+
+    function applyModelsPagination() {
+      const limit = parseInt(document.getElementById("rowCount").value) || 50;
+      const rows  = Array.from(document.querySelectorAll("#modelsTable tbody tr"));
+      const totalPages = Math.max(1, Math.ceil(rows.length / limit));
+      if (currentModelsPage > totalPages) currentModelsPage = totalPages;
+      const start = (currentModelsPage - 1) * limit;
+      const end = start + limit;
+      rows.forEach((row, idx) => {
+        row.style.display = (idx >= start && idx < end) ? "" : "none";
+      });
+      const info = document.getElementById("pageInfoModelsTop");
+      if (info) info.textContent = `Page ${currentModelsPage} of ${totalPages}`;
+      const prev = document.getElementById("btnPrevModelsTop");
+      const next = document.getElementById("btnNextModelsTop");
+      if (prev) prev.disabled = currentModelsPage <= 1;
+      if (next) next.disabled = currentModelsPage >= totalPages;
+    }
+    window.applyModelsPagination = applyModelsPagination;
+
+    document.getElementById("btnPrevModelsTop").addEventListener("click", () => {
+      if (currentModelsPage > 1) {
+        currentModelsPage--;
+        applyModelsPagination();
+      }
+    });
+    document.getElementById("btnNextModelsTop").addEventListener("click", () => {
+      currentModelsPage++;
+      applyModelsPagination();
+    });
+
+    async function downloadModels() {
+      try {
+        const res = await fetch('/api/models');
+        if (!res.ok) throw new Error('Failed to load models');
+        const data = await res.json();
+        const headers = ["ID","Item","Model","Last Update","Updated By","Models Remarks"];
+        const rows = data.map(m => [
+          m.id, m.item_name || '', m.name || '', m.updated_on || '', m.updated_by || '', (m.models_remarks1 || m.remarks || '').replace(/[\r\n]+/g,' ')
+        ]);
+        const csv = [headers, ...rows].map(r => r.map(v => `"${String(v ?? '').replace(/"/g,'""')}"`).join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'models.csv';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (err) {
+        alert('Download failed.');
+        console.error(err);
+      }
+    }
 
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("rowCount").dispatchEvent(new Event("change"));
@@ -225,3 +328,13 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+

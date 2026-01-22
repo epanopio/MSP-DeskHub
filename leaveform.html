@@ -1,8 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html class="fixed">
 <head>
   <meta charset="UTF-8">
   <title>DESKHUB | Leave Form</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
   <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
@@ -12,6 +13,20 @@
   <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
   <link rel="stylesheet" href="assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css" />
   <script src="assets/vendor/modernizr/modernizr.js"></script>
+  <style>
+    .leave-date-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .leave-date-row .input-group {
+      flex: 1;
+    }
+    .leave-date-row .btn {
+      min-width: 70px;
+    }
+  </style>
 </head>
 <body>
   <section class="body">
@@ -46,10 +61,49 @@
             <nav id="menu" class="nav-main">
               <ul class="nav nav-main">
                 <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
-                <li class="nav-parent nav-expanded nav-active">
-                  <a><i class="fa fa-archive"></i><span>Leave Form</span></a>
+                <li class="nav-parent">
+                  <a><i class="fa fa-archive"></i><span>Inventory</span></a>
                   <ul class="nav nav-children">
+                    <li><a href="items.html">Items</a></li>
+                    <li><a href="models.html">Models</a></li>
+                    <li><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent nav-expanded nav-active">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
                     <li class="nav-active"><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                  </ul>
+                                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                    
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                                <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
                   </ul>
                 </li>
                 <!-- Logout button: calls logout() and redirects to login page -->
@@ -58,95 +112,92 @@
                 </li>
               </ul>
             </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
           </div>
         </div>
       </aside>
 
       <section role="main" class="content-body">
-        <header class="page-header"><h2>Leave Application Form</h2></header>
+        <header class="page-header"><h2>Leave Application Form</h2><div class="welcome-banner">Welcome, <span class="welcome-name"></span></div></header>
 
         <section class="panel">
           <header class="panel-heading"><h2 class="panel-title">Leave Application Form</h2></header>
           <div class="panel-body">
-
-            <div class="form-group">
-              <label class="col-md-3 control-label" for="leavefirstname">First Name</label>
-              <div class="col-md-6">
-                <input type="text" class="form-control" id="leavefirstname">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-md-3 control-label" for="leavelastname">Last Name</label>
-              <div class="col-md-6">
-                <input type="text" class="form-control" id="leavelastname">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-md-3 control-label" for="inputleavetype">Select Leave type:</label>
-              <div class="col-md-6">
-                <div class="radio">
-                  <label><input type="radio" name="optionsRadios" value="Annual Leave" checked> Annual Leave</label>
-                </div>
-                <div class="radio">
-                  <label><input type="radio" name="optionsRadios" value="Unpaid Leave"> Unpaid Leave</label>
-                </div>
-				  
-				<div class="radio">
-                  <label><input type="radio" name="optionsRadios" value="Unpaid Leave"> Urgent Leave </label>
-                </div>
-				  
-				<div class="radio">
-                  <label><input type="radio" name="optionsRadios" value="Unpaid Leave"> Medical Leave </label>
-                </div>
-				  
-				<div class="radio">
-                  <label><input type="radio" name="optionsRadios" value="Unpaid Leave"> Compassionate Leave </label>
-                </div>				  
-
-				<div class="radio">
-                  <label><input type="radio" name="optionsRadios" value="Unpaid Leave"> Reservist </label>
-                </div>
-				  
-              </div>
-            </div>
-
-			  <div class="form-group">
-              <label class="col-md-3 control-label" for="leaveremarks">Remarks </label>
-              <div class="col-md-6">
-                <input type="text" class="form-control" id="leaveremarks">
-              </div>
-            </div>
-			  
-			  
-            <div class="form-group">
-              <label class="col-md-3 control-label">Leave Dates</label>
-              <div class="col-md-6">
-                <div class="input-daterange input-group" data-plugin-datepicker>
-                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                  <input type="text" class="form-control" name="leavestart">
-                  <span class="input-group-addon">to</span>
-                  <input type="text" class="form-control" name="leaveend">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="leavefullname">Full Name</label>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" id="leavefullname" placeholder="Full Name">
                 </div>
               </div>
-            </div>
 
-			  
-			<div class="form-group">
-              <label class="col-md-3 control-label" for="leavenumberdays">Number of Days </label>
-              <div class="col-md-6">
-                <input type="text" class="form-control" id="leavenumberdays">
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="inputleavetype">Select Leave type:</label>
+                <div class="col-md-6">
+                  <div class="radio">
+                    <label><input type="radio" name="optionsRadios" value="Annual Leave" checked> Annual Leave</label>
+                  </div>
+                  <div class="radio">
+                    <label><input type="radio" name="optionsRadios" value="Unpaid Leave"> Unpaid Leave</label>
+                  </div>
+                  <div class="radio">
+                    <label><input type="radio" name="optionsRadios" value="Unpaid Leave"> Urgent Leave </label>
+                  </div>
+                  <div class="radio">
+                    <label><input type="radio" name="optionsRadios" value="Unpaid Leave"> Medical Leave </label>
+                  </div>
+                  <div class="radio">
+                    <label><input type="radio" name="optionsRadios" value="Unpaid Leave"> Compassionate Leave </label>
+                  </div>
+                  <div class="radio">
+                    <label><input type="radio" name="optionsRadios" value="Unpaid Leave"> Reservist </label>
+                  </div>
+                </div>
               </div>
-            </div>
-			  
-			  
-            <div class="row">
-              <div class="col-sm-9 col-sm-offset-3">
-                <button class="btn btn-primary" id="submitLeaveBtn">Submit Leave</button>
-                <div id="emailStatus" class="alert mt-md" style="display: none;"></div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="leaveremarks">Remarks </label>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" id="leaveremarks">
+                </div>
               </div>
-            </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label">Leave Dates</label>
+                <div class="col-md-6">
+                  <div id="leaveDatesContainer">
+                    <div class="leave-date-row">
+                      <div class="input-daterange input-group leave-date-range" data-plugin-datepicker>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input type="text" class="form-control leave-start" name="leavestart">
+                        <span class="input-group-addon">to</span>
+                        <input type="text" class="form-control leave-end" name="leaveend">
+                      </div>
+                      <button type="button" class="btn btn-default remove-leave-range" style="visibility:hidden;">Remove</button>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-default btn-xs" id="addLeaveRange">Add Dates</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="leavenumberdays">Number of Days </label>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" id="leavenumberdays">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-9 col-sm-offset-3">
+                  <button class="btn btn-primary" id="submitLeaveBtn">Submit Leave</button>
+                  <div id="emailStatus" class="alert mt-md" style="display: none;"></div>
+                </div>
+              </div>
+            </form>
 
           </div>
         </section>
@@ -163,11 +214,82 @@
 
   <script>
     $(document).ready(function () {
-      $('[data-plugin-datepicker]').datepicker({
-        format: 'mm/dd/yyyy',
-        autoclose: true,
-        todayHighlight: true
+      function initDatepickers(context) {
+        const $ctx = context ? $(context) : $(document);
+        $ctx.find('.leave-start, .leave-end').each(function() {
+          const $input = $(this);
+          if ($input.data('datepicker')) return;
+          $input.datepicker({
+            format: 'mm/dd/yyyy',
+            autoclose: true,
+            todayHighlight: true
+          });
+        });
+      }
+      initDatepickers($(document));
+
+      function parseMMDDYYYY(val) {
+        if (!val) return null;
+        const parts = val.split('/');
+        if (parts.length !== 3) return null;
+        const [mm, dd, yyyy] = parts.map(p => parseInt(p, 10));
+        if (!yyyy || !mm || !dd) return null;
+        return new Date(yyyy, mm - 1, dd);
+      }
+
+      function updateLeaveDays() {
+        const daysField = document.getElementById('leavenumberdays');
+        if (!daysField) return;
+        let totalDays = 0;
+        let hasValidRange = false;
+        document.querySelectorAll('.leave-date-range').forEach(range => {
+          const startVal = range.querySelector('.leave-start').value;
+          const endVal = range.querySelector('.leave-end').value;
+          const startDate = parseMMDDYYYY(startVal);
+          const endDate = parseMMDDYYYY(endVal);
+          if (startDate && endDate && endDate >= startDate) {
+            const diff = Math.round((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            totalDays += diff;
+            hasValidRange = true;
+          }
+        });
+        daysField.value = hasValidRange ? totalDays : '';
+      }
+
+      function addLeaveRange() {
+        const $row = $(`
+          <div class="leave-date-row">
+            <div class="input-daterange input-group leave-date-range" data-plugin-datepicker>
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              <input type="text" class="form-control leave-start" name="leavestart">
+              <span class="input-group-addon">to</span>
+              <input type="text" class="form-control leave-end" name="leaveend">
+            </div>
+            <button type="button" class="btn btn-default remove-leave-range">Remove</button>
+          </div>
+        `);
+        $('#leaveDatesContainer').append($row);
+        initDatepickers($row);
+      }
+
+      $('#addLeaveRange').on('click', function() {
+        addLeaveRange();
       });
+
+      $(document).on('click', '.remove-leave-range', function() {
+        $(this).closest('.leave-date-row').remove();
+        updateLeaveDays();
+      });
+
+      // Recalculate when dates change (datepicker events and manual input)
+      $(document).on('change keyup', '.leave-start, .leave-end', updateLeaveDays);
+      $(document).on('changeDate', '.leave-start, .leave-end', updateLeaveDays);
+
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      if (user && user.fullName) {
+        const fullNameField = document.getElementById('leavefullname');
+        if (fullNameField) fullNameField.value = user.fullName;
+      }
 
       $('#submitLeaveBtn').click(async function () {
         const btn = this;
@@ -175,23 +297,59 @@
         btn.disabled = true;
         statusDiv.style.display = 'none';
 
-        const firstName = document.getElementById('leavefirstname').value.trim();
-        const lastName = document.getElementById('leavelastname').value.trim();
+        const fullName = document.getElementById('leavefullname').value.trim();
         const leaveType = document.querySelector('input[name="optionsRadios"]:checked').value;
-        const leaveStart = document.querySelector('input[name="leavestart"]').value;
-        const leaveEnd = document.querySelector('input[name="leaveend"]').value;
-		const leaveremarks = document.getElementById('leaveremarks').value.trim();
-		const leavenumberdays = document.getElementById('leavenumberdays').value.trim();
+        const ranges = [];
+        document.querySelectorAll('.leave-date-range').forEach(range => {
+          const start = range.querySelector('.leave-start').value;
+          const end = range.querySelector('.leave-end').value;
+          if (start || end) {
+            ranges.push({ start, end });
+          }
+        });
+        const leaveDateText = ranges.map(r => `${r.start} to ${r.end}`.trim()).join('; ');
+        const leaveStart = ranges.length > 1 ? leaveDateText : (ranges[0] ? ranges[0].start : '');
+        const leaveEnd = ranges.length > 1 ? leaveDateText : (ranges[0] ? ranges[0].end : '');
+        const leaveremarks = document.getElementById('leaveremarks').value.trim();
+        const leavenumberdays = document.getElementById('leavenumberdays').value.trim();
+        const submittedOn = new Date().toISOString().split('T')[0];
 
-		const formData = {
-		  fullName: firstName + ' ' + lastName,
-		  leaveType,
-		  fromDate: leaveStart,
-		  toDate: leaveEnd,
-		  leaveremarks: leaveremarks,  // ✅ Corrected here
-		  leavenumberdays: leavenumberdays,
-		  submittedOn: new Date().toISOString().split('T')[0]
-		};
+        async function resolveUserEmail() {
+          if (user && user.email) return user.email;
+          try {
+            const res = await fetch('/api/users');
+            if (!res.ok) throw new Error('load users failed');
+            const list = await res.json();
+            const found = list.find(u => (u.username || '').toLowerCase() === (user && user.username || '').toLowerCase());
+            if (found && found.email) {
+              const updatedUser = { ...(user || {}), email: found.email };
+              localStorage.setItem('user', JSON.stringify(updatedUser));
+              return found.email;
+            }
+          } catch (err) {
+            console.warn('Could not resolve user email', err);
+          }
+          return '';
+        }
+
+        const userEmail = await resolveUserEmail();
+
+        const formData = {
+          formType: 'leave',
+          username: user && user.username ? user.username : '',
+          fullName: fullName,
+          full_name: fullName,
+          userEmail,
+          office: user && user.office ? user.office : null,
+          leaveType,
+          fromDate: leaveStart,
+          toDate: leaveEnd,
+          leaveremarks: leaveremarks,
+          leavenumberdays: leavenumberdays,
+          leaveDateRanges: ranges,
+          submittedOn: submittedOn,
+          submitted_on: submittedOn
+        };
 
         try {
           const res = await fetch('/api/send-leave-pdf', {
@@ -201,14 +359,14 @@
           });
 
           if (res.ok) {
-            statusDiv.textContent = '✅ Leave application sent successfully!';
+            statusDiv.textContent = `Leave application sent successfully! A copy was emailed${userEmail ? ' to ' + userEmail : ''}.`;
             statusDiv.className = 'alert alert-success mt-md';
           } else {
-            statusDiv.textContent = '❌ Failed to send leave application.';
+            statusDiv.textContent = 'Failed to send leave application.';
             statusDiv.className = 'alert alert-danger mt-md';
           }
         } catch (err) {
-          statusDiv.textContent = '⚠️ Error connecting to server.';
+          statusDiv.textContent = 'Error connecting to server.';
           statusDiv.className = 'alert alert-warning mt-md';
         }
 
@@ -216,6 +374,15 @@
         btn.disabled = false;
       });
     });
+
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+

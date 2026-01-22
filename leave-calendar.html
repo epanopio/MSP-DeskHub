@@ -1,0 +1,428 @@
+﻿<!doctype html>
+<html class="fixed">
+<head>
+  <meta charset="UTF-8">
+  <title>DESKHUB | Leave Calendar</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+  <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
+  <link rel="stylesheet" href="assets/vendor/fullcalendar/fullcalendar.css" />
+  <script src="assets/vendor/modernizr/modernizr.js"></script>
+  <style>
+    #calendar { max-width: 1050px; margin: 0 auto; font-size: 12px; }
+    .fc-toolbar { margin-bottom: 16px; }
+    .fc-day-header { font-size: 12px; }
+    .fc-title { font-size: 12px; }
+    .cal-wrapper { display: flex; gap: 16px; }
+    .cal-sidebar { width: 260px; background: #f7f7f7; border: 1px solid #e1e1e1; border-radius: 4px; padding: 12px; height: 100%; overflow-y: auto; font-size: 12px; }
+    .cal-sidebar h4 { margin-top: 0; font-size: 13px; font-weight: 700; }
+    .cal-event-item { padding: 8px; border-bottom: 1px solid #e5e5e5; cursor: pointer; }
+    .cal-event-item:last-child { border-bottom: none; }
+    .cal-event-title { font-weight: 600; display: block; }
+    .cal-event-dates { color: #666; }
+    .cal-event-time { color: #666; font-size: 11px; }
+    .cal-event-remarks { color: #555; font-size: 11px; margin-top: 2px; white-space: pre-line; }
+    .cal-event-actions { margin-top: 6px; }
+    .cal-event-actions .btn { margin-right: 4px; }
+    .cal-empty { color: #999; font-style: italic; }
+  </style>
+</head>
+<body>
+  <section class="body">
+    <header class="header">
+      <div class="logo-container">
+        <a href="dashboard.html" class="logo">
+          <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
+        </a>
+        <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
+          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+      </div>
+    </header>
+
+    <div class="inner-wrapper">
+      <aside id="sidebar-left" class="sidebar-left">
+        <div class="sidebar-header">
+          <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle" title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
+          </div>
+        </div>
+        <div class="nano">
+          <div class="nano-content">
+            <nav id="menu" class="nav-main">
+              <ul class="nav nav-main">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-archive"></i><span>Inventory</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="items.html">Items</a></li>
+                    <li><a href="models.html">Models</a></li>
+                    <li><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent nav-expanded nav-active"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li class="nav-active"><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
+                  </ul>
+                </li>
+                <li><a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a></li>
+              </ul>
+            </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>Powered by:<br>Monitoring Solution Providers Pte. Ltd.
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section role="main" class="content-body">
+        <header class="page-header">
+          <h2>Leave Calendar</h2>
+          <div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
+        </header>
+
+        <section class="panel">
+          <header class="panel-heading">
+            <h2 class="panel-title">Leave Calendar <span id="leave-cal-month-year" style="font-size:13px;font-weight:400;margin-left:8px;"></span></h2>
+            <button id="addEventBtn" class="btn btn-primary btn-xs pull-right" style="margin-top:-4px; display:none;">Add Event</button>
+          </header>
+          <div class="panel-body">
+            <div class="cal-wrapper">
+              <div class="cal-sidebar">
+                <h4>Month Events</h4>
+                <div id="eventList" class="cal-list cal-empty">No events</div>
+              </div>
+              <div style="flex:1;">
+                <div id="calendar"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </section>
+
+  <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Event Details</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="eventId">
+          <div class="form-group">
+            <label>Event From</label>
+            <input type="date" class="form-control" id="eventDateFrom">
+          </div>
+          <div class="form-group">
+            <label>Event To</label>
+            <input type="date" class="form-control" id="eventDateTo">
+          </div>
+          <div class="form-group">
+            <label>Event Title</label>
+            <input type="text" class="form-control" id="eventTitle" placeholder="Enter event title">
+          </div>
+          <div class="form-group">
+            <label>Event Time</label>
+            <input type="time" class="form-control" id="eventTime">
+          </div>
+          <div class="form-group">
+            <label>Event Remarks</label>
+            <textarea class="form-control" id="eventRemarks" rows="3" placeholder="Remarks"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Event Color</label>
+            <input type="color" class="form-control" id="eventColor" value="#3498db" style="height:34px; padding:2px 4px;">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" id="deleteEventBtn" class="btn btn-danger pull-left" style="display:none;">Delete</button>
+          <button type="button" id="saveEventBtn" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="assets/javascripts/theme.js"></script>
+  <script src="assets/javascripts/theme.custom.js"></script>
+  <script src="assets/javascripts/theme.init.js"></script>
+  <script src="script.js"></script>
+  <script src="assets/vendor/fullcalendar/lib/moment.min.js"></script>
+  <script src="assets/vendor/fullcalendar/fullcalendar.min.js"></script>
+  <script>
+    $(function() {
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      const role = user && user.role ? String(user.role).toLowerCase().trim() : 'user';
+      const canEdit = ['admin','superadmin','super admin','administrator'].includes(role);
+      const calType = 'leave';
+
+      const $modal = $('#eventModal');
+      const $eventId = $('#eventId');
+      const $eventDateFrom = $('#eventDateFrom');
+      const $eventDateTo = $('#eventDateTo');
+      const $eventTitle = $('#eventTitle');
+      const $eventTime = $('#eventTime');
+      const $eventRemarks = $('#eventRemarks');
+      const $eventColor = $('#eventColor');
+      const $saveBtn = $('#saveEventBtn');
+      const $deleteBtn = $('#deleteEventBtn');
+      const $addBtn = $('#addEventBtn');
+      const $eventList = $('#eventList');
+      let cachedEvents = [];
+
+      function refresh() { $('#calendar').fullCalendar('refetchEvents'); }
+
+      function apiCreate(payload) {
+        return fetch(`/api/calendar/${calType}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(res => res.ok ? res.json() : Promise.reject());
+      }
+
+      function apiUpdate(id, payload) {
+        return fetch(`/api/calendar/${calType}/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(res => res.ok ? res.json() : Promise.reject());
+      }
+
+      function apiDelete(id) {
+        return fetch(`/api/calendar/${calType}/${id}`, { method: 'DELETE' })
+          .then(res => res.ok ? true : Promise.reject());
+      }
+
+      function setReadOnly(readonly, hasEvent) {
+        $eventTitle.prop('disabled', readonly);
+        $eventTime.prop('disabled', readonly);
+        $eventRemarks.prop('disabled', readonly);
+        $eventDateFrom.prop('disabled', readonly);
+        $eventDateTo.prop('disabled', readonly);
+        $eventColor.prop('disabled', readonly);
+        $saveBtn.toggle(!readonly && canEdit);
+        $deleteBtn.toggle(!readonly && canEdit && hasEvent);
+      }
+
+      function openModal(date, event) {
+        $eventId.val(event ? event.id : '');
+        const dateStr = date || (event && event.start ? event.start.format('YYYY-MM-DD') : '');
+        $eventDateFrom.val(event ? (event.eventFrom || dateStr) : dateStr);
+        $eventDateTo.val(event ? (event.eventTo || dateStr) : '');
+        $eventTitle.val(event ? event.title : '');
+        $eventTime.val(event && event.time ? event.time : '');
+        $eventRemarks.val(event && event.remarks ? event.remarks : '');
+        $eventColor.val(event && event.color ? event.color : '#3498db');
+        setReadOnly(!canEdit, !!event);
+        $modal.modal('show');
+      }
+
+      $saveBtn.on('click', function() {
+        if (!canEdit) return;
+        const id = $eventId.val();
+        const payload = {
+          title: $eventTitle.val().trim(),
+          date_from: $eventDateFrom.val(),
+          date_to: $eventDateTo.val(),
+          time: $eventTime.val(),
+          remarks: $eventRemarks.val().trim(),
+          color: $eventColor.val()
+        };
+        if (!payload.date_from) {
+          alert('Please select a start date.');
+          return;
+        }
+        const promise = id ? apiUpdate(id, payload) : apiCreate(payload);
+        promise.then(() => {
+          $modal.modal('hide');
+          refresh();
+        }).catch(() => alert('Failed to save event'));
+      });
+
+      $deleteBtn.on('click', function() {
+        if (!canEdit) return;
+        const id = $eventId.val();
+        if (!id) return;
+        if (!confirm('Delete this event?')) return;
+        apiDelete(id).then(() => {
+          $modal.modal('hide');
+          refresh();
+        }).catch(() => alert('Failed to delete event'));
+      });
+
+      function renderSidebar(events, view) {
+        if (!$eventList || !$eventList.length) return;
+        const base = view && (view.intervalStart || view.start) ? (view.intervalStart || view.start) : moment();
+        const monthStart = moment(base).startOf('month');
+        const monthEnd = moment(base).endOf('month');
+        const monthKey = monthStart.format('YYYY-MM');
+        const list = (events || []).filter(ev => {
+          const start = ev.start ? moment(ev.start) : (ev.eventFrom ? moment(ev.eventFrom, 'YYYY-MM-DD') : null);
+          const end = ev.end ? moment(ev.end) : (ev.eventTo ? moment(ev.eventTo, 'YYYY-MM-DD') : start);
+          if (!start || !start.isValid()) return false;
+          const startKey = start.format('YYYY-MM');
+          const endKey = end && end.isValid() ? end.format('YYYY-MM') : startKey;
+          return startKey === monthKey || endKey === monthKey;
+        }).sort((a, b) => {
+          const da = a.start ? moment(a.start).valueOf() : (a.eventFrom ? moment(a.eventFrom, 'YYYY-MM-DD').valueOf() : 0);
+          const db = b.start ? moment(b.start).valueOf() : (b.eventFrom ? moment(b.eventFrom, 'YYYY-MM-DD').valueOf() : 0);
+          return da - db;
+        });
+        if (!list.length) {
+          $eventList.addClass('cal-empty').html('No events');
+          return;
+        }
+        $eventList.removeClass('cal-empty').empty();
+        list.forEach(ev => {
+          const from = ev.eventFrom ? moment(ev.eventFrom, 'YYYY-MM-DD').format('YYYY-MMM-DD') : (ev.start ? moment(ev.start).format('YYYY-MMM-DD') : '');
+          const to = ev.eventTo ? moment(ev.eventTo, 'YYYY-MM-DD').format('YYYY-MMM-DD') : (ev.end ? moment(ev.end).format('YYYY-MMM-DD') : '');
+          const dates = to && to !== from ? `${from} to ${to}` : from;
+          const time = ev.time ? `Time: ${ev.time}` : '';
+          const remarks = ev.remarks ? String(ev.remarks).replace(/\r?\n/g, '<br>') : '';
+          const color = ev.color || '#3498db';
+          const $item = $(`
+            <div class="cal-event-item" style="border-left:4px solid ${color};">
+              <span class="cal-event-title">${ev.title || 'Event'}</span>
+              <span class="cal-event-dates">${dates || ''}</span>
+              ${time ? `<div class="cal-event-time">${time}</div>` : ''}
+              ${remarks ? `<div class="cal-event-remarks">${remarks}</div>` : ''}
+            </div>
+          `);
+          if (canEdit) {
+            const $actions = $(`
+              <div class="cal-event-actions">
+                <button class="btn btn-xs btn-primary">Edit</button>
+                <button class="btn btn-xs btn-danger">Delete</button>
+              </div>
+            `);
+            $actions.find('.btn-primary').on('click', () => openModal(null, ev));
+            $actions.find('.btn-danger').on('click', () => {
+              if (!confirm('Delete this event?')) return;
+              apiDelete(ev.id).then(refresh).catch(() => alert('Failed to delete event'));
+            });
+            $item.append($actions);
+          } else {
+            $item.on('click', () => openModal(null, ev));
+          }
+          $eventList.append($item);
+        });
+      }
+
+      $('#calendar').fullCalendar({
+        header: { left: 'prev,next today', center: 'title', right: 'month,agendaWeek,agendaDay' },
+        defaultDate: moment().format('YYYY-MM-DD'),
+        defaultView: 'month',
+        timezone: 'Asia/Singapore',
+        editable: canEdit,
+        eventStartEditable: canEdit,
+        eventDurationEditable: false,
+        selectable: canEdit,
+        eventLimit: true,
+        events: function(start, end, timezone, callback) {
+          fetch(`/api/calendar/${calType}`)
+            .then(res => res.ok ? res.json() : [])
+            .then(data => {
+              cachedEvents = (data || []).map(ev => {
+                const copy = Object.assign({}, ev);
+                if (copy.start && typeof copy.start === 'string') copy.start = moment(copy.start);
+                if (copy.end && typeof copy.end === 'string') copy.end = moment(copy.end);
+                copy.color = copy.color || '#3498db';
+                copy.backgroundColor = copy.color;
+                copy.borderColor = copy.color;
+                return copy;
+              });
+              callback(cachedEvents);
+              renderSidebar(cachedEvents, $('#calendar').fullCalendar('getView'));
+            })
+            .catch(() => {
+              cachedEvents = [];
+              callback([]);
+              renderSidebar([], $('#calendar').fullCalendar('getView'));
+            });
+        },
+        select: function(start) {
+          if (!canEdit) return;
+          openModal(start.format('YYYY-MM-DD'), null);
+          $('#calendar').fullCalendar('unselect');
+        },
+        eventClick: function(event) {
+          openModal(null, event);
+        },
+        eventRender: function(event, element) {
+          $(element).on('dblclick', function() {
+            openModal(null, event);
+          });
+        },
+        eventDrop: function(event) {
+          if (!canEdit) return false;
+          apiUpdate(event.id, {
+            date_from: event.start ? event.start.format('YYYY-MM-DD') : null,
+            date_to: event.eventTo || (event.end ? event.end.format('YYYY-MM-DD') : null) || (event.start ? event.start.format('YYYY-MM-DD') : null),
+            time: event.time || '',
+            title: event.title,
+            remarks: event.remarks || '',
+            color: event.color || ''
+          }).then(refresh).catch(() => alert('Update failed'));
+        },
+        viewRender: function(view) {
+          $('#leave-cal-month-year').text(view.title || '');
+          if (canEdit) $addBtn.show(); else $addBtn.hide();
+          renderSidebar(cachedEvents, view);
+        }
+      });
+
+      $addBtn.on('click', function() {
+        if (!canEdit) return;
+        const today = moment().format('YYYY-MM-DD');
+        openModal(today, null);
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
