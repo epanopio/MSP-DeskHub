@@ -1,0 +1,420 @@
+﻿<!doctype html>
+<html class="fixed">
+<head>
+  <meta charset="UTF-8">
+  <title>DESKHUB | Data Processing Info</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+  <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
+  <script src="assets/vendor/modernizr/modernizr.js"></script>
+  <style>
+    .diagram-title { text-align: center; font-weight: 700; margin: 8px 0 18px; }
+    .diagram-wrap { max-width: 980px; margin: 0 auto; }
+    .server-box { background: #5cd8e2; color: #00313a; text-align: center; padding: 8px 10px; border-radius: 4px; font-weight: 700; margin: 0 auto 14px; width: 240px; }
+    .server-box small { display: block; font-weight: 600; color: #00313a; }
+    .server-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+    .server-card { text-align: center; }
+    .server-card .server-head { background: #25a4f0; color: #fff; font-weight: 700; padding: 6px 8px; border-radius: 3px; }
+    .server-card .server-sub { font-size: 11px; margin-top: 4px; color: #0b2a3c; }
+    .server-card .server-list { margin-top: 6px; border: 1px solid #2a2a2a; border-radius: 3px; padding: 6px 8px; text-align: left; min-height: 260px; font-size: 11px; }
+    .list-item { margin: 2px 0; }
+    .tag-jk { color: #1aa64b; font-weight: 700; }
+    .tag-em { color: #1f6fd1; font-weight: 700; }
+    .tag-ln { color: #ef6b2b; font-weight: 700; }
+    .bottom-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
+    .bottom-box { text-align: center; padding: 8px 6px; color: #00313a; font-weight: 700; border-radius: 4px; }
+    .bottom-green { background: #7bd85a; }
+    .bottom-teal { background: #2ac1db; }
+    .bottom-orange { background: #f59a43; }
+    .bottom-blue { background: #3bb0e8; }
+    .bottom-box small { display: block; font-weight: 600; }
+    @media (max-width: 1200px) {
+      .server-row { grid-template-columns: repeat(3, 1fr); }
+      .bottom-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .server-row { grid-template-columns: repeat(2, 1fr); }
+      .bottom-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <section class="body">
+    <header class="header">
+      <div class="logo-container">
+        <a href="dashboard.html" class="logo">
+          <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
+        </a>
+        <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
+          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+      </div>
+    </header>
+
+    <div class="inner-wrapper">
+      <aside id="sidebar-left" class="sidebar-left">
+        <div class="sidebar-header">
+          <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle" title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
+          </div>
+        </div>
+        <div class="nano">
+          <div class="nano-content">
+            <nav id="menu" class="nav-main">
+              <ul class="nav nav-main">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-archive"></i><span>Inventory</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="items.html">Items</a></li>
+                    <li><a href="models.html">Models</a></li>
+                    <li><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent nav-expanded nav-active">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="projects.html">Projects</a></li>
+                    
+                    
+                    <li class="nav-active"><a href="dataprocessinginfo.html">Data Processing Info</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                    <li><a href="deskhublogs.html">DeskHub Logs</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
+                  </ul>
+                </li>
+                <li><a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a></li>
+              </ul>
+            </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>Powered by:<br>Monitoring Solution Providers Pte. Ltd.
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section role="main" class="content-body">
+        <header class="page-header">
+          <h2>Data Processing Info</h2>
+          <div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
+        </header>
+
+        <section class="panel">
+          <header class="panel-heading">
+            <h2 class="panel-title">Data Processing Info</h2>
+          </header>
+          <div class="panel-body">
+            <div class="mb-md">
+              <button class="btn btn-primary btn-sm" id="dpAddTable">Add Table</button>
+              <button class="btn btn-default btn-sm" id="dpDeleteTable" disabled>Delete Table</button>
+              <button class="btn btn-success btn-sm" id="dpSave">Save</button>
+              <span id="dpStatus" class="text-muted" style="margin-left:10px;"></span>
+            </div>
+            <div id="dpTables"></div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </section>
+
+  <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="assets/javascripts/theme.js"></script>
+  <script src="assets/javascripts/theme.custom.js"></script>
+  <script src="assets/javascripts/theme.init.js"></script>
+  <script src="script.js"></script>
+  <div class="modal fade" id="dpConfirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Action</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p id="dpConfirmText"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="dpConfirmOk">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const tablesWrap = document.getElementById('dpTables');
+      const statusEl = document.getElementById('dpStatus');
+      const addTableBtn = document.getElementById('dpAddTable');
+      const deleteTableBtn = document.getElementById('dpDeleteTable');
+      const saveBtn = document.getElementById('dpSave');
+      const confirmModal = $('#dpConfirmModal');
+      const confirmText = document.getElementById('dpConfirmText');
+      const confirmOk = document.getElementById('dpConfirmOk');
+
+      let dataState = null;
+      let selectedTableId = null;
+      const storageKey = 'dataProcessingInfoTables';
+
+      function setStatus(text, ok) {
+        statusEl.textContent = text;
+        statusEl.style.color = ok ? '#2e7d32' : '#c62828';
+      }
+
+      function makeId() {
+        return 'id_' + Math.random().toString(36).slice(2, 9);
+      }
+
+      function renderAllTables() {
+        tablesWrap.innerHTML = '';
+        if (!dataState || !Array.isArray(dataState.tables)) return;
+        dataState.tables.forEach(table => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'mb-lg';
+          wrapper.dataset.tableId = table.id;
+
+          const header = document.createElement('div');
+          header.className = 'mb-sm';
+          header.innerHTML = `
+            <div class="clearfix">
+              <h4 class="pull-left dp-table-title" contenteditable="true" data-title="true">${table.title || 'New Table'}</h4>
+              <div class="pull-right">
+                <button class="btn btn-xs btn-primary" data-action="add-row">Add Row</button>
+                <button class="btn btn-xs btn-default" data-action="add-col">Add Column</button>
+              </div>
+            </div>
+          `;
+          wrapper.appendChild(header);
+
+          const tableWrap = document.createElement('div');
+          tableWrap.className = 'table-responsive';
+          const tableEl = document.createElement('table');
+          tableEl.className = 'table table-bordered table-striped dp-edit-table';
+          const thead = document.createElement('thead');
+          const tbody = document.createElement('tbody');
+          const headRow = document.createElement('tr');
+
+          table.columns.forEach(col => {
+            const th = document.createElement('th');
+            th.dataset.colId = col.id;
+            th.innerHTML = `
+              <span contenteditable="true" class="dp-col-label">${col.label || ''}</span>
+              <button class="btn btn-xs btn-default pull-right" data-action="del-col" title="Delete Column">x</button>
+            `;
+            headRow.appendChild(th);
+          });
+          thead.appendChild(headRow);
+          tableEl.appendChild(thead);
+
+          table.rows.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.dataset.rowId = row.id;
+            table.columns.forEach(col => {
+              const td = document.createElement('td');
+              td.contentEditable = 'true';
+              td.dataset.colId = col.id;
+              td.textContent = (row.cells && row.cells[col.id]) ? row.cells[col.id] : '';
+              tr.appendChild(td);
+            });
+            const tdActions = document.createElement('td');
+            tdActions.className = 'dp-row-actions';
+            tdActions.innerHTML = '<button class="btn btn-xs btn-default" data-action="del-row">-</button>';
+            tr.appendChild(tdActions);
+            tbody.appendChild(tr);
+          });
+          tableEl.appendChild(tbody);
+          tableWrap.appendChild(tableEl);
+          wrapper.appendChild(tableWrap);
+          wrapper.addEventListener('click', () => {
+            selectedTableId = table.id;
+            tablesWrap.querySelectorAll('[data-table-id]').forEach(el => el.classList.remove('dp-table-selected'));
+            wrapper.classList.add('dp-table-selected');
+            deleteTableBtn.disabled = false;
+          });
+          tablesWrap.appendChild(wrapper);
+        });
+      }
+
+      function collectTables() {
+        const tables = Array.from(tablesWrap.querySelectorAll('[data-table-id]')).map(wrapper => {
+          const tableId = wrapper.dataset.tableId || makeId();
+          const titleEl = wrapper.querySelector('[data-title="true"]');
+          const columns = Array.from(wrapper.querySelectorAll('th')).map(th => ({
+            id: th.dataset.colId || makeId(),
+            label: (th.querySelector('.dp-col-label')?.textContent || '').trim()
+          }));
+          const rows = Array.from(wrapper.querySelectorAll('tbody tr')).map(tr => {
+            const rowId = tr.dataset.rowId || makeId();
+            const cells = {};
+            tr.querySelectorAll('td').forEach(td => {
+              const colId = td.dataset.colId;
+              if (!colId) return;
+              cells[colId] = td.textContent.trim();
+            });
+            return { id: rowId, cells };
+          });
+          return { id: tableId, title: (titleEl?.textContent || '').trim(), columns, rows };
+        });
+        return { tables };
+      }
+
+      function loadData() {
+        const raw = localStorage.getItem(storageKey);
+        if (raw) {
+          try {
+            dataState = JSON.parse(raw);
+          } catch (err) {
+            dataState = null;
+          }
+        }
+        if (!dataState || !Array.isArray(dataState.tables) || !dataState.tables.length) {
+          dataState = {
+            tables: [{
+              id: makeId(),
+              title: 'MSP Server Diagram',
+              columns: [
+                { id: makeId(), label: 'Node' },
+                { id: makeId(), label: 'Details' },
+                { id: makeId(), label: 'Items' }
+              ],
+              rows: []
+            }]
+          };
+        }
+        renderAllTables();
+      }
+
+      function saveData() {
+        dataState = collectTables();
+        localStorage.setItem(storageKey, JSON.stringify(dataState));
+        setStatus('Saved locally.', true);
+      }
+
+      function confirmAction(message, onConfirm) {
+        confirmText.textContent = message;
+        confirmOk.onclick = () => {
+          confirmModal.modal('hide');
+          onConfirm();
+        };
+        confirmModal.modal('show');
+      }
+
+      addTableBtn.addEventListener('click', () => {
+        if (!dataState) return;
+        const newTable = {
+          id: makeId(),
+          title: 'New Table',
+          columns: [
+            { id: makeId(), label: 'Column 1' },
+            { id: makeId(), label: 'Column 2' },
+            { id: makeId(), label: 'Column 3' }
+          ],
+          rows: []
+        };
+        dataState.tables.push(newTable);
+        renderAllTables();
+      });
+
+      deleteTableBtn.addEventListener('click', () => {
+        if (!dataState || !selectedTableId) return;
+        confirmAction('Delete this table and all its rows?', () => {
+          dataState.tables = dataState.tables.filter(t => t.id !== selectedTableId);
+          selectedTableId = null;
+          deleteTableBtn.disabled = true;
+          renderAllTables();
+        });
+      });
+
+      tablesWrap.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const action = btn.dataset.action;
+        const wrapper = e.target.closest('[data-table-id]');
+        if (!wrapper) return;
+        const tableId = wrapper.dataset.tableId;
+        const table = dataState.tables.find(t => t.id === tableId);
+        if (!table) return;
+
+        if (action === 'add-row') {
+          table.rows.push({ id: makeId(), cells: {} });
+          renderAllTables();
+          return;
+        }
+        if (action === 'add-col') {
+          const newId = makeId();
+          table.columns.push({ id: newId, label: 'New Column' });
+          table.rows.forEach(r => { r.cells[newId] = ''; });
+          renderAllTables();
+          return;
+        }
+        if (action === 'del-col') {
+          const th = btn.closest('th');
+          if (!th) return;
+          const colId = th.dataset.colId;
+          if (!colId) return;
+          confirmAction('Delete this column from the table?', () => {
+            table.columns = table.columns.filter(c => c.id !== colId);
+            table.rows.forEach(r => { delete r.cells[colId]; });
+            renderAllTables();
+          });
+          return;
+        }
+        if (action === 'del-row') {
+          const tr = btn.closest('tr');
+          if (!tr) return;
+          const rowId = tr.dataset.rowId;
+          confirmAction('Delete this row?', () => {
+            table.rows = table.rows.filter(r => r.id !== rowId);
+            renderAllTables();
+          });
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('[data-table-id]')) return;
+        selectedTableId = null;
+        deleteTableBtn.disabled = true;
+        tablesWrap.querySelectorAll('[data-table-id]').forEach(el => el.classList.remove('dp-table-selected'));
+      });
+
+      saveBtn.addEventListener('click', saveData);
+
+      loadData();
+    });
+  </script>
+</body>
+</html>

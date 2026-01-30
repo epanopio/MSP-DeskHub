@@ -1,8 +1,8 @@
-﻿<!doctype html>
+<!doctype html>
 <html class="fixed">
 <head>
   <meta charset="UTF-8">
-  <title>DESKHUB | Calendar</title>
+  <title>DESKHUB | DeskHub Logs</title>
   <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
@@ -11,49 +11,7 @@
   <link rel="stylesheet" href="assets/stylesheets/theme.css" />
   <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
   <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
-  <!-- FullCalendar v3 with Bootstrap 3 theme (local assets) -->
-  <link rel="stylesheet" href="assets/vendor/fullcalendar/fullcalendar.css" />
   <script src="assets/vendor/modernizr/modernizr.js"></script>
-  <style>
-    .fc-toolbar {
-      margin-bottom: 20px;
-    }
-    .fc-day-grid-event {
-      padding: 4px 6px;
-    }
-    /* Compact month view */
-    .fc-view-container {
-      font-size: 11px;
-    }
-    .fc-day-header {
-      padding: 4px 3px;
-      font-size: 11px;
-    }
-    .fc-day-number {
-      padding: 3px 4px;
-      font-size: 11px;
-    }
-    .fc-event {
-      font-size: 11px;
-      line-height: 1.1;
-      min-height: 16px;
-    }
-    .panel-body {
-      padding: 6px;
-    }
-    #calendar {
-      max-width: 1050px;
-      margin: 0 auto;
-    }
-    .fc-toolbar h2 {
-      font-size: 16px;
-    }
-    .fc button {
-      padding: 2px 6px;
-      font-size: 11px;
-      height: 26px;
-    }
-  </style>
 </head>
 <body>
   <section class="body">
@@ -62,10 +20,7 @@
         <a href="dashboard.html" class="logo">
           <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
         </a>
-        <div class="visible-xs toggle-sidebar-left"
-             data-toggle-class="sidebar-left-opened"
-             data-target="html"
-             data-fire-event="sidebar-left-opened">
+        <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
           <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
         </div>
       </div>
@@ -74,11 +29,7 @@
     <div class="inner-wrapper">
       <aside id="sidebar-left" class="sidebar-left">
         <div class="sidebar-header">
-          <div class="sidebar-toggle hidden-xs"
-               data-toggle-class="sidebar-left-collapsed"
-               data-target="html"
-               data-fire-event="sidebar-left-toggle"
-               title="Collapse sidebar">
+          <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle" title="Collapse sidebar">
             <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
           </div>
         </div>
@@ -100,7 +51,7 @@
                   <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
                   <ul class="nav nav-children">
                     <li><a href="nightaccessform.html">Night Access Form</a></li>
-                    
+                    <li><a href="leaveform.html">Leave Form</a></li>
                     <li><a href="overtimeform.html">Overtime Form</a></li>
                     <li><a href="timeoffform.html">Time Off Form</a></li>
                     <li><a href="mcform.html">MC Form</a></li>
@@ -111,40 +62,35 @@
                   <ul class="nav nav-children">
                     <li><a href="projects.html">Projects</a></li>
                     <li><a href="dataprocessinginfo.html">Data Processing Info</a></li>
-                    
-                    
                   </ul>
                 </li>
-                <li class="nav-parent nav-expanded nav-active"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                <li class="nav-parent">
+                  <a><i class="fa fa-calendar"></i><span>Calendar</span></a>
                   <ul class="nav nav-children">
-                    <li class="nav-active"><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
                     <li><a href="leave-calendar.html">Leave Calendar</a></li>
                     <li><a href="reports-calendar.html">Reports Calendar</a></li>
-                    
                   </ul>
                 </li>
-                <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                <li class="nav-parent nav-expanded nav-active"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
                   <ul class="nav nav-children">
                     <li><a href="manageusers.html">Manage Users</a></li>
                     <li><a href="applicationforms.html">Application Forms</a></li>
-                    <li><a href="deskhublogs.html">DeskHub Logs</a></li>
+                    <li class="nav-active"><a href="deskhublogs.html">DeskHub Logs</a></li>
                   </ul>
                 </li>
-                                <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                <li class="nav-parent">
+                  <a><i class="fa fa-user"></i><span>User Profile</span></a>
                   <ul class="nav nav-children">
                     <li><a href="userprofile.html">User Profile</a></li>
                     <li><a href="formsrecords.html">Forms Records</a></li>
                   </ul>
                 </li>
-                <li>
-                  <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
-                </li>
+                <li><a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a></li>
               </ul>
             </nav>
             <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
-              MSP DeskHub version 1.0<br>
-              Powered by:<br>
-              Monitoring Solution Providers Pte. Ltd.
+              MSP DeskHub version 1.0<br>Powered by:<br>Monitoring Solution Providers Pte. Ltd.
             </div>
           </div>
         </div>
@@ -152,15 +98,62 @@
 
       <section role="main" class="content-body">
         <header class="page-header">
-          <h2>Calendar</h2><div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
+          <h2>DeskHub Logs</h2>
+          <div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
         </header>
 
         <section class="panel">
-          <header class="panel-heading">
-            <h2 class="panel-title">Calendar <span id="cal-month-year" style="font-size:13px;font-weight:400;margin-left:8px;"></span></h2>
-          </header>
+          <header class="panel-heading"><h2 class="panel-title">Activity Logs</h2></header>
           <div class="panel-body">
-            <div id="calendar"></div>
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#tabInventoryLogs" data-toggle="tab">Inventory Logs</a></li>
+              <li><a href="#tabDataProcessingLogs" data-toggle="tab">Data Processing Logs</a></li>
+              <li><a href="#tabCalendarLogs" data-toggle="tab">Calendar Logs</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="tabInventoryLogs">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Event</th>
+                      <th>Done By</th>
+                      <th>Date/Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td colspan="3" class="text-muted">No logs yet.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="tabDataProcessingLogs">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Event</th>
+                      <th>Done By</th>
+                      <th>Date/Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td colspan="3" class="text-muted">No logs yet.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="tabCalendarLogs">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Event</th>
+                      <th>Done By</th>
+                      <th>Date/Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td colspan="3" class="text-muted">No logs yet.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </section>
       </section>
@@ -173,39 +166,5 @@
   <script src="assets/javascripts/theme.custom.js"></script>
   <script src="assets/javascripts/theme.init.js"></script>
   <script src="script.js"></script>
-  <!-- Load moment and fullcalendar locally to avoid network blocking -->
-  <script src="assets/vendor/fullcalendar/lib/moment.min.js"></script>
-  <script src="assets/vendor/fullcalendar/fullcalendar.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      const $cal = $('#calendar');
-      $('#calendar').fullCalendar({
-        header: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'month,agendaWeek,agendaDay'
-        },
-        defaultDate: moment().format('YYYY-MM-DD'),
-        defaultView: 'month',
-        editable: false,
-        eventLimit: true,
-        events: [],
-        viewRender: function(view) {
-          const label = view.title || '';
-          $('#cal-month-year').text(label);
-        }
-      });
-    });
-  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-

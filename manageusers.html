@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html class="fixed">
 <head>
   <meta charset="UTF-8">
@@ -23,8 +23,10 @@
   <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
   <script src="assets/vendor/modernizr/modernizr.js"></script>
   <style>
-    #usersTable tbody tr:hover { background-color: #f0f8ff !important; cursor: pointer; }
-    #usersTable tbody tr.selected { background-color: #d0e9ff !important; }
+    #usersInfoTable tbody tr:hover,
+    #usersLeaveTable tbody tr:hover { background-color: #f0f8ff !important; cursor: pointer; }
+    #usersInfoTable tbody tr.selected,
+    #usersLeaveTable tbody tr.selected { background-color: #d0e9ff !important; }
   </style>
 </head>
 <body>
@@ -82,12 +84,24 @@
                   <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
                   <ul class="nav nav-children">
                     <li><a href="projects.html">Projects</a></li>
+                    <li><a href="dataprocessinginfo.html">Data Processing Info</a></li>
+                    
+                    
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                    
                   </ul>
                 </li>
                 <li class="nav-parent nav-expanded nav-active"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
                   <ul class="nav nav-children">
                     <li class="nav-active"><a href="manageusers.html">Manage Users</a></li>
                     <li><a href="applicationforms.html">Application Forms</a></li>
+                    <li><a href="deskhublogs.html">DeskHub Logs</a></li>
                   </ul>
                 </li>
                 <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
@@ -142,33 +156,52 @@
               </div>
             </div>
 
-            <table class="table table-hover table-bordered table-striped mb-none" id="usersTable">
-              <thead>
-                <tr>
-                  <th id="sort-id">ID</th>
-                  <th id="sort-username">Username</th>
-                  <th id="sort-fullname">Full Name</th>
-                  <th id="sort-email">Email</th>
-                  <th id="sort-role">Role</th>
-                  <th id="sort-mobile">Mobile</th>
-                  <th id="sort-address">Address</th>
-                  <th id="sort-user-leave-total">Total Leaves</th>
-                  <th id="sort-used-leaves">Used Leaves</th>
-                  <th id="sort-balance-leaves">Leave Balance</th>
-                  <th id="sort-user-claimoff-total">Total Claim Offs</th>
-                  <th id="sort-used-claim-offs">Used Claim Offs</th>
-                  <th id="sort-balance-claim-offs">Claim Off Balance</th>
-                  <th id="sort-user-childcare-total">Total Child Care</th>
-                  <th id="sort-used-child-care">Used Child Care</th>
-                  <th id="sort-balance-child-care">Child Care Balance</th>
-                  <th id="sort-user-mc-total">Total MC</th>
-                  <th id="sort-used-mc">Used MC</th>
-                  <th id="sort-balance-mc">MC Balance</th>
-                </tr>
-              </thead>
-              <tbody id="usersTableBody">
-              </tbody>
-            </table>
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#tab-users-info" data-toggle="tab">Users Info</a></li>
+              <li><a href="#tab-leave-counts" data-toggle="tab">Leave Counts</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="tab-users-info">
+                <table class="table table-hover table-bordered table-striped mb-none" id="usersInfoTable">
+                  <thead>
+                    <tr>
+                      <th id="sort-id">ID</th>
+                      <th id="sort-username">Username</th>
+                      <th id="sort-fullname">Full Name</th>
+                      <th id="sort-email">Email</th>
+                      <th id="sort-role">Role</th>
+                      <th id="sort-mobile">Mobile</th>
+                      <th id="sort-address">Address</th>
+                    </tr>
+                  </thead>
+                  <tbody id="usersInfoTableBody"></tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="tab-leave-counts">
+                <table class="table table-hover table-bordered table-striped mb-none" id="usersLeaveTable">
+                  <thead>
+                    <tr>
+                      <th id="sort-id">ID</th>
+                      <th id="sort-username">Username</th>
+                      <th id="sort-fullname">Full Name</th>
+                      <th id="sort-user-leave-total">Total Leaves</th>
+                      <th id="sort-used-leaves">Used Leaves</th>
+                      <th id="sort-balance-leaves">Leave Balance</th>
+                      <th id="sort-user-claimoff-total">Total Claim Offs</th>
+                      <th id="sort-used-claim-offs">Used Claim Offs</th>
+                      <th id="sort-balance-claim-offs">Claim Off Balance</th>
+                      <th id="sort-user-childcare-total">Total Child Care</th>
+                      <th id="sort-used-child-care">Used Child Care</th>
+                      <th id="sort-balance-child-care">Child Care Balance</th>
+                      <th id="sort-user-mc-total">Total MC</th>
+                      <th id="sort-used-mc">Used MC</th>
+                      <th id="sort-balance-mc">MC Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody id="usersLeaveTableBody"></tbody>
+                </table>
+              </div>
+            </div>
 
             <div class="row mb-xs">
               <div class="col-sm-6">

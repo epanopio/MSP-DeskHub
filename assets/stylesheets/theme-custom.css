@@ -229,6 +229,52 @@ html.sidebar-left-collapsed .content-body {
   margin: 0;
 }
 
+.server-status {
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.server-status.ok {
+  background: #2e7d32;
+  color: #fff;
+}
+
+.server-status.fail {
+  background: #c62828;
+  color: #fff;
+}
+
+.dp-table-selected {
+  outline: 2px solid #3aa3e3;
+  border-radius: 4px;
+  padding: 6px;
+}
+
+.dp-edit-table td.dp-row-actions {
+  width: 90px;
+  text-align: center;
+  background: #fafafa;
+}
+
+.dp-edit-table thead th {
+  font-weight: 700;
+  background: #e6f0fb;
+  color: #0b2a3c;
+}
+
+.dp-table-title {
+  font-weight: 800;
+  color: #0b2a3c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* Increase table font sizes for Items, Models and Units tables by approx. 2px */
 #itemsTable th, #itemsTable td,
 #modelsTable th, #modelsTable td,
@@ -313,5 +359,19 @@ html.sidebar-left-collapsed .content-body {
 }
 .nav-main .nav-parent.nav-expanded > .nav-children {
   max-height: 500px; /* large enough to show children */
+}
+
+/* Tabs: active tab emphasis */
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  color: #0a3d91 !important;
+  font-weight: 700 !important;
+}
+
+/* FullCalendar: highlight today's date more prominently */
+.fc-today,
+.fc-unthemed .fc-today {
+  background: #d9ecff !important; /* light blue */
 }
 

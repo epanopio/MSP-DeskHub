@@ -8,6 +8,7 @@ const PDFDocument = require('pdfkit');
 const { PassThrough } = require('stream');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+const https = require('https');
 const pool = require('./db');
 const calendarFile = path.join(__dirname, 'calendar-events.json');
 
@@ -176,9 +177,11 @@ const unitsRouter = require('./routes/units');
 const usersRouter = require('./routes/users');
 const projectsRouter = require('./routes/projects');
 const inventoryInoutRouter = require('./routes/inventoryInout');
+const dataProcessingInfoRouter = require('./routes/dataProcessingInfo');
 
 let userTableCols = null;
 let formTableReady = false;
+let teamviewerCriticalReady = false;
 
 function quoteIdent(name) {
   return `"${name.replace(/"/g, '""')}"`;
@@ -225,6 +228,19 @@ async function ensureFormRecordsTable() {
     CREATE INDEX IF NOT EXISTS idx_form_records_control ON form_records (control_number);
   `);
   formTableReady = true;
+}
+
+async function ensureTeamviewerCriticalTable() {
+  if (teamviewerCriticalReady) return;
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS teamviewer_critical (
+      id SERIAL PRIMARY KEY,
+      device_id TEXT UNIQUE NOT NULL,
+      name TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+  teamviewerCriticalReady = true;
 }
 
 function formTypeCode(formType) {
@@ -290,6 +306,10 @@ const PORT = process.env.PORT || 4051;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.get('/api/health', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.json({ status: 'ok' });
+});
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'login.html'));
 });
@@ -302,6 +322,103 @@ app.use('/api/units', unitsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/projects', projectsRouter);
 app.use('/api/inventory-inout', inventoryInoutRouter);
+app.use('/api/data-processing-info', dataProcessingInfoRouter);
+
+function fetchTeamViewerDevices(token) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      method: 'GET',
+      hostname: 'webapi.teamviewer.com',
+      path: '/api/v1/devices?full_list=true',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+    const req = https.request(options, res => {
+      let raw = '';
+      res.on('data', chunk => { raw += chunk; });
+      res.on('end', () => {
+        let payload = {};
+        try {
+          payload = JSON.parse(raw || '{}');
+        } catch (err) {
+          payload = {};
+        }
+        if (res.statusCode < 200 || res.statusCode >= 300) {
+          const error = new Error(payload.message || 'TeamViewer API error');
+          error.status = res.statusCode;
+          error.payload = payload;
+          reject(error);
+          return;
+        }
+        resolve(payload);
+      });
+    });
+    req.on('error', reject);
+    req.end();
+  });
+}
+
+app.get('/api/teamviewer/devices', async (req, res) => {
+  const token = process.env.TEAMVIEWER_TOKEN;
+  if (!token) {
+    res.status(400).json({ message: 'TEAMVIEWER_TOKEN is not set on the server.' });
+    return;
+  }
+  try {
+    const data = await fetchTeamViewerDevices(token);
+    res.json(data);
+  } catch (err) {
+    res.status(err.status || 500).json({
+      message: err.message || 'Failed to reach TeamViewer API.',
+      details: err.payload || null
+    });
+  }
+});
+
+app.get('/api/teamviewer/critical', async (req, res) => {
+  try {
+    await ensureTeamviewerCriticalTable();
+    const { rows } = await pool.query('SELECT device_id, name FROM teamviewer_critical ORDER BY name NULLS LAST, device_id ASC');
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to load critical devices.' });
+  }
+});
+
+app.post('/api/teamviewer/critical', async (req, res) => {
+  try {
+    await ensureTeamviewerCriticalTable();
+    const deviceId = (req.body && req.body.device_id || '').toString().trim();
+    const name = (req.body && req.body.name || '').toString().trim();
+    if (!deviceId) {
+      res.status(400).json({ message: 'device_id is required.' });
+      return;
+    }
+    const { rows } = await pool.query(
+      'INSERT INTO teamviewer_critical (device_id, name) VALUES ($1, $2) ON CONFLICT (device_id) DO UPDATE SET name = EXCLUDED.name RETURNING device_id, name',
+      [deviceId, name || null]
+    );
+    res.json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to save critical device.' });
+  }
+});
+
+app.delete('/api/teamviewer/critical/:deviceId', async (req, res) => {
+  try {
+    await ensureTeamviewerCriticalTable();
+    const deviceId = (req.params.deviceId || '').toString().trim();
+    if (!deviceId) {
+      res.status(400).json({ message: 'device_id is required.' });
+      return;
+    }
+    await pool.query('DELETE FROM teamviewer_critical WHERE device_id = $1', [deviceId]);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to delete critical device.' });
+  }
+});
 
 // Forms records endpoints (used by formsrecords.html)
 app.get('/api/forms/records', async (req, res) => {

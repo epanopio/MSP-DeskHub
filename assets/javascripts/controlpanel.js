@@ -5,7 +5,8 @@ let editingProfileUser = null;
 let profileMode = 'edit';
 let currentSort = { key: 'id', dir: 'desc' };
 
-const tableBody = document.getElementById('usersTableBody');
+const tableBodyInfo = document.getElementById('usersInfoTableBody');
+const tableBodyLeave = document.getElementById('usersLeaveTableBody');
 const btnNew = document.getElementById('btnNew');
 const btnEdit = document.getElementById('btnEdit');
 const btnDelete = document.getElementById('btnDelete');
@@ -33,15 +34,25 @@ const btnDelete = document.getElementById('btnDelete');
   }
 
   function clearSelection() {
-    document.querySelectorAll('#usersTable tbody tr').forEach(tr => tr.classList.remove('selected'));
+    document.querySelectorAll('#usersInfoTable tbody tr, #usersLeaveTable tbody tr')
+      .forEach(tr => tr.classList.remove('selected'));
     selectedUser = null;
   }
 
   let currentUsersPage = 1;
 
+  function getActiveBody() {
+    const activePane = document.querySelector('.tab-pane.active');
+    if (activePane && activePane.id === 'tab-leave-counts') {
+      return tableBodyLeave;
+    }
+    return tableBodyInfo;
+  }
+
   function applyRowLimit() {
     const limit = parseInt(rowCount.value, 10) || 50;
-    const rows = Array.from(tableBody.querySelectorAll('tr')).filter(r => r.dataset.match !== 'false');
+    const body = getActiveBody();
+    const rows = Array.from(body.querySelectorAll('tr')).filter(r => r.dataset.match !== 'false');
     const totalPages = Math.max(1, Math.ceil(rows.length / limit));
     if (currentUsersPage > totalPages) currentUsersPage = totalPages;
     const start = (currentUsersPage - 1) * limit;
@@ -49,6 +60,8 @@ const btnDelete = document.getElementById('btnDelete');
     rows.forEach((row, idx) => {
       row.style.display = (idx >= start && idx < end) ? '' : 'none';
     });
+    const otherBody = body === tableBodyInfo ? tableBodyLeave : tableBodyInfo;
+    if (otherBody) otherBody.querySelectorAll('tr').forEach(row => { row.style.display = 'none'; });
     const info = document.getElementById('pageInfoUsersTop');
     if (info) info.textContent = `Page ${currentUsersPage} of ${totalPages}`;
     const prev = document.getElementById('btnPrevUsersTop');
@@ -59,7 +72,11 @@ const btnDelete = document.getElementById('btnDelete');
 
   function applySearch() {
     const query = searchInput.value.toLowerCase();
-    tableBody.querySelectorAll('tr').forEach(row => {
+    tableBodyInfo.querySelectorAll('tr').forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.dataset.match = text.includes(query);
+    });
+    tableBodyLeave.querySelectorAll('tr').forEach(row => {
       const text = row.textContent.toLowerCase();
       row.dataset.match = text.includes(query);
     });
@@ -78,13 +95,13 @@ const btnDelete = document.getElementById('btnDelete');
       return 0;
     });
 
-    tableBody.innerHTML = '';
+    tableBodyInfo.innerHTML = '';
+    tableBodyLeave.innerHTML = '';
     sorted.forEach(u => {
-      const row = document.createElement('tr');
-      row.dataset.id = u.id;
-      row.dataset.match = true;
-      const activeLabel = u.is_active ? 'Active' : 'Inactive';
-      row.innerHTML = `
+      const rowInfo = document.createElement('tr');
+      rowInfo.dataset.id = u.id;
+      rowInfo.dataset.match = true;
+      rowInfo.innerHTML = `
         <td>${u.id}</td>
         <td>${escapeHtml(u.username)}</td>
         <td>${escapeHtml(u.full_name || '')}</td>
@@ -92,6 +109,22 @@ const btnDelete = document.getElementById('btnDelete');
         <td>${escapeHtml(u.role || '')}</td>
         <td>${escapeHtml(u.mobile_no || '')}</td>
         <td>${escapeHtml(u.address1 || '')}</td>
+      `;
+      rowInfo.addEventListener('click', () => {
+        clearSelection();
+        rowInfo.classList.add('selected');
+        selectedUser = u;
+      });
+      rowInfo.addEventListener('dblclick', () => { profileMode = 'edit'; openProfileModal(u); });
+      tableBodyInfo.appendChild(rowInfo);
+
+      const rowLeave = document.createElement('tr');
+      rowLeave.dataset.id = u.id;
+      rowLeave.dataset.match = true;
+      rowLeave.innerHTML = `
+        <td>${u.id}</td>
+        <td>${escapeHtml(u.username)}</td>
+        <td>${escapeHtml(u.full_name || '')}</td>
         <td>${escapeHtml(u.user_leave_total ?? '')}</td>
         <td>${escapeHtml(u.user_leave_used ?? '')}</td>
         <td>${escapeHtml(u.user_leave_balance ?? '')}</td>
@@ -105,13 +138,13 @@ const btnDelete = document.getElementById('btnDelete');
         <td>${escapeHtml(u.user_mc_used ?? '')}</td>
         <td>${escapeHtml(u.user_mc_balance ?? '')}</td>
       `;
-      row.addEventListener('click', () => {
+      rowLeave.addEventListener('click', () => {
         clearSelection();
-        row.classList.add('selected');
+        rowLeave.classList.add('selected');
         selectedUser = u;
       });
-      row.addEventListener('dblclick', () => { profileMode = 'edit'; openProfileModal(u); });
-      tableBody.appendChild(row);
+      rowLeave.addEventListener('dblclick', () => { profileMode = 'edit'; openProfileModal(u); });
+      tableBodyLeave.appendChild(rowLeave);
     });
     applyRowLimit();
   }
@@ -214,7 +247,8 @@ const btnDelete = document.getElementById('btnDelete');
   const nextBtn = document.getElementById('btnNextUsersTop');
   if (prevBtn) prevBtn.addEventListener('click', () => { if (currentUsersPage > 1) { currentUsersPage--; applyRowLimit(); } });
   if (nextBtn) nextBtn.addEventListener('click', () => {
-    const rows = Array.from(tableBody.querySelectorAll('tr')).filter(r => r.dataset.match !== 'false');
+    const body = getActiveBody();
+    const rows = Array.from(body.querySelectorAll('tr')).filter(r => r.dataset.match !== 'false');
     const limit = parseInt(rowCount.value, 10) || 50;
     const totalPages = Math.max(1, Math.ceil(rows.length / limit));
     if (currentUsersPage < totalPages) { currentUsersPage++; applyRowLimit(); }
@@ -256,6 +290,11 @@ const btnDelete = document.getElementById('btnDelete');
         renderUsers(usersCache);
       });
     }
+  });
+
+  $('.nav-tabs a').on('shown.bs.tab', function () {
+    currentUsersPage = 1;
+    applyRowLimit();
   });
 
   fetchUsers();

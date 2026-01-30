@@ -1,0 +1,473 @@
+<!doctype html>
+<html class="fixed">
+<head>
+  <meta charset="UTF-8">
+  <title>DESKHUB | TeamViewer Status</title>
+  <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      const allowed = user && user.allowedApps ? user.allowedApps : [];
+      const canView = allowed.includes('teamviewerstatus') || (user && user.role === 'superadmin');
+      if (!canView) {
+        window.location.href = 'restricted.html';
+      }
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+  <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+  <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
+  <script src="assets/vendor/modernizr/modernizr.js"></script>
+  <style>
+    .status-pill {
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .status-online { background: #e6f4ea; color: #1a7f37; }
+    .status-offline { background: #fdecea; color: #b42318; }
+    .status-unknown { background: #f2f4f7; color: #475467; }
+  </style>
+</head>
+<body>
+  <section class="body">
+    <header class="header">
+      <div class="logo-container">
+        <a href="dashboard.html" class="logo">
+          <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
+        </a>
+        <div class="visible-xs toggle-sidebar-left"
+             data-toggle-class="sidebar-left-opened"
+             data-target="html"
+             data-fire-event="sidebar-left-opened">
+          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+      </div>
+    </header>
+
+    <div class="inner-wrapper">
+      <aside id="sidebar-left" class="sidebar-left">
+        <div class="sidebar-header">
+          <div class="sidebar-toggle hidden-xs"
+               data-toggle-class="sidebar-left-collapsed"
+               data-target="html"
+               data-fire-event="sidebar-left-toggle"
+               title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
+          </div>
+        </div>
+        <div class="nano">
+          <div class="nano-content">
+            <nav id="menu" class="nav-main">
+              <ul class="nav nav-main">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-archive"></i><span>Inventory</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="items.html">Items</a></li>
+                    <li><a href="models.html">Models</a></li>
+                    <li><a href="units.html">Units</a></li>
+                    <li><a href="inventorylocation.html">Inventory Location</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-files-o"></i><span>Admin Forms</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="nightaccessform.html">Night Access Form</a></li>
+                    <li><a href="leaveform.html">Leave Form</a></li>
+                    <li><a href="overtimeform.html">Overtime Form</a></li>
+                    <li><a href="timeoffform.html">Time Off Form</a></li>
+                    <li><a href="mcform.html">MC Form</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
+                  <ul class="nav nav-children">
+                    <li class="nav-active"><a href="teamviewerstatus.html">TeamViewer Status</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="dataprocessinginfo.html">Data Processing Info</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="operations-calendar.html">Operations Calendar</a></li>
+                    <li><a href="leave-calendar.html">Leave Calendar</a></li>
+                    <li><a href="reports-calendar.html">Reports Calendar</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent nav-expanded nav-active"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="manageusers.html">Manage Users</a></li>
+                    <li><a href="applicationforms.html">Application Forms</a></li>
+                    <li><a href="deskhublogs.html">DeskHub Logs</a></li>
+                  </ul>
+                </li>
+                <li class="nav-parent">
+                  <a><i class="fa fa-user"></i><span>User Profile</span></a>
+                  <ul class="nav nav-children">
+                    <li><a href="userprofile.html">User Profile</a></li>
+                    <li><a href="formsrecords.html">Forms Records</a></li>
+                  </ul>
+                </li>
+                <li><a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a></li>
+              </ul>
+            </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section role="main" class="content-body">
+        <header class="page-header">
+          <h2>TeamViewer Status</h2>
+          <div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
+        </header>
+
+        <section class="panel">
+          <header class="panel-heading">
+            <h2 class="panel-title">TeamViewer Devices</h2>
+          </header>
+          <div class="panel-body">
+            <div class="row mb-sm">
+              <div class="col-sm-6">
+                <button class="btn btn-primary" id="loadDevices">Load Devices</button>
+                <button class="btn btn-primary" id="refreshDevices">Refresh</button>
+                <span id="tvStatus" class="text-muted" style="margin-left:10px;"></span>
+              </div>
+              <div class="col-sm-6 text-right">
+                <label>Search:
+                  <input type="text" id="tvSearchInput" class="form-control input-sm" style="width: auto; display: inline-block;">
+                  <button class="btn btn-sm btn-default" id="tvSearchBtn">Search</button>
+                </label>
+              </div>
+            </div>
+
+            <ul class="nav nav-tabs" id="tvTabs">
+              <li class="active"><a href="#tab-critical" data-toggle="tab">Critical</a></li>
+              <li><a href="#tab-offline" data-toggle="tab">Offline</a></li>
+              <li><a href="#tab-online" data-toggle="tab">Online</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="tab-critical">
+                <div class="row mb-sm">
+                  <div class="col-sm-8">
+                    <label style="margin-right:8px;">Add from list:</label>
+                    <input id="criticalSelect" list="criticalOptions" class="form-control input-sm" style="display:inline-block; width:auto;" placeholder="Type to search...">
+                    <datalist id="criticalOptions"></datalist>
+                    <button class="btn btn-sm btn-primary" id="addCriticalBtn">Add</button>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-bordered table-striped" id="tvTableCritical">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Device ID</th>
+                        <th>Online</th>
+                        <th style="width:80px;">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td colspan="5" class="text-muted">No devices selected.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="tab-pane" id="tab-offline">
+                <div class="table-responsive">
+                  <table class="table table-bordered table-striped" id="tvTableOffline">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Device ID</th>
+                        <th>Online</th>
+                        <th>Add to Critical</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td colspan="4" class="text-muted">No data yet.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="tab-pane" id="tab-online">
+                <div class="table-responsive">
+                  <table class="table table-bordered table-striped" id="tvTableOnline">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Device ID</th>
+                        <th>Online</th>
+                        <th>Add to Critical</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td colspan="4" class="text-muted">No data yet.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <p class="text-muted" style="margin-top:10px; font-size:12px;">
+              Uses server-side TeamViewer API access. Set <code>TEAMVIEWER_TOKEN</code> in <code>deskhub-backend/.env</code>.
+            </p>
+          </div>
+        </section>
+      </section>
+    </div>
+  </section>
+
+  <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="assets/javascripts/theme.js"></script>
+  <script src="assets/javascripts/theme.custom.js"></script>
+  <script src="assets/javascripts/theme.init.js"></script>
+  <script src="script.js"></script>
+  <script>
+    const statusEl = document.getElementById('tvStatus');
+    const tableBodyOffline = document.querySelector('#tvTableOffline tbody');
+    const tableBodyOnline = document.querySelector('#tvTableOnline tbody');
+    const tableBodyCritical = document.querySelector('#tvTableCritical tbody');
+    const searchInput = document.getElementById('tvSearchInput');
+    const searchBtn = document.getElementById('tvSearchBtn');
+    const tabLinks = document.querySelectorAll('#tvTabs a[data-toggle="tab"]');
+    const criticalSelect = document.getElementById('criticalSelect');
+    const criticalOptions = document.getElementById('criticalOptions');
+    const addCriticalBtn = document.getElementById('addCriticalBtn');
+
+    function normalizeOnline(device) {
+      if (typeof device.online === 'boolean') return device.online;
+      if (typeof device.is_online === 'boolean') return device.is_online;
+      const state = (device.online_state || device.status || '').toString().toLowerCase();
+      if (state === 'online') return true;
+      if (state === 'offline') return false;
+      return null;
+    }
+
+    function normalizeName(device) {
+      return device.name || device.alias || device.computer_name || device.teamviewer_name || device.description || '';
+    }
+
+    function normalizeId(device) {
+      const raw = device.teamviewer_id || device.remotecontrol_id || device.id || device.device_id || device.deviceId || '';
+      return raw.toString().replace(/^r/i, '').replace(/^d/i, '');
+    }
+
+    function normalizeLastSeen(device) {
+      const raw = device.last_seen || device.last_seen_at || device.last_seen_time || device.last_online || device.last_online_time || device.last_contact;
+      if (!raw) return '';
+      if (typeof raw === 'number') {
+        const dt = new Date(raw * 1000);
+        return isNaN(dt.getTime()) ? '' : dt.toISOString();
+      }
+      return raw;
+    }
+
+    let cachedDevices = [];
+    function populateCriticalSelect(devices) {
+      criticalOptions.innerHTML = '';
+      devices.forEach(device => {
+        const id = normalizeId(device);
+        const name = normalizeName(device) || id;
+        if (!id) return;
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.label = name;
+        criticalOptions.appendChild(opt);
+      });
+    }
+
+    function renderCritical(list) {
+      list = list.slice().sort((a, b) => {
+        const nameA = (a.name || '').toLowerCase();
+        const nameB = (b.name || '').toLowerCase();
+        if (nameA && nameB) return nameA.localeCompare(nameB);
+        if (nameA) return -1;
+        if (nameB) return 1;
+        return (a.id || '').toLowerCase().localeCompare((b.id || '').toLowerCase());
+      });
+      tableBodyCritical.innerHTML = '';
+      if (!list.length) {
+        tableBodyCritical.innerHTML = '<tr><td colspan="5" class="text-muted">No devices selected.</td></tr>';
+        return;
+      }
+
+      list.forEach(item => {
+        const match = cachedDevices.find(d => normalizeId(d) === item.id) || {};
+        const name = normalizeName(match) || item.name || item.id;
+        const online = normalizeOnline(match);
+        const pillClass = online === true ? 'status-online' : (online === false ? 'status-offline' : 'status-unknown');
+        const pillText = online === true ? 'Online' : (online === false ? 'Offline' : 'Unknown');
+        const lastSeen = normalizeLastSeen(match);
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${name}</td>
+          <td>${item.id}</td>
+          <td><span class="status-pill ${pillClass}">${pillText}</span></td>
+          <td><button class="btn btn-xs btn-default" data-id="${item.id}">Delete</button></td>
+        `;
+        row.querySelector('button').addEventListener('click', () => {
+          deleteCritical(item.id);
+        });
+        tableBodyCritical.appendChild(row);
+      });
+    }
+
+    function applySearch(list, query) {
+      if (!query) return list;
+      const q = query.toLowerCase();
+      return list.filter(device => {
+        const name = normalizeName(device).toLowerCase();
+        const id = normalizeId(device).toLowerCase();
+        return name.includes(q) || id.includes(q);
+      });
+    }
+
+    function renderRows(devices) {
+      tableBodyOffline.innerHTML = '';
+      tableBodyOnline.innerHTML = '';
+      if (!devices.length) {
+        tableBodyOffline.innerHTML = '<tr><td colspan="4" class="text-muted">No devices found.</td></tr>';
+        tableBodyOnline.innerHTML = '<tr><td colspan="4" class="text-muted">No devices found.</td></tr>';
+        return;
+      }
+      const offline = [];
+      const onlineList = [];
+      devices.forEach(device => {
+        const online = normalizeOnline(device);
+        if (online === true) onlineList.push(device);
+        else offline.push(device);
+      });
+      const byName = (a, b) => normalizeName(a).toLowerCase().localeCompare(normalizeName(b).toLowerCase());
+      offline.sort(byName);
+      onlineList.sort(byName);
+
+      const renderList = (list, targetBody) => {
+        if (!list.length) {
+          targetBody.innerHTML = '<tr><td colspan="4" class="text-muted">No devices found.</td></tr>';
+          return;
+        }
+        list.forEach(device => {
+          const online = normalizeOnline(device);
+          const pillClass = online === true ? 'status-online' : (online === false ? 'status-offline' : 'status-unknown');
+          const pillText = online === true ? 'Online' : (online === false ? 'Offline' : 'Unknown');
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${normalizeName(device)}</td>
+            <td>${normalizeId(device)}</td>
+            <td><span class="status-pill ${pillClass}">${pillText}</span></td>
+            <td><button class="btn btn-xs btn-default btn-add-critical" data-id="${normalizeId(device)}" data-name="${normalizeName(device)}">Add</button></td>
+        `;
+          targetBody.appendChild(row);
+        });
+      };
+
+      const query = searchInput.value.trim();
+      const offlineFiltered = applySearch(offline, query);
+      const onlineFiltered = applySearch(onlineList, query);
+
+      renderList(offlineFiltered, tableBodyOffline);
+      renderList(onlineFiltered, tableBodyOnline);
+
+      document.querySelectorAll('.btn-add-critical').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const name = btn.getAttribute('data-name') || id;
+          if (!id) return;
+          saveCritical(id, name);
+        });
+      });
+    }
+
+    async function loadDevices() {
+      statusEl.textContent = 'Loading...';
+      try {
+        const res = await fetch('/api/teamviewer/devices');
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || 'Failed to load TeamViewer devices.');
+        }
+        const devices = data.devices || data || [];
+        cachedDevices = devices;
+        populateCriticalSelect(devices);
+        renderRows(devices);
+        await loadCriticalFromDb();
+        statusEl.textContent = `Loaded ${devices.length} device(s).`;
+      } catch (err) {
+        statusEl.textContent = err.message || 'Failed to load devices.';
+        tableBodyOffline.innerHTML = '<tr><td colspan="4" class="text-danger">Failed to load devices.</td></tr>';
+        tableBodyOnline.innerHTML = '<tr><td colspan="4" class="text-danger">Failed to load devices.</td></tr>';
+      }
+    }
+
+    document.getElementById('loadDevices').addEventListener('click', loadDevices);
+    document.getElementById('refreshDevices').addEventListener('click', loadDevices);
+    searchBtn.addEventListener('click', () => renderRows(cachedDevices));
+    searchInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        renderRows(cachedDevices);
+      }
+    });
+    tabLinks.forEach(link => {
+      link.addEventListener('shown.bs.tab', () => {
+        renderRows(cachedDevices);
+        loadCriticalFromDb();
+      });
+    });
+    document.addEventListener('DOMContentLoaded', loadDevices);
+    addCriticalBtn.addEventListener('click', () => {
+      const id = criticalSelect.value.trim();
+      if (!id) return;
+      const match = cachedDevices.find(d => normalizeId(d) === id) || {};
+      const name = normalizeName(match) || id;
+      saveCritical(id, name);
+    });
+
+    async function loadCriticalFromDb() {
+      try {
+        const res = await fetch('/api/teamviewer/critical');
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed to load critical list.');
+        const list = Array.isArray(data) ? data.map(d => ({ id: d.device_id, name: d.name })) : [];
+        renderCritical(list);
+      } catch (err) {
+        tableBodyCritical.innerHTML = '<tr><td colspan="5" class="text-danger">Failed to load critical devices.</td></tr>';
+      }
+    }
+
+    async function saveCritical(id, name) {
+      try {
+        await fetch('/api/teamviewer/critical', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ device_id: id, name })
+        });
+        await loadCriticalFromDb();
+      } catch (err) {
+        alert('Failed to save critical device.');
+      }
+    }
+
+    async function deleteCritical(id) {
+      try {
+        await fetch(`/api/teamviewer/critical/${encodeURIComponent(id)}`, {
+          method: 'DELETE'
+        });
+        await loadCriticalFromDb();
+      } catch (err) {
+        alert('Failed to delete critical device.');
+      }
+    }
+  </script>
+</body>
+</html>

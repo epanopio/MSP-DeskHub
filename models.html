@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html class="fixed">
 <head>
   <meta charset="UTF-8">
@@ -20,11 +20,11 @@
     #modelsTable tbody tr.selected {
       background-color: #d0e9ff !important;
     }
-    .remarksâ€‘cell {
-      whiteâ€‘space: nowrap;
+    .remarks-cell {
+      white-space: nowrap;
       overflow: hidden;
-      textâ€‘overflow: ellipsis;
-      maxâ€‘width: 300px;
+      text-overflow: ellipsis;
+      max-width: 400px;
     }
   </style>
 </head>
@@ -32,7 +32,7 @@
   <section class="body">
     <header class="header">
       <div class="logo-container">
-        <a href="index.html" class="logo">
+        <a href="dashboard.html" class="logo">
           <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
         </a>
         <div class="visible-xs toggle-sidebar-left"
@@ -45,7 +45,6 @@
     </header>
 
     <div class="inner-wrapper">
-      <!-- Sidebar -->
       <aside id="sidebar-left" class="sidebar-left">
         <div class="sidebar-header">
           <div class="sidebar-toggle hidden-xs"
@@ -56,7 +55,6 @@
             <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
           </div>
         </div>
-
         <div class="nano">
           <div class="nano-content">
             <nav id="menu" class="nav-main">
@@ -85,23 +83,24 @@
                   <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
                   <ul class="nav nav-children">
                     <li><a href="projects.html">Projects</a></li>
+                    <li><a href="dataprocessinginfo.html">Data Processing Info</a></li>
                   </ul>
-                                </li>
+                </li>
                 <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
                   <ul class="nav nav-children">
                     <li><a href="operations-calendar.html">Operations Calendar</a></li>
                     <li><a href="leave-calendar.html">Leave Calendar</a></li>
                     <li><a href="reports-calendar.html">Reports Calendar</a></li>
-                    
                   </ul>
                 </li>
                 <li class="nav-parent"><a><i class="fa fa-cog"></i><span>Control Panel</span></a>
                   <ul class="nav nav-children">
                     <li><a href="manageusers.html">Manage Users</a></li>
                     <li><a href="applicationforms.html">Application Forms</a></li>
+                    <li><a href="deskhublogs.html">DeskHub Logs</a></li>
                   </ul>
                 </li>
-                                <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
+                <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
                   <ul class="nav nav-children">
                     <li><a href="userprofile.html">User Profile</a></li>
                     <li><a href="formsrecords.html">Forms Records</a></li>
@@ -109,7 +108,8 @@
                 </li>
                 <li>
                   <a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a>
-                </li>              </ul>
+                </li>
+              </ul>
             </nav>
             <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
               MSP DeskHub version 1.0<br>
@@ -136,8 +136,7 @@
             <div class="row mb-md">
               <div class="col-sm-6">
                 <label>Show
-                  <select id="rowCount" class="form-control input-sm"
-                          style="width: auto; display: inline-block;">
+                  <select id="rowCount" class="form-control input-sm" style="width: auto; display: inline-block;">
                     <option value="10">10</option>
                     <option value="50" selected>50</option>
                     <option value="100">100</option>
@@ -146,21 +145,9 @@
               </div>
               <div class="col-sm-6 text-right">
                 <label>Search:
-                  <input type="text" id="searchInput"
-                         class="form-control input-sm"
-                         style="width: auto; display: inline-block;">
+                  <input type="text" id="searchInput" class="form-control input-sm" style="width: auto; display: inline-block;">
                   <button class="btn btn-sm btn-default" onclick="filterTable()">Search</button>
                 </label>
-                <button class="btn btn-sm btn-success" onclick="downloadModels()">Download (Excel)</button>
-              </div>
-            </div>
-
-            <div class="row mb-xs">
-              <div class="col-sm-6"></div>
-              <div class="col-sm-6 text-right">
-                <span id="pageInfoModelsTop"></span>
-                <button class="btn btn-default btn-sm" id="btnPrevModelsTop">Previous</button>
-                <button class="btn btn-default btn-sm" id="btnNextModelsTop">Next</button>
               </div>
             </div>
 
@@ -169,28 +156,25 @@
                 <tr>
                   <th style="width:5%;">ID</th>
                   <th style="width:15%;">Item</th>
-                  <th style="width:15%;">Model</th>
-                  <th style="width:10%;">Last Update</th>
-                  <th style="width:10%;">Updated By</th>
-                  <th style="width:35%;">Models Remarks</th>
+                  <th style="width:20%;">Model Name</th>
+                  <th style="width:15%;">Last Update</th>
+                  <th style="width:15%;">Last Updated By</th>
+                  <th style="width:30%;">Models Remarks</th>
                 </tr>
               </thead>
-              <tbody id="modelsTableBody">
-              </tbody>
+              <tbody id="modelsTableBody"></tbody>
             </table>
-
           </div>
         </section>
       </section>
     </div>
   </section>
 
-  <!-- Modal -->
   <div class="modal fade" id="modelModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <form id="modelForm" class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modelModalLabel">New Model</h5>
+          <h5 class="modal-title">New Model</h5>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
@@ -200,12 +184,12 @@
             <select class="form-control" id="itemSelect" required></select>
           </div>
           <div class="form-group">
-            <label for="modelName">Model</label>
+            <label for="modelName">Model Name</label>
             <input type="text" class="form-control" id="modelName" required />
           </div>
           <div class="form-group">
-            <label for="modelRemarks">Remarks</label>
-            <textarea class="form-control" id="modelRemarks" rows="5"></textarea>
+            <label for="modelRemarks">Models Remarks</label>
+            <textarea class="form-control" id="modelRemarks" rows="10"></textarea>
           </div>
         </div>
         <div class="modal-footer">
@@ -216,7 +200,6 @@
     </div>
   </div>
 
-  <!-- View Modal: Model details (opened on double-click) -->
   <div class="modal fade" id="modelViewModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -228,7 +211,7 @@
           <p><strong>ID:</strong> <span id="viewModelId"></span></p>
           <p><strong>Item:</strong> <span id="viewModelItem"></span></p>
           <p><strong>Model:</strong> <span id="viewModelName"></span></p>
-          <p><strong>Models Remarks:</strong> <span id="viewModelRemarks"></span></p>
+          <p><strong>Remarks:</strong> <span id="viewModelRemarks"></span></p>
           <p><strong>Last Updated:</strong> <span id="viewModelUpdated"></span></p>
         </div>
         <div class="modal-footer">
@@ -245,75 +228,24 @@
   <script src="assets/javascripts/theme.init.js"></script>
   <script src="assets/javascripts/models.js"></script>
   <script src="script.js"></script>
-  
-	<script>
-    let currentModelsPage = 1;
+
+  <script>
     function filterTable() {
       const search = document.getElementById("searchInput").value.toLowerCase();
-      const rows   = document.querySelectorAll("#modelsTable tbody tr");
+      const rows = document.querySelectorAll("#modelsTable tbody tr");
       rows.forEach(row => {
         const text = row.textContent.toLowerCase();
         row.style.display = text.includes(search) ? "" : "none";
       });
     }
 
-  document.getElementById("rowCount").addEventListener("change", function() {
-      currentModelsPage = 1;
-      applyModelsPagination();
-    });
-
-    function applyModelsPagination() {
-      const limit = parseInt(document.getElementById("rowCount").value) || 50;
-      const rows  = Array.from(document.querySelectorAll("#modelsTable tbody tr"));
-      const totalPages = Math.max(1, Math.ceil(rows.length / limit));
-      if (currentModelsPage > totalPages) currentModelsPage = totalPages;
-      const start = (currentModelsPage - 1) * limit;
-      const end = start + limit;
+    document.getElementById("rowCount").addEventListener("change", function() {
+      const limit = parseInt(this.value, 10);
+      const rows = document.querySelectorAll("#modelsTable tbody tr");
       rows.forEach((row, idx) => {
-        row.style.display = (idx >= start && idx < end) ? "" : "none";
+        row.style.display = idx < limit ? "" : "none";
       });
-      const info = document.getElementById("pageInfoModelsTop");
-      if (info) info.textContent = `Page ${currentModelsPage} of ${totalPages}`;
-      const prev = document.getElementById("btnPrevModelsTop");
-      const next = document.getElementById("btnNextModelsTop");
-      if (prev) prev.disabled = currentModelsPage <= 1;
-      if (next) next.disabled = currentModelsPage >= totalPages;
-    }
-    window.applyModelsPagination = applyModelsPagination;
-
-    document.getElementById("btnPrevModelsTop").addEventListener("click", () => {
-      if (currentModelsPage > 1) {
-        currentModelsPage--;
-        applyModelsPagination();
-      }
     });
-    document.getElementById("btnNextModelsTop").addEventListener("click", () => {
-      currentModelsPage++;
-      applyModelsPagination();
-    });
-
-    async function downloadModels() {
-      try {
-        const res = await fetch('/api/models');
-        if (!res.ok) throw new Error('Failed to load models');
-        const data = await res.json();
-        const headers = ["ID","Item","Model","Last Update","Updated By","Models Remarks"];
-        const rows = data.map(m => [
-          m.id, m.item_name || '', m.name || '', m.updated_on || '', m.updated_by || '', (m.models_remarks1 || m.remarks || '').replace(/[\r\n]+/g,' ')
-        ]);
-        const csv = [headers, ...rows].map(r => r.map(v => `"${String(v ?? '').replace(/"/g,'""')}"`).join(',')).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'models.csv';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (err) {
-        alert('Download failed.');
-        console.error(err);
-      }
-    }
 
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("rowCount").dispatchEvent(new Event("change"));
@@ -328,13 +260,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-

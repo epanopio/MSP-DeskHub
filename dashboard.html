@@ -20,6 +20,31 @@
   <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
   <link rel="stylesheet" href="assets/vendor/fullcalendar/fullcalendar.css" />
   <script src="assets/vendor/modernizr/modernizr.js"></script>
+  <style>
+    .tv-offline-item {
+      background: #fdecea;
+      border: 1px solid #f5c2c7;
+      color: #b42318;
+      padding: 6px 10px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .tv-offline-badge {
+      background: #c62828;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 10px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      margin-left: 8px;
+    }
+  </style>
 </head>
 
 <body>
@@ -76,6 +101,9 @@
                   <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
                   <ul class="nav nav-children">
                     <li><a href="projects.html">Projects</a></li>
+                    <li><a href="dataprocessinginfo.html">Data Processing Info</a></li>
+                    
+                    
                   </ul>
                                 </li>
                 <li class="nav-parent"><a><i class="fa fa-calendar"></i><span>Calendar</span></a>
@@ -90,6 +118,7 @@
                   <ul class="nav nav-children">
                     <li><a href="manageusers.html">Manage Users</a></li>
                     <li><a href="applicationforms.html">Application Forms</a></li>
+                    <li><a href="deskhublogs.html">DeskHub Logs</a></li>
                   </ul>
                 </li>
                                 <li class="nav-parent"><a><i class="fa fa-user"></i><span>User Profile</span></a>
@@ -120,6 +149,68 @@
         </header>
 
         <div class="row">
+          <div class="col-md-6">
+            <section class="panel">
+              <header class="panel-heading">
+                <h2 class="panel-title">Welcome to Deskhub</h2>
+              </header>
+              <div class="panel-body">
+                <p>This is the dashboard. Add widgets or summary panels here as needed.</p>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <section class="panel">
+                      <div class="panel-body">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <h4>Items</h4>
+                            <h3 id="dashboardItemsCount">--</h3>
+                          </div>
+                          <div class="col-sm-4">
+                            <h4>Models</h4>
+                            <h3 id="dashboardModelsCount">--</h3>
+                          </div>
+                          <div class="col-sm-4">
+                            <h4>Units</h4>
+                            <h3 id="dashboardUnitsCount">--</h3>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+                <section class="panel">
+                  <header class="panel-heading" style="display:flex; align-items:center; justify-content:space-between; background:#2b6cb0; color:#fff;">
+                    <h2 class="panel-title" style="color:#fff;">TeamViewer Status</h2>
+                    <a class="btn btn-xs btn-default" href="teamviewerstatus.html">View all</a>
+                  </header>
+                  <div class="panel-body">
+                    <div id="dashboardTeamviewerStatus" class="text-muted">Loading...</div>
+                    <ul id="dashboardTeamviewerList" class="list-unstyled" style="margin:10px 0 0;"></ul>
+                  </div>
+                </section>
+                <section class="panel">
+                  <header class="panel-heading" style="display:flex; align-items:center; justify-content:space-between; background:#2b6cb0; color:#fff;">
+                    <h2 class="panel-title" style="color:#fff;">Calibration</h2>
+                  </header>
+                  <div class="panel-body">
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-striped">
+                        <thead>
+                          <tr>
+                            <th>Total Station</th>
+                            <th>Expiry Date</th>
+                          </tr>
+                        </thead>
+                        <tbody id="dashboardCalibrationBody">
+                          <tr><td colspan="2" class="text-muted">No data</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </section>
+          </div>
           <div class="col-md-6">
             <section class="panel">
               <header class="panel-heading">
@@ -177,38 +268,6 @@
                       <tr><td colspan="5" class="text-center text-muted">No events</td></tr>
                     </tbody>
                   </table>
-                </div>
-              </div>
-            </section>
-          </div>
-          <div class="col-md-6">
-            <section class="panel">
-              <header class="panel-heading">
-                <h2 class="panel-title">Welcome to Deskhub</h2>
-              </header>
-              <div class="panel-body">
-                <p>This is the dashboard. Add widgets or summary panels here as needed.</p>
-                <div class="row">
-                  <div class="col-sm-12">
-                    <section class="panel">
-                      <div class="panel-body">
-                        <div class="row">
-                          <div class="col-sm-4">
-                            <h4>Items</h4>
-                            <h3 id="dashboardItemsCount">--</h3>
-                          </div>
-                          <div class="col-sm-4">
-                            <h4>Models</h4>
-                            <h3 id="dashboardModelsCount">--</h3>
-                          </div>
-                          <div class="col-sm-4">
-                            <h4>Units</h4>
-                            <h3 id="dashboardUnitsCount">--</h3>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
-                  </div>
                 </div>
               </div>
             </section>
@@ -276,6 +335,70 @@
           if (value._isAMomentObject && typeof value.toDate === 'function') return value.toDate();
           const parsed = new Date(value);
           return Number.isNaN(parsed.getTime()) ? null : parsed;
+        }
+
+        async function loadTeamviewerCriticalOffline() {
+          const statusEl = document.getElementById('dashboardTeamviewerStatus');
+          const listEl = document.getElementById('dashboardTeamviewerList');
+          if (!statusEl || !listEl) return;
+          statusEl.textContent = 'Loading...';
+          listEl.innerHTML = '';
+
+          try {
+            const [criticalRes, devicesRes] = await Promise.all([
+              fetch('/api/teamviewer/critical'),
+              fetch('/api/teamviewer/devices')
+            ]);
+            const criticalData = await criticalRes.json();
+            const devicesData = await devicesRes.json();
+            if (!criticalRes.ok) throw new Error(criticalData.message || 'Failed to load critical list.');
+            if (!devicesRes.ok) throw new Error(devicesData.message || 'Failed to load devices.');
+
+            const criticalList = Array.isArray(criticalData) ? criticalData : [];
+            const devices = devicesData.devices || devicesData || [];
+
+            const normalizeId = (device) => {
+              const raw = device.teamviewer_id || device.remotecontrol_id || device.id || device.device_id || device.deviceId || '';
+              return raw.toString().replace(/^r/i, '').replace(/^d/i, '');
+            };
+            const normalizeName = (device) => device.name || device.alias || device.computer_name || device.teamviewer_name || device.description || '';
+            const normalizeOnline = (device) => {
+              if (typeof device.online === 'boolean') return device.online;
+              if (typeof device.is_online === 'boolean') return device.is_online;
+              const state = (device.online_state || device.status || '').toString().toLowerCase();
+              if (state === 'online') return true;
+              if (state === 'offline') return false;
+              return null;
+            };
+
+            const criticalIds = criticalList.map(c => c.device_id);
+            const criticalOffline = criticalIds.map(id => {
+              const match = devices.find(d => normalizeId(d) === id) || {};
+              return {
+                id,
+                name: normalizeName(match) || criticalList.find(c => c.device_id === id)?.name || id,
+                online: normalizeOnline(match)
+              };
+            }).filter(item => item.online === false);
+
+            if (!criticalOffline.length) {
+              statusEl.textContent = 'No offline critical devices.';
+              return;
+            }
+            statusEl.textContent = `${criticalOffline.length} offline critical device(s).`;
+            criticalOffline.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+            criticalOffline.forEach(item => {
+              const li = document.createElement('li');
+              li.className = 'tv-offline-item';
+              li.innerHTML = `
+                <span>${item.name} (${item.id})</span>
+                <span class="tv-offline-badge">Offline</span>
+              `;
+              listEl.appendChild(li);
+            });
+          } catch (err) {
+            statusEl.textContent = err.message || 'Failed to load TeamViewer status.';
+          }
         }
 
         function eventInMonth(ev, monthStart, monthEnd) {
@@ -404,6 +527,7 @@
             loadMonthlyEvents(lastView || $('#dashboardCalendar').fullCalendar('getView'));
           }
         });
+        loadTeamviewerCriticalOffline();
       }
     });
   </script>

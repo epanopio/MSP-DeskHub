@@ -82,6 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
       'items', 'models', 'units', 'inventorylocation',
       'adminforms', 'leaveform', 'nightaccess', 'overtime', 'timeoff', 'mcform',
       'projects',
+      'dataprocessinginfo',
+      'deskhublogs',
+      'teamviewerstatus',
       'operations-calendar', 'reports-calendar', 'leave-calendar',
       'manageusers',
       'userprofile', 'formsrecords'
@@ -91,6 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
       'items', 'models', 'units', 'inventorylocation',
       'adminforms', 'leaveform', 'nightaccess', 'overtime', 'timeoff', 'mcform',
       'projects',
+      'dataprocessinginfo',
+      'teamviewerstatus',
       'operations-calendar', 'reports-calendar', 'leave-calendar',
       'userprofile', 'formsrecords'
     ],
@@ -99,6 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
       'inventorylocation',
       'adminforms', 'leaveform', 'nightaccess', 'overtime', 'timeoff', 'mcform',
       'projects',
+      'dataprocessinginfo',
+      'teamviewerstatus',
       'operations-calendar', 'reports-calendar', 'leave-calendar',
       'userprofile', 'formsrecords'
     ]
@@ -107,7 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const roleKey = (currentUser && currentUser.role ? String(currentUser.role).toLowerCase() : 'user');
   const storedAllowed = (currentUser && currentUser.allowedApps) || [];
   const defaults = roleDefaults[roleKey] || roleDefaults.user;
-  const allowedApps = Array.from(new Set([...defaults, ...storedAllowed]));
+  const mergedAllowed = Array.from(new Set([...defaults, ...storedAllowed]));
+  const allowedApps = roleKey === 'superadmin'
+    ? mergedAllowed
+    : mergedAllowed.filter(key => key !== 'deskhublogs' && key !== 'teamviewerstatus');
   // Persist enriched permissions so subsequent page loads see them
   if (currentUser) {
     currentUser.allowedApps = allowedApps;
@@ -122,6 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
       : path.includes('timeoffform.html') ? 'timeoff'
       : path.includes('mcform.html') ? 'mcform'
       : (path.includes('manageusers.html') || path.includes('controlpanel.html')) ? 'manageusers'
+      : path.includes('deskhublogs.html') ? 'deskhublogs'
+      : path.includes('teamviewerstatus.html') ? 'teamviewerstatus'
       : path.includes('userprofile.html') ? 'userprofile'
       : path.includes('formsrecords.html') ? 'formsrecords'
       : path.includes('inventorylocation.html') ? 'inventorylocation'
@@ -131,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
       : path.includes('operations-calendar.html') ? 'operations-calendar'
       : path.includes('reports-calendar.html') ? 'reports-calendar'
       : path.includes('leave-calendar.html') ? 'leave-calendar'
+      : path.includes('dataprocessinginfo.html') ? 'dataprocessinginfo'
       : path.includes('dashboard.html') ? 'dashboard'
       : null;
     if (pageKey && !allowedApps.includes(pageKey)) {
@@ -147,6 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hide disallowed pages in the nav
     const disallowMap = [
       { key: 'manageusers', hrefs: ['manageusers.html', 'controlpanel.html'] },
+      { key: 'deskhublogs', hrefs: ['deskhublogs.html'] },
+      { key: 'teamviewerstatus', hrefs: ['teamviewerstatus.html'] },
       { key: 'items', hrefs: ['items.html'] },
       { key: 'models', hrefs: ['models.html'] },
       { key: 'units', hrefs: ['units.html'] }
@@ -161,6 +176,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
     });
+
+    const ensureMenuItem = (ul, href, label, afterHref, beforeHref) => {
+      if (!ul || ul.querySelector(`a[href$="${href}"]`)) return;
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="${href}">${label}</a>`;
+      if (beforeHref) {
+        const beforeLink = ul.querySelector(`a[href$="${beforeHref}"]`);
+        const beforeLi = beforeLink ? beforeLink.closest('li') : null;
+        if (beforeLi) {
+          beforeLi.insertAdjacentElement('beforebegin', li);
+          return;
+        }
+      }
+      if (afterHref) {
+        const afterLink = ul.querySelector(`a[href$="${afterHref}"]`);
+        const afterLi = afterLink ? afterLink.closest('li') : null;
+        if (afterLi) {
+          afterLi.insertAdjacentElement('afterend', li);
+          return;
+        }
+      }
+      ul.appendChild(li);
+    };
+
+    // Ensure missing submenu links exist on all pages
+    const opsLink = nav.querySelector('a[href$="projects.html"]');
+    if (opsLink) {
+      const opsUl = opsLink.closest('ul');
+      ensureMenuItem(opsUl, 'teamviewerstatus.html', 'TeamViewer Status', null, 'projects.html');
+      ensureMenuItem(opsUl, 'dataprocessinginfo.html', 'Data Processing Info', 'projects.html');
+    }
+
+    const calendarParent = Array.from(nav.querySelectorAll('.nav-parent > a'))
+      .find(a => (a.textContent || '').trim().toLowerCase().includes('calendar'));
+    if (calendarParent) {
+      const calendarUl = calendarParent.parentElement.querySelector('.nav-children');
+      ensureMenuItem(calendarUl, 'operations-calendar.html', 'Operations Calendar');
+      ensureMenuItem(calendarUl, 'leave-calendar.html', 'Leave Calendar', 'operations-calendar.html');
+      ensureMenuItem(calendarUl, 'reports-calendar.html', 'Reports Calendar', 'leave-calendar.html');
+    }
+
+    const controlLink = nav.querySelector('a[href$="applicationforms.html"]');
+    if (controlLink) {
+      const controlUl = controlLink.closest('ul');
+      ensureMenuItem(controlUl, 'deskhublogs.html', 'DeskHub Logs', 'applicationforms.html');
+    }
 
     // Reset all active/expanded states, then set only the current page as active
     const pageFile = (window.location.pathname.split('/').pop() || 'dashboard.html').toLowerCase();
@@ -256,6 +317,41 @@ document.addEventListener('DOMContentLoaded', () => {
     headerNameNodes.forEach(n => { n.textContent = displayName; });
   }
 
+  function ensureServerStatus() {
+    const header = document.querySelector('header.header');
+    if (!header) return;
+    let statusEl = document.getElementById('serverStatus');
+    if (!statusEl) {
+      statusEl = document.createElement('div');
+      statusEl.id = 'serverStatus';
+      statusEl.className = 'server-status';
+      statusEl.textContent = 'Checking...';
+      header.appendChild(statusEl);
+    }
+
+    async function checkStatus() {
+      try {
+        const res = await fetch('/api/health', { cache: 'no-store' });
+        if (res.ok) {
+          statusEl.textContent = 'Server Connected';
+          statusEl.classList.remove('fail');
+          statusEl.classList.add('ok');
+        } else {
+          statusEl.textContent = 'Server Connection Failed';
+          statusEl.classList.remove('ok');
+          statusEl.classList.add('fail');
+        }
+      } catch (err) {
+        statusEl.textContent = 'Server Connection Failed';
+        statusEl.classList.remove('ok');
+        statusEl.classList.add('fail');
+      }
+    }
+
+    checkStatus();
+    setInterval(checkStatus, 10000);
+  }
+
   // Ensure top-right header full name banner exists
   function ensureHeaderFullName() {
     const header = document.querySelector('.header');
@@ -269,6 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   ensureHeaderFullName();
   fillWelcomeName();
+  ensureServerStatus();
 });
 
 function logout() {
