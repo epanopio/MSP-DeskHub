@@ -11,6 +11,8 @@ const bcrypt = require('bcrypt');
 const https = require('https');
 const pool = require('./db');
 const calendarFile = path.join(__dirname, 'calendar-events.json');
+const emailSettingsFile = path.join(__dirname, '..', 'email-settings.txt');
+const emailSettingKeys = ['night_access', 'leave', 'overtime', 'time_off', 'mc_form'];
 
 function ensureCalendarFile() {
   if (!fs.existsSync(calendarFile)) {
@@ -39,6 +41,56 @@ function loadCalendar() {
 
 function saveCalendar(data) {
   fs.writeFileSync(calendarFile, JSON.stringify(data, null, 2));
+}
+
+function ensureEmailSettingsFile() {
+  const dir = path.dirname(emailSettingsFile);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  if (fs.existsSync(emailSettingsFile)) return;
+  const lines = emailSettingKeys.map((k) => `${k}=`).join('\n') + '\n';
+  fs.writeFileSync(emailSettingsFile, lines, 'utf8');
+}
+
+function loadEmailSettings() {
+  ensureEmailSettingsFile();
+  const out = {};
+  emailSettingKeys.forEach((k) => { out[k] = ''; });
+  try {
+    const raw = fs.readFileSync(emailSettingsFile, 'utf8');
+    raw.split(/\r?\n/).forEach((line) => {
+      const trimmed = (line || '').trim();
+      if (!trimmed || trimmed.startsWith('#')) return;
+      const idx = trimmed.indexOf('=');
+      if (idx === -1) return;
+      const key = trimmed.slice(0, idx).trim();
+      const value = trimmed.slice(idx + 1).trim();
+      if (emailSettingKeys.includes(key)) out[key] = value;
+    });
+  } catch (err) {
+    console.warn('Failed to read email settings file:', err.message || err);
+  }
+  return out;
+}
+
+function saveEmailSettings(settings) {
+  const lines = emailSettingKeys.map((key) => `${key}=${(settings[key] || '').toString().trim()}`);
+  fs.writeFileSync(emailSettingsFile, `${lines.join('\n')}\n`, 'utf8');
+}
+
+function parseRecipientList(value) {
+  return (value || '')
+    .toString()
+    .split(/[;,]/)
+    .map((v) => v.trim())
+    .filter(Boolean);
+}
+
+function getFormRecipients(formType) {
+  const settings = loadEmailSettings();
+  const raw = settings[formType] || '';
+  const list = parseRecipientList(raw);
+  if (list.length) return list;
+  return parseRecipientList(process.env.EMAIL_TO || '');
 }
 
 function normalizeCalType(t) {
@@ -309,6 +361,30 @@ app.use(bodyParser.json());
 app.get('/api/health', (req, res) => {
   res.set('Cache-Control', 'no-store');
   res.json({ status: 'ok' });
+});
+app.get('/api/email-settings', (req, res) => {
+  try {
+    res.set('Cache-Control', 'no-store');
+    res.json(loadEmailSettings());
+  } catch (err) {
+    console.error('Failed to load email settings:', err);
+    res.status(500).json({ message: 'Failed to load email settings' });
+  }
+});
+app.post('/api/email-settings', (req, res) => {
+  try {
+    const body = req.body || {};
+    const current = loadEmailSettings();
+    const next = { ...current };
+    emailSettingKeys.forEach((key) => {
+      next[key] = (body[key] || '').toString().trim();
+    });
+    saveEmailSettings(next);
+    res.json({ ok: true, settings: next });
+  } catch (err) {
+    console.error('Failed to save email settings:', err);
+    res.status(500).json({ message: 'Failed to save email settings', error: err.message || String(err) });
+  }
 });
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'login.html'));
@@ -610,8 +686,8 @@ app.post('/api/login', async (req, res) => {
 
     const role = (user.role || '').toLowerCase() || 'user';
     const defaultByRole = {
-      superadmin: ['dashboard', 'inventory', 'controlpanel', 'adminforms', 'leaveform', 'userprofile', 'projects'],
-      admin: ['dashboard', 'inventory', 'adminforms', 'leaveform', 'userprofile', 'projects'],
+      superadmin: ['dashboard', 'inventory', 'controlpanel', 'adminforms', 'leaveform', 'userprofile', 'projects', 'emailsettings'],
+      admin: ['dashboard', 'inventory', 'adminforms', 'leaveform', 'userprofile', 'projects', 'emailsettings'],
       user: ['dashboard', 'adminforms', 'leaveform', 'userprofile', 'projects']
     };
     const defaultApps = defaultByRole[role] || defaultByRole.user;
@@ -774,12 +850,13 @@ app.post('/api/send-leave-pdf', async (req, res) => {
           return filenameParts.map(safe).filter(Boolean).join('_') || title.toLowerCase().replace(/\s+/g, '_');
         })();
 
-    const recipients = [process.env.EMAIL_TO].filter(Boolean);
+    const recipients = getFormRecipients(formType);
     if (userEmail) recipients.push(userEmail);
+    const uniqueRecipients = Array.from(new Set(recipients.map((r) => (r || '').trim()).filter(Boolean).map((r) => r.toLowerCase())));
 
     await transporter.sendMail({
       from: `"DeskHub" <${process.env.EMAIL_USER}>`,
-      to: recipients.join(','),
+      to: uniqueRecipients.join(','),
       subject,
       text: `Please find attached the ${title}.`,
       attachments: [
@@ -833,6 +910,13 @@ app.patch('/api/forms/records/:id', async (req, res) => {
     const id = req.params.id;
     const status = (req.body && req.body.status) ? String(req.body.status) : '';
     if (!status) return res.status(400).json({ error: 'status required' });
+    const existing = await pool.query(
+      `SELECT id, status, form_type AS "formType", username, payload
+       FROM form_records
+       WHERE id = $1`,
+      [id]
+    );
+    if (!existing.rows.length) return res.status(404).json({ error: 'not found' });
     const { rows } = await pool.query(
       `UPDATE form_records
        SET status = $1
@@ -841,6 +925,31 @@ app.patch('/api/forms/records/:id', async (req, res) => {
       [status, id]
     );
     if (!rows.length) return res.status(404).json({ error: 'not found' });
+
+    const prevStatus = (existing.rows[0].status || '').toString().toLowerCase();
+    const newStatus = status.toString().toLowerCase();
+    const formType = (existing.rows[0].formType || '').toString().toLowerCase();
+    const username = (existing.rows[0].username || '').toString().trim();
+    let payload = existing.rows[0].payload || {};
+    if (typeof payload === 'string') {
+      try { payload = JSON.parse(payload); } catch { payload = {}; }
+    }
+    if (newStatus === 'approved' && prevStatus !== 'approved' && formType === 'overtime' && username) {
+      const rawHours = payload.total_hours || payload.totalHours || payload.hours || '';
+      const hours = parseFloat(rawHours);
+      if (!Number.isNaN(hours) && Number.isFinite(hours)) {
+        try {
+          await pool.query(
+            `UPDATE users
+             SET user_ot_total = COALESCE(user_ot_total, 0) + $1
+             WHERE lower(username) = lower($2)`,
+            [hours, username]
+          );
+        } catch (err) {
+          console.error('Failed to update user_ot_total for overtime approval:', err);
+        }
+      }
+    }
     res.json(rows[0]);
   } catch (err) {
     console.error('Error updating form record status:', err);
@@ -953,10 +1062,11 @@ app.post('/api/forms/records/:id/send-status-email', async (req, res) => {
     const filenameSafe = [controlNumber, statusText].map(safe).filter(Boolean).join('_') || safe(controlNumber || 'form');
 
     const userEmail = payload.userEmail || payload.email || null;
-    const recipients = [process.env.EMAIL_TO].filter(Boolean);
+    const recipients = getFormRecipients(formType);
     if (userEmail) recipients.push(userEmail);
+    const uniqueRecipients = Array.from(new Set(recipients.map((r) => (r || '').trim()).filter(Boolean).map((r) => r.toLowerCase())));
 
-    if (!recipients.length) {
+    if (!uniqueRecipients.length) {
       return res.status(400).json({ error: 'No email recipients' });
     }
 
@@ -973,7 +1083,7 @@ app.post('/api/forms/records/:id/send-status-email', async (req, res) => {
 
     await transporter.sendMail({
       from: `"DeskHub" <${process.env.EMAIL_USER}>`,
-      to: recipients.join(','),
+      to: uniqueRecipients.join(','),
       subject,
       text: `${title} has been ${statusText.toLowerCase()}.`,
       attachments: [

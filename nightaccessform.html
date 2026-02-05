@@ -232,10 +232,23 @@
           const data = await res.json();
           const select = document.getElementById('naProject');
           select.innerHTML = '<option value=\"\">Select Project</option>';
-          data.forEach(p => {
+          const pinned = ['MSP Office', 'H3 Geospatial Technologies Pte Ltd'];
+          const sorted = (Array.isArray(data) ? data.slice() : []).sort((a, b) => {
+            const aName = (a && a.proj_name ? a.proj_name : '').trim();
+            const bName = (b && b.proj_name ? b.proj_name : '').trim();
+            const aPin = pinned.indexOf(aName);
+            const bPin = pinned.indexOf(bName);
+            if (aPin !== -1 || bPin !== -1) {
+              if (aPin === -1) return 1;
+              if (bPin === -1) return -1;
+              return aPin - bPin;
+            }
+            return aName.localeCompare(bName, undefined, { sensitivity: 'base' });
+          });
+          sorted.forEach(p => {
             const opt = document.createElement('option');
-            opt.value = p.name || '';
-            opt.textContent = p.name || '';
+            opt.value = p.proj_name || '';
+            opt.textContent = p.proj_name || '';
             select.appendChild(opt);
           });
         } catch (err) {
@@ -247,9 +260,13 @@
 
       const naForm = document.querySelector('form');
       const naStatus = document.getElementById('naStatus');
+      const naSubmit = document.getElementById('naSubmit');
       naForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        naStatus.style.display = 'none';
+        if (naSubmit) naSubmit.disabled = true;
+        naStatus.textContent = 'Sending...';
+        naStatus.className = 'alert alert-info mt-md';
+        naStatus.style.display = 'block';
         const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
         async function resolveUserEmail() {
           if (currentUser && currentUser.email) return currentUser.email;
@@ -298,7 +315,7 @@
             body: JSON.stringify(payload)
           });
           if (res.ok) {
-            naStatus.textContent = `Form submitted successfully. A copy was emailed${userEmail ? ' to ' + userEmail : ''}.`;
+            naStatus.textContent = 'Form submitted successfully. A copy was emailed to your email and to MSP Admin.';
             naStatus.className = 'alert alert-success mt-md';
           } else {
             naStatus.textContent = 'Failed to submit form.';
@@ -309,6 +326,7 @@
           naStatus.className = 'alert alert-warning mt-md';
         }
         naStatus.style.display = 'block';
+        if (naSubmit) naSubmit.disabled = false;
       });
     });
   </script>

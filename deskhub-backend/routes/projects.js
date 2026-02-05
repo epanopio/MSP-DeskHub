@@ -6,7 +6,7 @@ const pool = require('../db');
 router.get('/', async (_req, res) => {
   try {
     const result = await pool.query(
-      'SELECT id, name, location, stationcounts FROM projects ORDER BY id DESC'
+      'SELECT id, proj_name, location, location_stn, proj_stn FROM projects ORDER BY id DESC'
     );
     res.json(result.rows);
   } catch (err) {
@@ -18,12 +18,12 @@ router.get('/', async (_req, res) => {
 // CREATE project
 router.post('/', async (req, res) => {
   try {
-    const { name, location = null, stationcounts = 0 } = req.body;
-    if (!name) return res.status(400).json({ message: 'Project name is required.' });
-    const stations = parseInt(stationcounts, 10) || 0;
+    const { proj_name, location = null, location_stn = null, proj_stn = 0 } = req.body;
+    if (!proj_name) return res.status(400).json({ message: 'Project name is required.' });
+    const stations = parseInt(proj_stn, 10) || 0;
     const result = await pool.query(
-      'INSERT INTO projects (name, location, stationcounts) VALUES ($1, $2, $3) RETURNING id, name, location, stationcounts',
-      [name, location, stations]
+      'INSERT INTO projects (proj_name, location, location_stn, proj_stn) VALUES ($1, $2, $3, $4) RETURNING id, proj_name, location, location_stn, proj_stn',
+      [proj_name, location, location_stn, stations]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -36,12 +36,12 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, location = null, stationcounts = 0 } = req.body;
-    if (!name) return res.status(400).json({ message: 'Project name is required.' });
-    const stations = parseInt(stationcounts, 10) || 0;
+    const { proj_name, location = null, location_stn = null, proj_stn = 0 } = req.body;
+    if (!proj_name) return res.status(400).json({ message: 'Project name is required.' });
+    const stations = parseInt(proj_stn, 10) || 0;
     const result = await pool.query(
-      'UPDATE projects SET name=$1, location=$2, stationcounts=$3 WHERE id=$4 RETURNING id, name, location, stationcounts',
-      [name, location, stations, id]
+      'UPDATE projects SET proj_name=$1, location=$2, location_stn=$3, proj_stn=$4 WHERE id=$5 RETURNING id, proj_name, location, location_stn, proj_stn',
+      [proj_name, location, location_stn, stations, id]
     );
     if (result.rows.length === 0) return res.status(404).json({ message: 'Not found' });
     res.json(result.rows[0]);

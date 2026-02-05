@@ -9,7 +9,9 @@ const mapRow = (r) => ({
   date: r.inv_date ? r.inv_date.toISOString().split('T')[0] : null,
   time: r.inv_time,
   from_location: r.from_location,
+  from_stn: r.from_stn,
   to_location: r.to_location,
+  to_stn: r.to_stn,
   item_id: r.item_id,
   brand: r.brand,
   model: r.model,
@@ -22,7 +24,7 @@ const mapRow = (r) => ({
 router.get('/', async (_req, res) => {
   try {
     const result = await pool.query(`
-      SELECT id, inventory, inv_date, inv_time, from_location, to_location,
+      SELECT id, inventory, inv_date, inv_time, from_location, from_stn, to_location, to_stn,
              item_id, brand, model, unit_serial, quantity, name
       FROM inventory_inout
       ORDER BY id DESC
@@ -42,7 +44,9 @@ router.post('/', async (req, res) => {
       date,
       time,
       from_location,
+      from_stn,
       to_location,
+      to_stn,
       item_id = null,
       brand = null,
       model = null,
@@ -55,11 +59,11 @@ router.post('/', async (req, res) => {
 
     const result = await pool.query(
       `INSERT INTO inventory_inout
-       (inventory, inv_date, inv_time, from_location, to_location, item_id, brand, model, unit_serial, quantity, name)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-       RETURNING id, inventory, inv_date, inv_time, from_location, to_location,
+       (inventory, inv_date, inv_time, from_location, from_stn, to_location, to_stn, item_id, brand, model, unit_serial, quantity, name)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+       RETURNING id, inventory, inv_date, inv_time, from_location, from_stn, to_location, to_stn,
                  item_id, brand, model, unit_serial, quantity, name`,
-      [inventory, date || null, time || null, from_location || null, to_location || null,
+      [inventory, date || null, time || null, from_location || null, from_stn || null, to_location || null, to_stn || null,
        item_id, brand || null, model || null, unit_serial || null,
        quantity !== undefined && quantity !== null && quantity !== '' ? Number(quantity) : null,
        name || null]
@@ -80,7 +84,9 @@ router.put('/:id', async (req, res) => {
       date,
       time,
       from_location,
+      from_stn,
       to_location,
+      to_stn,
       item_id = null,
       brand = null,
       model = null,
@@ -92,12 +98,12 @@ router.put('/:id', async (req, res) => {
 
     const result = await pool.query(
       `UPDATE inventory_inout
-       SET inventory=$1, inv_date=$2, inv_time=$3, from_location=$4, to_location=$5,
-           item_id=$6, brand=$7, model=$8, unit_serial=$9, quantity=$10, name=$11
-       WHERE id=$12
-       RETURNING id, inventory, inv_date, inv_time, from_location, to_location,
+       SET inventory=$1, inv_date=$2, inv_time=$3, from_location=$4, from_stn=$5, to_location=$6, to_stn=$7,
+           item_id=$8, brand=$9, model=$10, unit_serial=$11, quantity=$12, name=$13
+       WHERE id=$14
+       RETURNING id, inventory, inv_date, inv_time, from_location, from_stn, to_location, to_stn,
                  item_id, brand, model, unit_serial, quantity, name`,
-      [inventory, date || null, time || null, from_location || null, to_location || null,
+      [inventory, date || null, time || null, from_location || null, from_stn || null, to_location || null, to_stn || null,
        item_id, brand || null, model || null, unit_serial || null,
        quantity !== undefined && quantity !== null && quantity !== '' ? Number(quantity) : null,
        name || null, id]

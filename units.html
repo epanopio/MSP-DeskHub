@@ -187,6 +187,14 @@
                 </tbody>
               </table>
             </div>
+            <div class="row mt-xs">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6 text-right">
+                <span id="pageInfoUnitsBottom"></span>
+                <button class="btn btn-default btn-sm" id="btnPrevUnitsBottom">Previous</button>
+                <button class="btn btn-default btn-sm" id="btnNextUnitsBottom">Next</button>
+              </div>
+            </div>
           </div>
         </section>
       </section>
@@ -334,21 +342,29 @@
     rows.forEach((row, idx) => {
       row.style.display = (idx >= start && idx < end) ? "" : "none";
     });
-    const info = document.getElementById("pageInfoUnitsTop");
-    if (info) info.textContent = `Page ${currentUnitsPage} of ${totalPages}`;
-    const prev = document.getElementById("btnPrevUnitsTop");
-    const next = document.getElementById("btnNextUnitsTop");
-    if (prev) prev.disabled = currentUnitsPage <= 1;
-    if (next) next.disabled = currentUnitsPage >= totalPages;
+    const pageText = `Page ${currentUnitsPage} of ${totalPages}`;
+    document.querySelectorAll("#pageInfoUnitsTop, #pageInfoUnitsBottom").forEach((el) => {
+      el.textContent = pageText;
+    });
+    const disablePrev = currentUnitsPage <= 1;
+    const disableNext = currentUnitsPage >= totalPages;
+    document.querySelectorAll("#btnPrevUnitsTop, #btnPrevUnitsBottom").forEach((el) => {
+      el.disabled = disablePrev;
+    });
+    document.querySelectorAll("#btnNextUnitsTop, #btnNextUnitsBottom").forEach((el) => {
+      el.disabled = disableNext;
+    });
   }
 
-  const prevBtn = document.getElementById("btnPrevUnitsTop");
-  const nextBtn = document.getElementById("btnNextUnitsTop");
-  if (prevBtn) prevBtn.addEventListener("click", () => {
-    if (currentUnitsPage > 1) { currentUnitsPage--; applyUnitsPagination(); }
+  document.querySelectorAll("#btnPrevUnitsTop, #btnPrevUnitsBottom").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (currentUnitsPage > 1) { currentUnitsPage--; applyUnitsPagination(); }
+    });
   });
-  if (nextBtn) nextBtn.addEventListener("click", () => {
-    currentUnitsPage++; applyUnitsPagination();
+  document.querySelectorAll("#btnNextUnitsTop, #btnNextUnitsBottom").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      currentUnitsPage++; applyUnitsPagination();
+    });
   });
   // expose for reuse after data reload
   window.applyUnitsPagination = applyUnitsPagination;

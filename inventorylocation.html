@@ -150,8 +150,10 @@
                   <th>Inventory</th>
                   <th>Date</th>
                   <th>From</th>
+                  <th>From Station</th>
                   <th>Time</th>
                   <th>To</th>
+                  <th>To Station</th>
                   <th>Item</th>
                   <th>Model</th>
                   <th>Unit</th>
@@ -210,8 +212,10 @@
         inventory: $('#invInventory'),
         date: $('#invDate'),
         from: $('#invFrom'),
+        fromStn: $('#invFromStn'),
         time: $('#invTime'),
         to: $('#invTo'),
+        toStn: $('#invToStn'),
         item: $('#invItem'),
         model: $('#invModel'),
         unit: $('#invUnit'),
@@ -270,8 +274,10 @@
               <td>${e.inventory || ''}</td>
               <td>${formatDateDisplay(e.date || '')}</td>
               <td>${e.from_location || ''}</td>
+              <td>${e.from_stn || ''}</td>
               <td>${e.time || ''}</td>
               <td>${e.to_location || ''}</td>
+              <td>${e.to_stn || ''}</td>
               <td>${itemName}</td>
               <td>${e.model || ''}</td>
               <td>${e.unit_serial || ''}</td>
@@ -323,8 +329,10 @@
         fields.inventory.val(e.inventory || '');
         fields.date.val(e.date || '');
         fields.from.val(e.from_location || '');
+        fields.fromStn.val(e.from_stn || '');
         fields.time.val(e.time || '');
         fields.to.val(e.to_location || '');
+        fields.toStn.val(e.to_stn || '');
         fields.item.val(e.item_id || '');
         loadModelsForItem(e.item_id).then(() => {
           fields.model.val(e.model || '');
@@ -367,13 +375,15 @@
       }
 
       function downloadInventoryCsv() {
-        const headers = ["Inventory","Date","From","Time","To","Item","Model","Unit/Serial","Quantity","Name"];
+        const headers = ["Inventory","Date","From","From Station","Time","To","To Station","Item","Model","Unit/Serial","Quantity","Name"];
         const rows = entries.map(e => [
           e.inventory || '',
           e.date || '',
           e.from_location || '',
+          e.from_stn || '',
           e.time || '',
           e.to_location || '',
+          e.to_stn || '',
           itemsMap[e.item_id] || e.item_id || '',
           e.model || '',
           e.unit_serial || '',
@@ -428,7 +438,9 @@
           date: fields.date.val().trim(),
           time: fields.time.val().trim(),
           from_location: fromVal === 'other' ? otherFromVal : fromVal,
+          from_stn: fields.fromStn.val().trim(),
           to_location: toVal === 'other' ? otherToVal : toVal,
+          to_stn: fields.toStn.val().trim(),
           item_id: fields.item.val() || null,
           model: fields.model.val(),
           unit_serial: unitVal === 'new' ? otherUnitVal : unitVal,
@@ -468,7 +480,10 @@
           const res = await fetch('/api/projects');
           if (!res.ok) throw new Error();
           const data = await res.json();
-          const opts = data.map(p => `<option value="${p.name || ''}">${p.name || ''}</option>`).join('');
+          const opts = data.map(p => {
+            const val = p.location || p.location_stn || p.proj_name || '';
+            return `<option value="${val}">${val}</option>`;
+          }).join('');
           projectSelectFrom.html(`<option value="">Select...</option><option value="other">Other (add new)</option>${opts}`);
           projectSelectTo.html(`<option value="">Select...</option><option value="other">Other (add new)</option>${opts}`);
         } catch (err) {
@@ -559,85 +574,62 @@
           <input type="hidden" id="invIndex">
           <div class="row">
             <div class="col-sm-6">
-          <div class="form-group">
-            <label>Inventory</label>
-            <select class="form-control" id="invInventory" required>
-              <option value="">Select</option>
-              <option value="In">In</option>
-              <option value="Out">Out</option>
-            </select>
-          </div>
-            </div>
-            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Inventory</label>
+                <select class="form-control" id="invInventory" required>
+                  <option value="">Select</option>
+                  <option value="In">In</option>
+                  <option value="Out">Out</option>
+                </select>
+              </div>
               <div class="form-group">
                 <label>Date</label>
                 <input type="date" class="form-control" id="invDate">
               </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-6">
-          <div class="form-group">
-            <label>From</label>
-            <select class="form-control" id="invFrom"></select>
-            <input type="text" class="form-control" id="invFromOther" placeholder="Enter location" style="margin-top:6px; display:none;">
-          </div>
-            </div>
-            <div class="col-sm-6">
               <div class="form-group">
                 <label>Time</label>
                 <input type="time" class="form-control" id="invTime">
               </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-6">
-          <div class="form-group">
-            <label>To</label>
-            <select class="form-control" id="invTo"></select>
-            <input type="text" class="form-control" id="invToOther" placeholder="Enter location" style="margin-top:6px; display:none;">
-          </div>
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" id="invName" required>
+              </div>
             </div>
             <div class="col-sm-6">
-          <div class="form-group">
-            <label>Item</label>
-            <select class="form-control" id="invItem" required></select>
-          </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-6">
+              <div class="form-group">
+                <label>From</label>
+                <select class="form-control" id="invFrom"></select>
+                <input type="text" class="form-control" id="invFromOther" placeholder="Enter location" style="margin-top:6px; display:none;">
+              </div>
+              <div class="form-group">
+                <label>From Station</label>
+                <input type="text" class="form-control" id="invFromStn">
+              </div>
+              <div class="form-group">
+                <label>To</label>
+                <select class="form-control" id="invTo"></select>
+                <input type="text" class="form-control" id="invToOther" placeholder="Enter location" style="margin-top:6px; display:none;">
+              </div>
+              <div class="form-group">
+                <label>To Station</label>
+                <input type="text" class="form-control" id="invToStn">
+              </div>
+              <div class="form-group">
+                <label>Item</label>
+                <select class="form-control" id="invItem" required></select>
+              </div>
               <div class="form-group">
                 <label>Model</label>
                 <select class="form-control" id="invModel"></select>
               </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-6">
-          <div class="form-group">
-            <label>Unit/Serial Number</label>
-            <select class="form-control" id="invUnit"></select>
-            <input type="text" class="form-control" id="invUnitOther" placeholder="Enter new serial number" style="margin-top:6px; display:none;">
-          </div>
-            </div>
-            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Unit/Serial Number</label>
+                <select class="form-control" id="invUnit"></select>
+                <input type="text" class="form-control" id="invUnitOther" placeholder="Enter new serial number" style="margin-top:6px; display:none;">
+              </div>
               <div class="form-group">
                 <label>Quantity</label>
                 <input type="number" class="form-control" id="invQuantity">
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Name</label>
-                <input type="text" class="form-control" id="invName" required>
               </div>
             </div>
           </div>

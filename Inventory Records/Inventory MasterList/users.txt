@@ -1,0 +1,17 @@
+username	role	password_hash	nric_fin	mobile_no	birthdate	full_name	email	office
+tslim	admin	msprapid!		9151 6972		T.S Lim Kenny	ts_lim@mspsystem.com	Singapore
+jinlin	user	msprapid!		9187 0518		Lin Jin Lin	linjinlin@mspsystem.com	Singapore
+samy	user	msprapid!		8285 4980		Arumugam Ponnusamy	samy@mspsystem.com	Singapore
+jackie	user	msprapid!		8589 0019		Jackie Sim	jackie@mspsystem.com	Singapore
+jathon	superadmin	msprapid!		9199 6358		Jathon Suen	jathon@mspsystem.com	Singapore
+kelvin	admin	msprapid!		9698 5922		Kelvin Tan	kelvin@mspsystem.com	Singapore
+raja	user	msprapid!		8901 4956		Karman Ilayaraja	raja@mspsystem.com	Singapore
+luna	user	msprapid!		8533 1241		Luna Koh	luna@mspsystem.com	Singapore
+see	user	msprapid!		9622 5435		See Joon Cher	see@mspsystem.com	Singapore
+suriyati	user	msprapid!		8328 7174		Suriyati	suriyati@mspsystem.com	Singapore
+john	admin	msprapid!		90878867		John Young Neo	johnyoung@mspsystem.com	Singapore
+siti	user	msprapid!		8233 6190		Siti Nazia	siti@mspsystem.com	Singapore
+satish	user	msprapid!		80792801		Satish Kumar	satish@mspsystem.com	Singapore
+joey	user	msprapid!		60122771002		Joey Tan	reports03@mspsystem.com	KL
+nadira	user	msprapid!		60192066942		Nadira Izzati Abdul Isam	reports06@mspsystem.com	KL
+yong	user	msprapid!		60129019007		Yong Ye Lam	reports04@mspsystem.com	KL

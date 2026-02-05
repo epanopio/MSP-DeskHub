@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'adminforms', 'leaveform', 'nightaccess', 'overtime', 'timeoff', 'mcform',
       'projects',
       'dataprocessinginfo',
+      'emailsettings',
       'deskhublogs',
       'teamviewerstatus',
       'operations-calendar', 'reports-calendar', 'leave-calendar',
@@ -95,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'adminforms', 'leaveform', 'nightaccess', 'overtime', 'timeoff', 'mcform',
       'projects',
       'dataprocessinginfo',
+      'emailsettings',
       'teamviewerstatus',
       'operations-calendar', 'reports-calendar', 'leave-calendar',
       'userprofile', 'formsrecords'
@@ -115,9 +117,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const storedAllowed = (currentUser && currentUser.allowedApps) || [];
   const defaults = roleDefaults[roleKey] || roleDefaults.user;
   const mergedAllowed = Array.from(new Set([...defaults, ...storedAllowed]));
-  const allowedApps = roleKey === 'superadmin'
+  let allowedApps = roleKey === 'superadmin'
     ? mergedAllowed
     : mergedAllowed.filter(key => key !== 'deskhublogs' && key !== 'teamviewerstatus');
+  if (roleKey !== 'superadmin' && roleKey !== 'admin') {
+    allowedApps = allowedApps.filter(key => key !== 'emailsettings');
+  }
   // Persist enriched permissions so subsequent page loads see them
   if (currentUser) {
     currentUser.allowedApps = allowedApps;
@@ -133,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
       : path.includes('mcform.html') ? 'mcform'
       : (path.includes('manageusers.html') || path.includes('controlpanel.html')) ? 'manageusers'
       : path.includes('deskhublogs.html') ? 'deskhublogs'
+      : path.includes('emailsettings.html') ? 'emailsettings'
       : path.includes('teamviewerstatus.html') ? 'teamviewerstatus'
       : path.includes('userprofile.html') ? 'userprofile'
       : path.includes('formsrecords.html') ? 'formsrecords'
@@ -161,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const disallowMap = [
       { key: 'manageusers', hrefs: ['manageusers.html', 'controlpanel.html'] },
       { key: 'deskhublogs', hrefs: ['deskhublogs.html'] },
+      { key: 'emailsettings', hrefs: ['emailsettings.html'] },
       { key: 'teamviewerstatus', hrefs: ['teamviewerstatus.html'] },
       { key: 'items', hrefs: ['items.html'] },
       { key: 'models', hrefs: ['models.html'] },
@@ -220,7 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const controlLink = nav.querySelector('a[href$="applicationforms.html"]');
     if (controlLink) {
       const controlUl = controlLink.closest('ul');
-      ensureMenuItem(controlUl, 'deskhublogs.html', 'DeskHub Logs', 'applicationforms.html');
+      ensureMenuItem(controlUl, 'emailsettings.html', 'Email Settings', 'applicationforms.html');
+      ensureMenuItem(controlUl, 'deskhublogs.html', 'DeskHub Logs', 'emailsettings.html');
     }
 
     // Reset all active/expanded states, then set only the current page as active

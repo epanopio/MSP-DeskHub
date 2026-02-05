@@ -179,9 +179,13 @@
 
       const toForm = document.querySelector('form');
       const toStatus = document.getElementById('toStatus');
+      const toSubmit = document.getElementById('toSubmit');
       toForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        toStatus.style.display = 'none';
+        if (toSubmit) toSubmit.disabled = true;
+        toStatus.textContent = 'Sending...';
+        toStatus.className = 'alert alert-info mt-md';
+        toStatus.style.display = 'block';
         const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
         const fullName = currentUser ? (currentUser.fullName || currentUser.username || '') : '';
         async function resolveUserEmail() {
@@ -223,7 +227,7 @@
             body: JSON.stringify(payload)
           });
           if (res.ok) {
-            toStatus.textContent = `Form submitted successfully. A copy was emailed${userEmail ? ' to ' + userEmail : ''}.`;
+            toStatus.textContent = 'Form submitted successfully. A copy was emailed to your email and to MSP Admin.';
             toStatus.className = 'alert alert-success mt-md';
           } else {
             toStatus.textContent = 'Failed to submit form.';
@@ -234,6 +238,7 @@
           toStatus.className = 'alert alert-warning mt-md';
         }
         toStatus.style.display = 'block';
+        if (toSubmit) toSubmit.disabled = false;
       });
     });
   </script>

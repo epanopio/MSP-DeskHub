@@ -299,7 +299,9 @@
         const btn = this;
         const statusDiv = document.getElementById('emailStatus');
         btn.disabled = true;
-        statusDiv.style.display = 'none';
+        statusDiv.textContent = 'Sending...';
+        statusDiv.className = 'alert alert-info mt-md';
+        statusDiv.style.display = 'block';
 
         const fullName = document.getElementById('leavefullname').value.trim();
         const leaveType = document.querySelector('input[name="optionsRadios"]:checked').value;
@@ -363,7 +365,7 @@
           });
 
           if (res.ok) {
-            statusDiv.textContent = `Leave application sent successfully! A copy was emailed${userEmail ? ' to ' + userEmail : ''}.`;
+            statusDiv.textContent = 'Form submitted successfully. A copy was emailed to your email and to MSP Admin.';
             statusDiv.className = 'alert alert-success mt-md';
           } else {
             statusDiv.textContent = 'Failed to send leave application.';
@@ -374,7 +376,6 @@
           statusDiv.className = 'alert alert-warning mt-md';
         }
 
-        statusDiv.style.display = 'block';
         btn.disabled = false;
       });
     });

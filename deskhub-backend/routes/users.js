@@ -51,7 +51,10 @@ async function loadColumns() {
     user_leave_balance: cols.includes('user_leave_balance') ? 'user_leave_balance' : null,
     user_claimoff_balance: cols.includes('user_claimoff_balance') ? 'user_claimoff_balance' : null,
     user_childcare_balance: cols.includes('user_childcare_balance') ? 'user_childcare_balance' : null,
-    user_mc_balance: cols.includes('user_mc_balance') ? 'user_mc_balance' : null
+    user_mc_balance: cols.includes('user_mc_balance') ? 'user_mc_balance' : null,
+    user_ot_total: cols.includes('user_ot_total') ? 'user_ot_total' : null,
+    user_ot_used: cols.includes('user_ot_used') ? 'user_ot_used' : null,
+    user_ot_balance: cols.includes('user_ot_balance') ? 'user_ot_balance' : null
   };
 }
 
@@ -113,7 +116,10 @@ function selectFields(cols) {
     cols.user_leave_balance ? `${quoteIdent(cols.user_leave_balance)} AS user_leave_balance` : `NULL::numeric AS user_leave_balance`,
     cols.user_claimoff_balance ? `${quoteIdent(cols.user_claimoff_balance)} AS user_claimoff_balance` : `NULL::numeric AS user_claimoff_balance`,
     cols.user_childcare_balance ? `${quoteIdent(cols.user_childcare_balance)} AS user_childcare_balance` : `NULL::numeric AS user_childcare_balance`,
-    cols.user_mc_balance ? `${quoteIdent(cols.user_mc_balance)} AS user_mc_balance` : `NULL::numeric AS user_mc_balance`
+    cols.user_mc_balance ? `${quoteIdent(cols.user_mc_balance)} AS user_mc_balance` : `NULL::numeric AS user_mc_balance`,
+    cols.user_ot_total ? `${quoteIdent(cols.user_ot_total)} AS user_ot_total` : `NULL::numeric AS user_ot_total`,
+    cols.user_ot_used ? `${quoteIdent(cols.user_ot_used)} AS user_ot_used` : `NULL::numeric AS user_ot_used`,
+    cols.user_ot_balance ? `${quoteIdent(cols.user_ot_balance)} AS user_ot_balance` : `NULL::numeric AS user_ot_balance`
   ];
 }
 
@@ -159,7 +165,10 @@ router.post('/', async (req, res) => {
       user_leave_balance = null,
       user_claimoff_balance = null,
       user_childcare_balance = null,
-      user_mc_balance = null
+      user_mc_balance = null,
+      user_ot_total = null,
+      user_ot_used = null,
+      user_ot_balance = null
     } = req.body;
     if (!username || !password) return res.status(400).json({ message: 'Username and password are required.' });
     if (!cols.password_hash) return res.status(500).json({ message: 'Users table missing password_hash column.' });
@@ -192,6 +201,15 @@ router.post('/', async (req, res) => {
     if (cols.user_claimoff_balance) { insertCols.push(quoteIdent(cols.user_claimoff_balance)); values.push(user_claimoff_balance); }
     if (cols.user_childcare_balance) { insertCols.push(quoteIdent(cols.user_childcare_balance)); values.push(user_childcare_balance); }
     if (cols.user_mc_balance) { insertCols.push(quoteIdent(cols.user_mc_balance)); values.push(user_mc_balance); }
+    if (cols.user_ot_total) { insertCols.push(quoteIdent(cols.user_ot_total)); values.push(user_ot_total); }
+    if (cols.user_ot_used) { insertCols.push(quoteIdent(cols.user_ot_used)); values.push(user_ot_used); }
+    if (cols.user_ot_balance) {
+      const t = Number(user_ot_total ?? 0);
+      const u = Number(user_ot_used ?? 0);
+      const bal = Number.isFinite(t) && Number.isFinite(u) ? (t - u) : null;
+      insertCols.push(quoteIdent(cols.user_ot_balance));
+      values.push(bal);
+    }
 
     const placeholders = values.map((_, idx) => `$${idx + 1}`);
     const query = `
@@ -237,7 +255,10 @@ router.put('/:id', async (req, res) => {
       user_leave_balance = null,
       user_claimoff_balance = null,
       user_childcare_balance = null,
-      user_mc_balance = null
+      user_mc_balance = null,
+      user_ot_total = null,
+      user_ot_used = null,
+      user_ot_balance = null
     } = req.body;
     if (!username) return res.status(400).json({ message: 'Username is required.' });
 
@@ -268,6 +289,15 @@ router.put('/:id', async (req, res) => {
     if (cols.user_claimoff_balance) { sets.push(`${quoteIdent(cols.user_claimoff_balance)} = $${values.length + 1}`); values.push(user_claimoff_balance); }
     if (cols.user_childcare_balance) { sets.push(`${quoteIdent(cols.user_childcare_balance)} = $${values.length + 1}`); values.push(user_childcare_balance); }
     if (cols.user_mc_balance) { sets.push(`${quoteIdent(cols.user_mc_balance)} = $${values.length + 1}`); values.push(user_mc_balance); }
+    if (cols.user_ot_total) { sets.push(`${quoteIdent(cols.user_ot_total)} = $${values.length + 1}`); values.push(user_ot_total); }
+    if (cols.user_ot_used) { sets.push(`${quoteIdent(cols.user_ot_used)} = $${values.length + 1}`); values.push(user_ot_used); }
+    if (cols.user_ot_balance) {
+      const t = Number(user_ot_total ?? 0);
+      const u = Number(user_ot_used ?? 0);
+      const bal = Number.isFinite(t) && Number.isFinite(u) ? (t - u) : null;
+      sets.push(`${quoteIdent(cols.user_ot_balance)} = $${values.length + 1}`);
+      values.push(bal);
+    }
     if (cols.updated_on) { sets.push(`${quoteIdent(cols.updated_on)} = CURRENT_TIMESTAMP`); }
 
     values.push(id);

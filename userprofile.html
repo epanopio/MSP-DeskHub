@@ -252,6 +252,12 @@
               <p>Used MC: <span id="mcUsed"></span></p>
               <p>Balance: <span id="mcBalance"></span></p>
             </div>
+            <div class="info-card">
+              <h5>Total Overtime</h5>
+              <p>Total Overtime: <span id="otTotal"></span></p>
+              <p>Used Overtime: <span id="otUsed"></span></p>
+              <p>Balance: <span id="otBalance"></span></p>
+            </div>
           </div>
         </div>
       </section>
@@ -332,6 +338,9 @@
           const mcTotal = document.getElementById('mcTotal');
           const mcUsed = document.getElementById('mcUsed');
           const mcBalance = document.getElementById('mcBalance');
+          const otTotal = document.getElementById('otTotal');
+          const otUsed = document.getElementById('otUsed');
+          const otBalance = document.getElementById('otBalance');
           if (leaveTotal) leaveTotal.textContent = currentUser.user_leave_total ?? '';
           if (leaveUsed) leaveUsed.textContent = currentUser.user_leave_used ?? '';
           if (leaveBalance) leaveBalance.textContent = currentUser.user_leave_balance ?? '';
@@ -344,6 +353,14 @@
           if (mcTotal) mcTotal.textContent = currentUser.user_mc_total ?? '';
           if (mcUsed) mcUsed.textContent = currentUser.user_mc_used ?? '';
           if (mcBalance) mcBalance.textContent = currentUser.user_mc_balance ?? '';
+          if (otTotal) otTotal.textContent = currentUser.user_ot_total ?? '';
+          if (otUsed) otUsed.textContent = currentUser.user_ot_used ?? '';
+          if (otBalance) {
+            const total = Number(currentUser.user_ot_total ?? 0);
+            const used = Number(currentUser.user_ot_used ?? 0);
+            const balance = Number.isFinite(total) && Number.isFinite(used) ? (total - used) : '';
+            otBalance.textContent = balance === '' ? '' : balance;
+          }
         } catch (err) {
           console.error(err);
           showStatus('Failed to load profile.', false);

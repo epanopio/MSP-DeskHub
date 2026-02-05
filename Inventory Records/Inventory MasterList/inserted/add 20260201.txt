@@ -1,0 +1,30 @@
+model_id	serial_number	unit_remarks1	unit_remarks3
+Sokkia NET1m	101583	CPG	SOLD TO CPG
+Sokkia NET1m	101556	JTRS	SOLD
+Sokkia NET1m	101640	JTRS	SOLD
+ES-101/SG	GW1011	Lian Ho Lee Construction Private Limited	Sold to Lian Ho Lee Construction Private Limited (MSP Tax Invoice: I15K214 DD 03/11/15)
+Sokkia NET05XTIIT-21W	102459	Monmet Engineering Co., Ltd	Sold to Monmet Engineering Co., Ltd
+SX-101T/S	Z70159	Pipe-Jack Engineering & Construction Pte Ltd	Sold
+MS1AX	102313	PT Exsol (Indonesia)	Sold
+MS05AXII	KJ0227	PT Exsol (Indonesia)	
+MS1AXTIIT/TE2	KM0051	PT Exsol Innovindo	Sold (MSP Tax Inv: I16J118 DD 05/10/16)
+MS1AXTIIT/TE2	KM0062	PT Exsol Innovindo	Sold to PT Exsol Innovindo
+MS1AXTIIT/TE2	KM0063	PT Exsol Innovindo	Sold to PT Exsol Innovindo
+Sokkia NET05XTIIT-21W	102175	S.D.M Company Limited (Thailand)	Sold to PT Exsol Innovindo
+Sokkia NET05XTIIT-21W	102210	S.D.M Company Limited (Thailand)	Purchase for S.D.M Company Limited
+Sokkia NET05XTIIT-21W	KG0072	S.D.M Company Limited (Thailand)	Sold to S.D.M Company Limited
+Sokkia NET05AX	102338	Thailand	Sold to S.D.M Company Limited
+Sokkia NET05AX	102218	Topcon Corporation Japan	Sold to Thailand (S.D.M Company Limited)
+Sokkia NET05AX	102219	Topcon Corporation Japan	Returned
+Sokkia NET05AX	102225	Topcon Corporation Japan	Returned
+Sokkia NET05AX	102227	Topcon Corporation Japan	Returned
+Sokkia NET1AX	102315	Topcon Corporation Japan	Returned
+Sokkia NET1AX	102319	Topcon Corporation Japan	Returned
+Sokkia NET1AX	102323	Topcon Corporation Japan	Returned
+Sokkia NET1AX	102326	Topcon Corporation Japan	Returned
+Sokkia NET05AX	102216	Topcon Instrument (Malaysia)	Returned
+MS1AXTIIT/TE2	KM0069	Topcon Instrument (Thailand) Co. Ltd	
+MS05AXT52T-21	102440	Victory Instrument JSC	
+Sokkia NET1m	101567	Woh Hup	Sold to Victory Instrument JSC
+Sokkia NET1AX	102030	Sokkia	SOLD
+IS301	Y30061	Sokkia	

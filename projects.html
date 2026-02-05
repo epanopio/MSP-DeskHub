@@ -146,7 +146,7 @@
                   <th style="width:60px;">#</th>
                   <th style="width:22%;">Project Name</th>
                   <th>Location</th>
-                  <th>Number of Stations</th>
+                  <th>Project Stations</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -186,7 +186,7 @@
             <input type="text" class="form-control" id="projectLocation" required>
           </div>
           <div class="form-group">
-            <label>Number of Stations</label>
+            <label>Project Stations</label>
             <input type="number" min="0" class="form-control" id="projectStations" required>
           </div>
         </div>
@@ -263,7 +263,7 @@
         const filtered = projects.filter(p => {
           const t = searchTerm.trim().toLowerCase();
           if (!t) return true;
-          return (p.name || '').toLowerCase().includes(t) ||
+          return (p.proj_name || '').toLowerCase().includes(t) ||
                  (p.location || '').toLowerCase().includes(t);
         });
         const priorityNames = [
@@ -271,8 +271,8 @@
           'H3 Geospatial Technologies Pte Ltd'
         ];
         const sorted = filtered.slice().sort((a, b) => {
-          const nameA = (a.name || '').trim();
-          const nameB = (b.name || '').trim();
+          const nameA = (a.proj_name || '').trim();
+          const nameB = (b.proj_name || '').trim();
           const priA = priorityNames.findIndex(n => n.toLowerCase() === nameA.toLowerCase());
           const priB = priorityNames.findIndex(n => n.toLowerCase() === nameB.toLowerCase());
           const rankA = priA === -1 ? 2 : priA;
@@ -290,9 +290,9 @@
           const tr = $(`
             <tr data-idx="${idx}">
               <td>${idx + 1}</td>
-              <td>${p.name || ''}</td>
+              <td>${p.proj_name || ''}</td>
               <td>${p.location || ''}</td>
-              <td>${p.stations || ''}</td>
+              <td>${p.proj_stn ?? ''}</td>
             </tr>
           `);
           if (idx === selectedIndex) tr.addClass('info');
@@ -333,9 +333,9 @@
         }
         const p = projects[selectedIndex];
         idxInput.val(selectedIndex);
-        nameInput.val(p.name || '');
+        nameInput.val(p.proj_name || '');
         locInput.val(p.location || '');
-        stationsInput.val(p.stations || '');
+        stationsInput.val(p.proj_stn ?? '');
         modal.find('.modal-title').text('Edit Project');
         modal.modal('show');
       }
@@ -359,7 +359,7 @@
         const filteredCount = projects.filter(p => {
           const t = searchTerm.trim().toLowerCase();
           if (!t) return true;
-          return (p.name || '').toLowerCase().includes(t) ||
+          return (p.proj_name || '').toLowerCase().includes(t) ||
                  (p.location || '').toLowerCase().includes(t);
         }).length;
         const totalPages = Math.max(1, Math.ceil(filteredCount / pageSize));
@@ -370,7 +370,7 @@
         const filteredCount = projects.filter(p => {
           const t = searchTerm.trim().toLowerCase();
           if (!t) return true;
-          return (p.name || '').toLowerCase().includes(t) ||
+          return (p.proj_name || '').toLowerCase().includes(t) ||
                  (p.location || '').toLowerCase().includes(t);
         }).length;
         const totalPages = Math.max(1, Math.ceil(filteredCount / pageSize));
@@ -390,20 +390,20 @@
       form.on('submit', function(e) {
         e.preventDefault();
         const data = {
-          name: nameInput.val().trim(),
+          proj_name: nameInput.val().trim(),
           location: locInput.val().trim(),
-          stations: stationsInput.val().trim()
+          proj_stn: stationsInput.val().trim()
         };
-        if (!data.name || !data.location || data.stations === '') {
+        if (!data.proj_name || !data.location || data.proj_stn === '') {
           alert('Please fill in all fields.');
           return;
         }
         const idx = idxInput.val();
         if (idx === '') {
-          saveProjects('create', { name: data.name, location: data.location, stationcounts: data.stations });
+          saveProjects('create', { proj_name: data.proj_name, location: data.location, proj_stn: data.proj_stn });
         } else {
           const id = projects[parseInt(idx, 10)].id;
-          saveProjects('update', { id, name: data.name, location: data.location, stationcounts: data.stations });
+          saveProjects('update', { id, proj_name: data.proj_name, location: data.location, proj_stn: data.proj_stn });
         }
         modal.modal('hide');
       });

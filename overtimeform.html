@@ -207,10 +207,14 @@
 
       const otForm = document.querySelector('form');
       const otStatus = document.getElementById('otStatus');
+      const otSubmit = document.getElementById('otSubmit');
 
       otForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        otStatus.style.display = 'none';
+        if (otSubmit) otSubmit.disabled = true;
+        otStatus.textContent = 'Sending...';
+        otStatus.className = 'alert alert-info mt-md';
+        otStatus.style.display = 'block';
         const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
         const fullName = currentUser ? (currentUser.fullName || currentUser.username || '') : '';
 
@@ -255,7 +259,7 @@
             body: JSON.stringify(payload)
           });
           if (res.ok) {
-            otStatus.textContent = `Form submitted successfully. A copy was emailed${userEmail ? ' to ' + userEmail : ''}.`;
+            otStatus.textContent = 'Form submitted successfully. A copy was emailed to your email and to MSP Admin.';
             otStatus.className = 'alert alert-success mt-md';
           } else {
             otStatus.textContent = 'Failed to submit form.';
@@ -266,6 +270,7 @@
           otStatus.className = 'alert alert-warning mt-md';
         }
         otStatus.style.display = 'block';
+        if (otSubmit) otSubmit.disabled = false;
       });
     });
   </script>
