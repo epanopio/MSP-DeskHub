@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'projects',
       'dataprocessinginfo',
       'emailsettings',
+      'applicationforms',
       'deskhublogs',
       'teamviewerstatus',
       'operations-calendar', 'reports-calendar', 'leave-calendar',
@@ -97,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'projects',
       'dataprocessinginfo',
       'emailsettings',
+      'applicationforms',
       'teamviewerstatus',
       'operations-calendar', 'reports-calendar', 'leave-calendar',
       'userprofile', 'formsrecords'
@@ -119,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const mergedAllowed = Array.from(new Set([...defaults, ...storedAllowed]));
   let allowedApps = roleKey === 'superadmin'
     ? mergedAllowed
-    : mergedAllowed.filter(key => key !== 'deskhublogs' && key !== 'teamviewerstatus');
+    : mergedAllowed.filter(key => key !== 'deskhublogs');
   if (roleKey !== 'superadmin' && roleKey !== 'admin') {
     allowedApps = allowedApps.filter(key => key !== 'emailsettings');
   }
@@ -137,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
       : path.includes('timeoffform.html') ? 'timeoff'
       : path.includes('mcform.html') ? 'mcform'
       : (path.includes('manageusers.html') || path.includes('controlpanel.html')) ? 'manageusers'
+      : path.includes('applicationforms.html') ? 'applicationforms'
       : path.includes('deskhublogs.html') ? 'deskhublogs'
       : path.includes('emailsettings.html') ? 'emailsettings'
       : path.includes('teamviewerstatus.html') ? 'teamviewerstatus'
@@ -162,10 +165,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const nav = document.querySelector('.nav-main');
   if (nav) {
     const allowed = allowedApps;
+    const isUserOnly = roleKey === 'user';
 
     // Hide disallowed pages in the nav
     const disallowMap = [
       { key: 'manageusers', hrefs: ['manageusers.html', 'controlpanel.html'] },
+      { key: 'applicationforms', hrefs: ['applicationforms.html'] },
       { key: 'deskhublogs', hrefs: ['deskhublogs.html'] },
       { key: 'emailsettings', hrefs: ['emailsettings.html'] },
       { key: 'teamviewerstatus', hrefs: ['teamviewerstatus.html'] },
@@ -183,6 +188,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
     });
+    if (isUserOnly) {
+      ['emailsettings.html'].forEach(h => {
+        const link = nav.querySelector(`a[href$="${h}"]`);
+        if (link && link.closest('li')) {
+          link.closest('li').style.display = 'none';
+        }
+      });
+      const controlParent = Array.from(nav.querySelectorAll('.nav-parent > a'))
+        .find(a => (a.textContent || '').trim().toLowerCase().includes('control panel'));
+      if (controlParent && controlParent.closest('li')) {
+        controlParent.closest('li').style.display = 'none';
+      }
+    }
 
     const ensureMenuItem = (ul, href, label, afterHref, beforeHref) => {
       if (!ul || ul.querySelector(`a[href$="${href}"]`)) return;

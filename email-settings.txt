@@ -1,5 +1,5 @@
-night_access=eman@mspsystem.com,sensor@mspsystem.com
-leave=eman@mspsystem.com,sensor@mspsystem.com
-overtime=eman@mspsystem.com,sensor@mspsystem.com
-time_off=eman@mspsystem.com,sensor@mspsystem.com
-mc_form=eman@mspsystem.com,sensor@mspsystem.com
+night_access=eman@mspsystem.com,suriyati@mspsystem.com,kelvin@mspsystem.com
+leave=eman@mspsystem.com,suriyati@mspsystem.com,kelvin@mspsystem.com
+overtime=eman@mspsystem.com,suriyati@mspsystem.com,kelvin@mspsystem.com
+time_off=eman@mspsystem.com,suriyati@mspsystem.com,kelvin@mspsystem.com
+mc_form=eman@mspsystem.com,suriyati@mspsystem.com,kelvin@mspsystem.com
