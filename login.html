@@ -9,19 +9,23 @@
   <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
   <link rel="stylesheet" href="assets/stylesheets/theme.css" />
   <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+  <style>
+    .panel.panel-sign,
+    .panel.panel-sign .panel-body {
+      background: #ffffff;
+    }
+  </style>
 </head>
-<body>
+<body style="background: url('assets/images/loginbg.png') no-repeat center center fixed; background-size: cover;">
   <section class="body-sign">
     <div class="center-sign">
-      <a href="/" class="logo pull-left">
-        <img src="assets/images/deskhub.png" height="50" alt="JSOFT Admin" />
-      </a>
-
       <div class="panel panel-sign">
-        <div class="panel-title-sign mt-xl text-right">
-          <h2 class="title text-uppercase text-weight-bold m-none"><i class="fa fa-user mr-xs"></i> DeskHub Login</h2>
-        </div>
         <div class="panel-body">
+          <div class="text-center mb-lg">
+            <a href="/" class="logo">
+              <img src="assets/images/deskhub.png" height="50" alt="DeskHub" />
+            </a>
+          </div>
           <form id="loginForm">
             <div class="form-group mb-lg">
               <label>Username</label>
