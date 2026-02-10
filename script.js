@@ -48,7 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
               ? ['dashboard', 'inventory', 'controlpanel', 'adminforms', 'leaveform', 'userprofile', 'projects']
               : role === 'admin'
                 ? ['dashboard', 'inventory', 'adminforms', 'leaveform', 'userprofile', 'projects']
-                : ['dashboard', 'adminforms', 'leaveform', 'userprofile', 'projects']
+                : role === 'poweruser'
+                  ? ['dashboard', 'inventory', 'adminforms', 'leaveform', 'userprofile', 'projects']
+                  : ['dashboard', 'adminforms', 'leaveform', 'userprofile', 'projects']
           );
           const isAdmin = role === 'admin' || role === 'superadmin' || ['admin', 'deskhubadmin'].includes(username.toLowerCase());
           localStorage.setItem('user', JSON.stringify({ username, fullName, isAdmin, role, allowedApps }));
@@ -99,6 +101,16 @@ document.addEventListener('DOMContentLoaded', () => {
       'dataprocessinginfo',
       'emailsettings',
       'applicationforms',
+      'teamviewerstatus',
+      'operations-calendar', 'reports-calendar', 'leave-calendar',
+      'userprofile', 'formsrecords'
+    ],
+    poweruser: [
+      'dashboard',
+      'items', 'models', 'units', 'inventorylocation',
+      'adminforms', 'leaveform', 'nightaccess', 'overtime', 'timeoff', 'mcform',
+      'projects',
+      'dataprocessinginfo',
       'teamviewerstatus',
       'operations-calendar', 'reports-calendar', 'leave-calendar',
       'userprofile', 'formsrecords'
@@ -165,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const nav = document.querySelector('.nav-main');
   if (nav) {
     const allowed = allowedApps;
-    const isUserOnly = roleKey === 'user';
+    const isUserOnly = roleKey === 'user' || roleKey === 'poweruser';
 
     // Hide disallowed pages in the nav
     const disallowMap = [

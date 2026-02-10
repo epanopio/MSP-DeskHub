@@ -688,6 +688,7 @@ app.post('/api/login', async (req, res) => {
     const defaultByRole = {
       superadmin: ['dashboard', 'inventory', 'controlpanel', 'adminforms', 'leaveform', 'userprofile', 'projects', 'emailsettings'],
       admin: ['dashboard', 'inventory', 'adminforms', 'leaveform', 'userprofile', 'projects', 'emailsettings'],
+      poweruser: ['dashboard', 'inventory', 'adminforms', 'leaveform', 'userprofile', 'projects'],
       user: ['dashboard', 'adminforms', 'leaveform', 'userprofile', 'projects']
     };
     const defaultApps = defaultByRole[role] || defaultByRole.user;
