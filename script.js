@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     superadmin: [
       'dashboard',
       'items', 'models', 'units', 'inventorylocation',
-      'adminforms', 'leaveform', 'nightaccess', 'overtime', 'timeoff', 'mcform',
+      'adminforms', 'leaveform', 'nightaccess', 'overtime', 'claimoff', 'timeoff', 'mcform',
       'projects',
       'dataprocessinginfo',
       'emailsettings',
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     admin: [
       'dashboard',
       'items', 'models', 'units', 'inventorylocation',
-      'adminforms', 'leaveform', 'nightaccess', 'overtime', 'timeoff', 'mcform',
+      'adminforms', 'leaveform', 'nightaccess', 'overtime', 'claimoff', 'timeoff', 'mcform',
       'projects',
       'dataprocessinginfo',
       'emailsettings',
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     poweruser: [
       'dashboard',
       'items', 'models', 'units', 'inventorylocation',
-      'adminforms', 'leaveform', 'nightaccess', 'overtime', 'timeoff', 'mcform',
+      'adminforms', 'leaveform', 'nightaccess', 'overtime', 'claimoff', 'timeoff', 'mcform',
       'projects',
       'dataprocessinginfo',
       'teamviewerstatus',
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     user: [
       'dashboard',
       'inventorylocation',
-      'adminforms', 'leaveform', 'nightaccess', 'overtime', 'timeoff', 'mcform',
+      'adminforms', 'leaveform', 'nightaccess', 'overtime', 'claimoff', 'timeoff', 'mcform',
       'projects',
       'dataprocessinginfo',
       'teamviewerstatus',
@@ -148,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
       : path.includes('leaveform.html') ? 'leaveform'
       : path.includes('nightaccessform.html') ? 'nightaccess'
       : path.includes('overtimeform.html') ? 'overtime'
+      : path.includes('claimoffform.html') ? 'claimoff'
       : path.includes('timeoffform.html') ? 'timeoff'
       : path.includes('mcform.html') ? 'mcform'
       : (path.includes('manageusers.html') || path.includes('controlpanel.html')) ? 'manageusers'
@@ -259,6 +260,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const controlUl = controlLink.closest('ul');
       ensureMenuItem(controlUl, 'emailsettings.html', 'Email Settings', 'applicationforms.html');
       ensureMenuItem(controlUl, 'deskhublogs.html', 'DeskHub Logs', 'emailsettings.html');
+    }
+
+    const adminFormsLink = nav.querySelector('a[href$="nightaccessform.html"]');
+    if (adminFormsLink) {
+      const adminFormsUl = adminFormsLink.closest('ul');
+      ensureMenuItem(adminFormsUl, 'claimoffform.html', 'Claim Off Form', 'overtimeform.html', 'timeoffform.html');
     }
 
     // Reset all active/expanded states, then set only the current page as active

@@ -12,7 +12,7 @@ const https = require('https');
 const pool = require('./db');
 const calendarFile = path.join(__dirname, 'calendar-events.json');
 const emailSettingsFile = path.join(__dirname, '..', 'email-settings.txt');
-const emailSettingKeys = ['night_access', 'leave', 'overtime', 'time_off', 'mc_form'];
+const emailSettingKeys = ['night_access', 'leave', 'overtime', 'claim_off', 'time_off', 'mc_form'];
 
 function ensureCalendarFile() {
   if (!fs.existsSync(calendarFile)) {
@@ -300,6 +300,7 @@ function formTypeCode(formType) {
   if (key === 'night_access') return 'NAF';
   if (key === 'leave') return 'LVF';
   if (key === 'overtime') return 'OTF';
+  if (key === 'claim_off') return 'COF';
   if (key === 'time_off') return 'TOF';
   if (key === 'mc_form') return 'MCF';
   return 'FM';
@@ -746,6 +747,7 @@ app.post('/api/send-leave-pdf', async (req, res) => {
       time_off: 'Time Off Form',
       mc_form: 'MC Form',
       overtime: 'Overtime Form',
+      claim_off: 'Claim Off Form',
       leave: 'Leave Application Form'
     };
     const title = titles[formType] || titles.leave;
@@ -808,6 +810,15 @@ app.post('/api/send-leave-pdf', async (req, res) => {
         { label: 'Time From', value: req.body.time_from || '' },
         { label: 'Time To', value: req.body.time_to || '' },
         { label: 'Total Hours', value: req.body.total_hours || '' },
+        { label: 'Remarks', value: req.body.remarks || '' }
+      ];
+    } else if (formType === 'claim_off') {
+      fieldsList = [
+        { label: 'Control Number', value: controlNumber },
+        { label: 'Full Name', value: fullName },
+        { label: 'Submitted On', value: submitDate },
+        { label: 'Claim Off Date From', value: `${req.body.from_date || ''}   ${cb(req.body.from_am)} AM   ${cb(req.body.from_pm)} PM` },
+        { label: 'Claim Off Date To', value: `${req.body.to_date || ''}   ${cb(req.body.to_am)} AM   ${cb(req.body.to_pm)} PM` },
         { label: 'Remarks', value: req.body.remarks || '' }
       ];
     } else {
@@ -984,6 +995,7 @@ app.post('/api/forms/records/:id/send-status-email', async (req, res) => {
       time_off: 'Time Off Form',
       mc_form: 'MC Form',
       overtime: 'Overtime Form',
+      claim_off: 'Claim Off Form',
       leave: 'Leave Application Form'
     };
     const title = titles[formType] || titles.leave;
@@ -1036,6 +1048,16 @@ app.post('/api/forms/records/:id/send-status-email', async (req, res) => {
         { label: 'Time From', value: payload.time_from || '' },
         { label: 'Time To', value: payload.time_to || '' },
         { label: 'Total Hours', value: payload.total_hours || '' },
+        { label: 'Remarks', value: payload.remarks || '' }
+      ];
+    } else if (formType === 'claim_off') {
+      fieldsList = [
+        { label: 'Control Number', value: controlNumber },
+        { label: 'Status', value: statusText },
+        { label: 'Full Name', value: fullName },
+        { label: 'Submitted On', value: submittedOn },
+        { label: 'Claim Off Date From', value: `${payload.from_date || ''}   ${cb(payload.from_am)} AM   ${cb(payload.from_pm)} PM` },
+        { label: 'Claim Off Date To', value: `${payload.to_date || ''}   ${cb(payload.to_am)} AM   ${cb(payload.to_pm)} PM` },
         { label: 'Remarks', value: payload.remarks || '' }
       ];
     } else {

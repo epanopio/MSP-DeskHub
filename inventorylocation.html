@@ -150,15 +150,18 @@
                   <th>Inventory</th>
                   <th>Date</th>
                   <th>From</th>
+                  <th>From Bound</th>
                   <th>From Station</th>
                   <th>Time</th>
                   <th>To</th>
+                  <th>To Bound</th>
                   <th>To Station</th>
                   <th>Item</th>
                   <th>Model</th>
                   <th>Unit</th>
                   <th>Quantity</th>
                   <th>Name</th>
+                  <th>Remarks</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -212,9 +215,11 @@
         inventory: $('#invInventory'),
         date: $('#invDate'),
         from: $('#invFrom'),
+        fromBound: $('#invFromBound'),
         fromStn: $('#invFromStn'),
         time: $('#invTime'),
         to: $('#invTo'),
+        toBound: $('#invToBound'),
         toStn: $('#invToStn'),
         item: $('#invItem'),
         model: $('#invModel'),
@@ -222,6 +227,7 @@
         unitOther: $('#invUnitOther'),
         quantity: $('#invQuantity'),
         name: $('#invName'),
+        remarks: $('#invRemarks'),
         idx: $('#invIndex')
       };
 
@@ -274,15 +280,18 @@
               <td>${e.inventory || ''}</td>
               <td>${formatDateDisplay(e.date || '')}</td>
               <td>${e.from_location || ''}</td>
+              <td>${e.from_bound || ''}</td>
               <td>${e.from_stn || ''}</td>
               <td>${e.time || ''}</td>
               <td>${e.to_location || ''}</td>
+              <td>${e.to_bound || ''}</td>
               <td>${e.to_stn || ''}</td>
               <td>${itemName}</td>
               <td>${e.model || ''}</td>
               <td>${e.unit_serial || ''}</td>
               <td>${e.quantity || ''}</td>
               <td>${e.name || ''}</td>
+              <td>${e.inventory_remarks1 || ''}</td>
             </tr>
           `);
           if (realIdx === selectedIndex) tr.addClass('info');
@@ -329,9 +338,11 @@
         fields.inventory.val(e.inventory || '');
         fields.date.val(e.date || '');
         fields.from.val(e.from_location || '');
+        fields.fromBound.val(e.from_bound || 'None');
         fields.fromStn.val(e.from_stn || '');
         fields.time.val(e.time || '');
         fields.to.val(e.to_location || '');
+        fields.toBound.val(e.to_bound || 'None');
         fields.toStn.val(e.to_stn || '');
         fields.item.val(e.item_id || '');
         loadModelsForItem(e.item_id).then(() => {
@@ -341,6 +352,7 @@
         fields.quantity.val(e.quantity || '');
         const nameVal = e.name || (currentUser ? (currentUser.fullName || currentUser.username || '') : '');
         fields.name.val(nameVal);
+        fields.remarks.val(e.inventory_remarks1 || '');
         // Reset other fields
         fromOther.hide().val('');
         toOther.hide().val('');
@@ -375,20 +387,23 @@
       }
 
       function downloadInventoryCsv() {
-        const headers = ["Inventory","Date","From","From Station","Time","To","To Station","Item","Model","Unit/Serial","Quantity","Name"];
+        const headers = ["Inventory","Date","From","From Bound","From Station","Time","To","To Bound","To Station","Item","Model","Unit/Serial","Quantity","Name","Remarks"];
         const rows = entries.map(e => [
           e.inventory || '',
           e.date || '',
           e.from_location || '',
+          e.from_bound || '',
           e.from_stn || '',
           e.time || '',
           e.to_location || '',
+          e.to_bound || '',
           e.to_stn || '',
           itemsMap[e.item_id] || e.item_id || '',
           e.model || '',
           e.unit_serial || '',
           e.quantity || '',
-          e.name || ''
+          e.name || '',
+          e.inventory_remarks1 || ''
         ]);
         const csv = [headers, ...rows].map(r => r.map(toCsvValue).join(',')).join('\n');
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -438,14 +453,17 @@
           date: fields.date.val().trim(),
           time: fields.time.val().trim(),
           from_location: fromVal === 'other' ? otherFromVal : fromVal,
+          from_bound: fields.fromBound.val().trim(),
           from_stn: fields.fromStn.val().trim(),
           to_location: toVal === 'other' ? otherToVal : toVal,
+          to_bound: fields.toBound.val().trim(),
           to_stn: fields.toStn.val().trim(),
           item_id: fields.item.val() || null,
           model: fields.model.val(),
           unit_serial: unitVal === 'new' ? otherUnitVal : unitVal,
           quantity: fields.quantity.val().trim(),
-          name: fields.name.val().trim()
+          name: fields.name.val().trim(),
+          inventory_remarks1: fields.remarks.val().trim()
         };
         if (!data.inventory) return alert('Inventory Location is required.');
         if (!data.name) return alert('Name is required.');
@@ -582,54 +600,124 @@
                   <option value="Out">Out</option>
                 </select>
               </div>
+            </div>
+            <div class="col-sm-6">
               <div class="form-group">
                 <label>Date</label>
                 <input type="date" class="form-control" id="invDate">
               </div>
-              <div class="form-group">
-                <label>Time</label>
-                <input type="time" class="form-control" id="invTime">
-              </div>
-              <div class="form-group">
-                <label>Name</label>
-                <input type="text" class="form-control" id="invName" required>
-              </div>
             </div>
-            <div class="col-sm-6">
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
               <div class="form-group">
                 <label>From</label>
                 <select class="form-control" id="invFrom"></select>
                 <input type="text" class="form-control" id="invFromOther" placeholder="Enter location" style="margin-top:6px; display:none;">
               </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>Bound</label>
+                <select class="form-control" id="invFromBound">
+                  <option value="Inner Bound">Inner Bound</option>
+                  <option value="Outer Bound">Outer Bound</option>
+                  <option value="Expo Bound">Expo Bound</option>
+                  <option value="Changi Bound">Changi Bound</option>
+                  <option value="Woodlands Bound">Woodlands Bound</option>
+                  <option value="Bukit Panjang Bound">Bukit Panjang Bound</option>
+                  <option value="East Bound">East Bound</option>
+                  <option value="West Bound">West Bound</option>
+                  <option value="Others">Others</option>
+                  <option value="None" selected>None</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-4">
               <div class="form-group">
                 <label>From Station</label>
                 <input type="text" class="form-control" id="invFromStn">
               </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
               <div class="form-group">
                 <label>To</label>
                 <select class="form-control" id="invTo"></select>
                 <input type="text" class="form-control" id="invToOther" placeholder="Enter location" style="margin-top:6px; display:none;">
               </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>Bound</label>
+                <select class="form-control" id="invToBound">
+                  <option value="Inner Bound">Inner Bound</option>
+                  <option value="Outer Bound">Outer Bound</option>
+                  <option value="Expo Bound">Expo Bound</option>
+                  <option value="Changi Bound">Changi Bound</option>
+                  <option value="Woodlands Bound">Woodlands Bound</option>
+                  <option value="Bukit Panjang Bound">Bukit Panjang Bound</option>
+                  <option value="East Bound">East Bound</option>
+                  <option value="West Bound">West Bound</option>
+                  <option value="Others">Others</option>
+                  <option value="None" selected>None</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-4">
               <div class="form-group">
                 <label>To Station</label>
                 <input type="text" class="form-control" id="invToStn">
               </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>Time</label>
+                <input type="time" class="form-control" id="invTime">
+              </div>
+            </div>
+            <div class="col-sm-4">
               <div class="form-group">
                 <label>Item</label>
                 <select class="form-control" id="invItem" required></select>
               </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" class="form-control" id="invQuantity">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
               <div class="form-group">
                 <label>Model</label>
                 <select class="form-control" id="invModel"></select>
               </div>
+            </div>
+            <div class="col-sm-4">
               <div class="form-group">
                 <label>Unit/Serial Number</label>
                 <select class="form-control" id="invUnit"></select>
                 <input type="text" class="form-control" id="invUnitOther" placeholder="Enter new serial number" style="margin-top:6px; display:none;">
               </div>
+            </div>
+            <div class="col-sm-4">
               <div class="form-group">
-                <label>Quantity</label>
-                <input type="number" class="form-control" id="invQuantity">
+                <label>Name</label>
+                <input type="text" class="form-control" id="invName" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label>Remarks</label>
+                <textarea class="form-control" id="invRemarks" rows="2"></textarea>
               </div>
             </div>
           </div>

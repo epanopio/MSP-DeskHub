@@ -9,23 +9,26 @@ const mapRow = (r) => ({
   date: r.inv_date ? r.inv_date.toISOString().split('T')[0] : null,
   time: r.inv_time,
   from_location: r.from_location,
+  from_bound: r.from_bound,
   from_stn: r.from_stn,
   to_location: r.to_location,
+  to_bound: r.to_bound,
   to_stn: r.to_stn,
   item_id: r.item_id,
   brand: r.brand,
   model: r.model,
   unit_serial: r.unit_serial,
   quantity: r.quantity,
-  name: r.name
+  name: r.name,
+  inventory_remarks1: r.inventory_remarks1
 });
 
 // GET all
 router.get('/', async (_req, res) => {
   try {
     const result = await pool.query(`
-      SELECT id, inventory, inv_date, inv_time, from_location, from_stn, to_location, to_stn,
-             item_id, brand, model, unit_serial, quantity, name
+      SELECT id, inventory, inv_date, inv_time, from_location, from_bound, from_stn, to_location, to_bound, to_stn,
+             item_id, brand, model, unit_serial, quantity, name, inventory_remarks1
       FROM inventory_inout
       ORDER BY id DESC
     `);
@@ -44,29 +47,32 @@ router.post('/', async (req, res) => {
       date,
       time,
       from_location,
+      from_bound = null,
       from_stn,
       to_location,
+      to_bound = null,
       to_stn,
       item_id = null,
       brand = null,
       model = null,
       unit_serial = null,
       quantity = null,
-      name = null
+      name = null,
+      inventory_remarks1 = null
     } = req.body;
 
     if (!inventory) return res.status(400).json({ message: 'Inventory (In/Out) is required.' });
 
     const result = await pool.query(
       `INSERT INTO inventory_inout
-       (inventory, inv_date, inv_time, from_location, from_stn, to_location, to_stn, item_id, brand, model, unit_serial, quantity, name)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-       RETURNING id, inventory, inv_date, inv_time, from_location, from_stn, to_location, to_stn,
-                 item_id, brand, model, unit_serial, quantity, name`,
-      [inventory, date || null, time || null, from_location || null, from_stn || null, to_location || null, to_stn || null,
-       item_id, brand || null, model || null, unit_serial || null,
-       quantity !== undefined && quantity !== null && quantity !== '' ? Number(quantity) : null,
-       name || null]
+       (inventory, inv_date, inv_time, from_location, from_bound, from_stn, to_location, to_bound, to_stn, item_id, brand, model, unit_serial, quantity, name, inventory_remarks1)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+       RETURNING id, inventory, inv_date, inv_time, from_location, from_bound, from_stn, to_location, to_bound, to_stn,
+                 item_id, brand, model, unit_serial, quantity, name, inventory_remarks1`,
+      [inventory, date || null, time || null, from_location || null, from_bound || null, from_stn || null, to_location || null, to_bound || null, to_stn || null,
+        item_id, brand || null, model || null, unit_serial || null,
+        quantity !== undefined && quantity !== null && quantity !== '' ? Number(quantity) : null,
+       name || null, inventory_remarks1 || null]
     );
     res.status(201).json(mapRow(result.rows[0]));
   } catch (err) {
@@ -84,29 +90,32 @@ router.put('/:id', async (req, res) => {
       date,
       time,
       from_location,
+      from_bound = null,
       from_stn,
       to_location,
+      to_bound = null,
       to_stn,
       item_id = null,
       brand = null,
       model = null,
       unit_serial = null,
       quantity = null,
-      name = null
+      name = null,
+      inventory_remarks1 = null
     } = req.body;
     if (!inventory) return res.status(400).json({ message: 'Inventory (In/Out) is required.' });
 
     const result = await pool.query(
       `UPDATE inventory_inout
-       SET inventory=$1, inv_date=$2, inv_time=$3, from_location=$4, from_stn=$5, to_location=$6, to_stn=$7,
-           item_id=$8, brand=$9, model=$10, unit_serial=$11, quantity=$12, name=$13
-       WHERE id=$14
-       RETURNING id, inventory, inv_date, inv_time, from_location, from_stn, to_location, to_stn,
-                 item_id, brand, model, unit_serial, quantity, name`,
-      [inventory, date || null, time || null, from_location || null, from_stn || null, to_location || null, to_stn || null,
-       item_id, brand || null, model || null, unit_serial || null,
-       quantity !== undefined && quantity !== null && quantity !== '' ? Number(quantity) : null,
-       name || null, id]
+       SET inventory=$1, inv_date=$2, inv_time=$3, from_location=$4, from_bound=$5, from_stn=$6, to_location=$7, to_bound=$8, to_stn=$9,
+           item_id=$10, brand=$11, model=$12, unit_serial=$13, quantity=$14, name=$15, inventory_remarks1=$16
+       WHERE id=$17
+       RETURNING id, inventory, inv_date, inv_time, from_location, from_bound, from_stn, to_location, to_bound, to_stn,
+                 item_id, brand, model, unit_serial, quantity, name, inventory_remarks1`,
+      [inventory, date || null, time || null, from_location || null, from_bound || null, from_stn || null, to_location || null, to_bound || null, to_stn || null,
+        item_id, brand || null, model || null, unit_serial || null,
+        quantity !== undefined && quantity !== null && quantity !== '' ? Number(quantity) : null,
+       name || null, inventory_remarks1 || null, id]
     );
     if (!result.rows.length) return res.status(404).json({ message: 'Not found' });
     res.json(mapRow(result.rows[0]));

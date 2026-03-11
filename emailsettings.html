@@ -116,6 +116,10 @@
                 <input type="text" id="esOvertime" class="form-control">
               </div>
               <div class="form-group">
+                <label>Claim Off Form</label>
+                <input type="text" id="esClaimOff" class="form-control">
+              </div>
+              <div class="form-group">
                 <label>Time Off Form</label>
                 <input type="text" id="esTimeOff" class="form-control">
               </div>
@@ -154,6 +158,7 @@
           document.getElementById('esNight').value = data.night_access || '';
           document.getElementById('esLeave').value = data.leave || '';
           document.getElementById('esOvertime').value = data.overtime || '';
+          document.getElementById('esClaimOff').value = data.claim_off || '';
           document.getElementById('esTimeOff').value = data.time_off || '';
           document.getElementById('esMc').value = data.mc_form || '';
         } catch (err) {
@@ -169,6 +174,7 @@
             night_access: document.getElementById('esNight').value.trim(),
             leave: document.getElementById('esLeave').value.trim(),
             overtime: document.getElementById('esOvertime').value.trim(),
+            claim_off: document.getElementById('esClaimOff').value.trim(),
             time_off: document.getElementById('esTimeOff').value.trim(),
             mc_form: document.getElementById('esMc').value.trim()
           };
