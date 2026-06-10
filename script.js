@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'dashboard',
       'items', 'models', 'units', 'inventorylocation',
       'adminforms', 'leaveform', 'nightaccess', 'overtime', 'claimoff', 'timeoff', 'mcform',
-      'projects',
+      'projects', 'installationrecords', 'maintenancerecords',
       'dataprocessinginfo',
       'emailsettings',
       'applicationforms',
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'dashboard',
       'items', 'models', 'units', 'inventorylocation',
       'adminforms', 'leaveform', 'nightaccess', 'overtime', 'claimoff', 'timeoff', 'mcform',
-      'projects',
+      'projects', 'installationrecords', 'maintenancerecords',
       'dataprocessinginfo',
       'emailsettings',
       'applicationforms',
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'dashboard',
       'items', 'models', 'units', 'inventorylocation',
       'adminforms', 'leaveform', 'nightaccess', 'overtime', 'claimoff', 'timeoff', 'mcform',
-      'projects',
+      'projects', 'installationrecords', 'maintenancerecords',
       'dataprocessinginfo',
       'teamviewerstatus',
       'operations-calendar', 'reports-calendar', 'leave-calendar',
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'dashboard',
       'inventorylocation',
       'adminforms', 'leaveform', 'nightaccess', 'overtime', 'claimoff', 'timeoff', 'mcform',
-      'projects',
+      'projects', 'installationrecords', 'maintenancerecords',
       'dataprocessinginfo',
       'teamviewerstatus',
       'operations-calendar', 'reports-calendar', 'leave-calendar',
@@ -145,6 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const path = (window.location.pathname || '').toLowerCase();
   if (!path.includes('login.html') && !path.includes('restricted.html')) {
     const pageKey = path.includes('projects.html') ? 'projects'
+      : path.includes('installationrecords.html') ? 'installationrecords'
+      : path.includes('maintenancerecords.html') ? 'maintenancerecords'
       : path.includes('leaveform.html') ? 'leaveform'
       : path.includes('nightaccessform.html') ? 'nightaccess'
       : path.includes('overtimeform.html') ? 'overtime'
@@ -181,6 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const isUserOnly = roleKey === 'user' || roleKey === 'poweruser';
 
     // Hide disallowed pages in the nav
+    const hiddenNavHrefs = ['teamviewerstatus.html'];
+
     const disallowMap = [
       { key: 'manageusers', hrefs: ['manageusers.html', 'controlpanel.html'] },
       { key: 'applicationforms', hrefs: ['applicationforms.html'] },
@@ -199,6 +203,12 @@ document.addEventListener('DOMContentLoaded', () => {
             link.closest('li').style.display = 'none';
           }
         });
+      }
+    });
+    hiddenNavHrefs.forEach(h => {
+      const link = nav.querySelector(`a[href$="${h}"]`);
+      if (link && link.closest('li')) {
+        link.closest('li').style.display = 'none';
       }
     });
     if (isUserOnly) {
@@ -242,8 +252,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const opsLink = nav.querySelector('a[href$="projects.html"]');
     if (opsLink) {
       const opsUl = opsLink.closest('ul');
-      ensureMenuItem(opsUl, 'teamviewerstatus.html', 'TeamViewer Status', null, 'projects.html');
-      ensureMenuItem(opsUl, 'dataprocessinginfo.html', 'Data Processing Info', 'projects.html');
+      ensureMenuItem(opsUl, 'installationrecords.html', 'Installation Records', 'projects.html');
+      ensureMenuItem(opsUl, 'maintenancerecords.html', 'Maintenance Records', 'installationrecords.html');
+      ensureMenuItem(opsUl, 'dataprocessinginfo.html', 'Data Processing Info', 'maintenancerecords.html');
     }
 
     const calendarParent = Array.from(nav.querySelectorAll('.nav-parent > a'))

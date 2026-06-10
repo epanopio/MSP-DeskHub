@@ -2,7 +2,7 @@
 <html class="fixed">
 <head>
   <meta charset="UTF-8">
-  <title>DESKHUB | Email Settings</title>
+  <title>DESKHUB | Installation Records</title>
   <link rel="icon" type="image/png" href="assets/images/deskhubfavicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
@@ -20,6 +20,12 @@
         <a href="dashboard.html" class="logo">
           <img src="assets/images/deskhub.png" height="50" alt="DESKHUB" />
         </a>
+        <div class="visible-xs toggle-sidebar-left"
+             data-toggle-class="sidebar-left-opened"
+             data-target="html"
+             data-fire-event="sidebar-left-opened">
+          <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
       </div>
     </header>
 
@@ -29,8 +35,9 @@
           <div class="sidebar-toggle hidden-xs"
                data-toggle-class="sidebar-left-collapsed"
                data-target="html"
-               data-fire-event="sidebar-left-toggle">
-            <i class="fa fa-chevron-left"></i>
+               data-fire-event="sidebar-left-toggle"
+               title="Collapse sidebar">
+            <i class="fa fa-chevron-left" aria-label="Toggle sidebar"></i>
           </div>
         </div>
         <div class="nano">
@@ -61,7 +68,6 @@
                   <a><i class="fa fa-briefcase"></i><span>Operations</span></a>
                   <ul class="nav nav-children">
                     <li><a href="projects.html">Projects</a></li>
-                    <li style="display:none;"><a href="teamviewerstatus.html">TeamViewer Status</a></li>
                     <li><a href="dataprocessinginfo.html">Data Processing Info</a></li>
                   </ul>
                 </li>
@@ -73,12 +79,11 @@
                     <li><a href="reports-calendar.html">Reports Calendar</a></li>
                   </ul>
                 </li>
-                <li class="nav-parent nav-expanded nav-active">
+                <li class="nav-parent">
                   <a><i class="fa fa-cog"></i><span>Control Panel</span></a>
                   <ul class="nav nav-children">
                     <li><a href="manageusers.html">Manage Users</a></li>
                     <li><a href="applicationforms.html">Application Forms</a></li>
-                    <li class="nav-active"><a href="emailsettings.html">Email Settings</a></li>
                     <li><a href="deskhublogs.html">DeskHub Logs</a></li>
                   </ul>
                 </li>
@@ -92,44 +97,27 @@
                 <li><a href="#" onclick="logout(); return false;"><i class="fa fa-power-off"></i><span>Logout</span></a></li>
               </ul>
             </nav>
+            <div class="sidebar-footer text-muted" style="margin:16px; font-size:12px; line-height:1.5;">
+              MSP DeskHub version 1.0<br>
+              Powered by:<br>
+              Monitoring Solution Providers Pte. Ltd.
+            </div>
           </div>
         </div>
       </aside>
 
       <section role="main" class="content-body">
-        <header class="page-header"><h2>Email Settings</h2><div class="welcome-banner">Welcome, <span class="welcome-name"></span></div></header>
+        <header class="page-header">
+          <h2>Installation Records</h2>
+          <div class="welcome-banner">Welcome, <span class="welcome-name"></span></div>
+        </header>
+
         <section class="panel">
-          <header class="panel-heading"><h2 class="panel-title">Admin Forms Recipients</h2></header>
+          <header class="panel-heading">
+            <h2 class="panel-title">Installation Records</h2>
+          </header>
           <div class="panel-body">
-            <p class="text-muted">Enter one or more emails separated by comma.</p>
-            <form id="emailSettingsForm">
-              <div class="form-group">
-                <label>Night Access Form</label>
-                <input type="text" id="esNight" class="form-control" placeholder="ops@example.com, manager@example.com">
-              </div>
-              <div class="form-group">
-                <label>Leave Form</label>
-                <input type="text" id="esLeave" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>Overtime Form</label>
-                <input type="text" id="esOvertime" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>Claim Off Form</label>
-                <input type="text" id="esClaimOff" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>Time Off Form</label>
-                <input type="text" id="esTimeOff" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>MC Form</label>
-                <input type="text" id="esMc" class="form-control">
-              </div>
-              <button type="submit" class="btn btn-primary">Save Settings</button>
-              <span id="emailSettingsMsg" class="text-muted" style="margin-left:10px;"></span>
-            </form>
+            <p class="text-muted">This page is ready. Installation Records functions can be added here next.</p>
           </div>
         </section>
       </section>
@@ -137,68 +125,12 @@
   </section>
 
   <script src="assets/vendor/jquery/jquery.js"></script>
+  <script src="assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="assets/vendor/nanoscroller/nanoscroller.js"></script>
   <script src="assets/javascripts/theme.js"></script>
   <script src="assets/javascripts/theme.custom.js"></script>
   <script src="assets/javascripts/theme.init.js"></script>
   <script src="script.js"></script>
-  <script>
-    (async function () {
-      const msg = document.getElementById('emailSettingsMsg');
-      const form = document.getElementById('emailSettingsForm');
-      const setMsg = (text, isErr) => {
-        msg.textContent = text || '';
-        msg.className = isErr ? 'text-danger' : 'text-success';
-      };
-
-      async function loadSettings() {
-        try {
-          const res = await fetch('/api/email-settings');
-          const data = await res.json();
-          document.getElementById('esNight').value = data.night_access || '';
-          document.getElementById('esLeave').value = data.leave || '';
-          document.getElementById('esOvertime').value = data.overtime || '';
-          document.getElementById('esClaimOff').value = data.claim_off || '';
-          document.getElementById('esTimeOff').value = data.time_off || '';
-          document.getElementById('esMc').value = data.mc_form || '';
-        } catch (err) {
-          setMsg('Failed to load settings.', true);
-        }
-      }
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        setMsg('');
-        try {
-          const payload = {
-            night_access: document.getElementById('esNight').value.trim(),
-            leave: document.getElementById('esLeave').value.trim(),
-            overtime: document.getElementById('esOvertime').value.trim(),
-            claim_off: document.getElementById('esClaimOff').value.trim(),
-            time_off: document.getElementById('esTimeOff').value.trim(),
-            mc_form: document.getElementById('esMc').value.trim()
-          };
-          const res = await fetch('/api/email-settings', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          if (!res.ok) {
-            let detail = 'save failed';
-            try {
-              const j = await res.json();
-              detail = j.error || j.message || detail;
-            } catch (_) {}
-            throw new Error(detail);
-          }
-          setMsg('Settings saved.');
-        } catch (err) {
-          setMsg(`Failed to save settings: ${err.message || 'Unknown error'}`, true);
-        }
-      });
-
-      loadSettings();
-    })();
-  </script>
 </body>
 </html>

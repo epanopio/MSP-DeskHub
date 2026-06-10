@@ -10,13 +10,21 @@
   <link rel="stylesheet" href="assets/stylesheets/theme.css" />
   <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
   <style>
+    body.login-page {
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(61, 83, 105, 0.82), rgba(61, 83, 105, 0.82)),
+        #3d5369 url('assets/images/loginbg1.jpg') no-repeat center center fixed;
+      background-size: cover;
+      background-attachment: fixed;
+    }
     .panel.panel-sign,
     .panel.panel-sign .panel-body {
       background: #ffffff;
     }
   </style>
 </head>
-<body style="background: url('assets/images/loginbg.png') no-repeat center center fixed; background-size: cover;">
+<body class="login-page">
   <section class="body-sign">
     <div class="center-sign">
       <div class="panel panel-sign">

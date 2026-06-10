@@ -12,6 +12,38 @@
   <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
   <link rel="stylesheet" href="assets/stylesheets/theme-custom.css" />
   <script src="assets/vendor/modernizr/modernizr.js"></script>
+  <style>
+    .inventory-tabs {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      margin: 12px 0 18px;
+      border-bottom: 1px solid #d9d9d9;
+    }
+    .inventory-tab {
+      border: 1px solid #d9d9d9;
+      border-bottom: 0;
+      background: #f2f2f2;
+      color: #5f6b7a;
+      padding: 11px 18px;
+      font-size: 14px;
+      line-height: 1;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+    .inventory-tab:hover {
+      background: #ececec;
+      color: #304254;
+    }
+    .inventory-tab.active {
+      background: #fff;
+      color: #0f2d57;
+      font-weight: 700;
+      box-shadow: inset 0 3px 0 #4c4c4c;
+    }
+  </style>
 </head>
 <body>
   <section class="body">
@@ -133,6 +165,13 @@
               </div>
             </div>
 
+            <div class="inventory-tabs" id="inventoryTabs" role="tablist" aria-label="Inventory item filters">
+              <button type="button" class="inventory-tab active" data-tab="all">All</button>
+              <button type="button" class="inventory-tab" data-tab="total-station">Total Station</button>
+              <button type="button" class="inventory-tab" data-tab="sim-cards">Sim Cards</button>
+              <button type="button" class="inventory-tab" data-tab="others">Others</button>
+            </div>
+
             <div class="row">
               <div class="col-sm-6">
                 <span id="pageInfoTopInv"></span>
@@ -199,6 +238,7 @@
       let currentPage = 1;
       const pageSize = 100;
       let itemsMap = {};
+      let activeTab = 'all';
       const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
 
       // option sources
@@ -244,12 +284,25 @@
         }
       }
 
+      function getItemName(entry) {
+        return (itemsMap[entry.item_id] || entry.item || entry.item_id || '').toString();
+      }
+
+      function getTabCategory(entry) {
+        const itemName = getItemName(entry).trim().toLowerCase();
+        if (itemName.includes('total station')) return 'total-station';
+        if (itemName.includes('sim')) return 'sim-cards';
+        return 'others';
+      }
+
       function filteredEntries() {
         const t = (searchTerm || '').trim().toLowerCase();
-        if (!t) return entries;
-        return entries.filter(e =>
-        Object.values(e).some(v => (v || '').toString().toLowerCase().includes(t))
-      );
+        return entries.filter(e => {
+          if (activeTab !== 'all' && getTabCategory(e) !== activeTab) return false;
+          if (!t) return true;
+          return Object.values(e).some(v => (v || '').toString().toLowerCase().includes(t))
+            || getItemName(e).toLowerCase().includes(t);
+        });
       }
 
       function formatDateDisplay(val) {
@@ -273,7 +326,7 @@
         tableBody.empty();
         visible.forEach((e, idxLocal) => {
           const realIdx = entries.indexOf(e);
-          const itemName = itemsMap[e.item_id] || e.item || e.item_id || '';
+          const itemName = getItemName(e);
           const tr = $(`
             <tr data-idx="${realIdx}">
               <td>${realIdx + 1}</td>
@@ -387,8 +440,9 @@
       }
 
       function downloadInventoryCsv() {
+        const list = filteredEntries();
         const headers = ["Inventory","Date","From","From Bound","From Station","Time","To","To Bound","To Station","Item","Model","Unit/Serial","Quantity","Name","Remarks"];
-        const rows = entries.map(e => [
+        const rows = list.map(e => [
           e.inventory || '',
           e.date || '',
           e.from_location || '',
@@ -427,6 +481,14 @@
       $('#btnSearchInv').on('click', applySearch);
       $('#searchInv').on('keyup', function(e) { if (e.key === 'Enter') applySearch(); });
       $('#btnDownloadInv').on('click', downloadInventoryCsv);
+      $('#inventoryTabs').on('click', '.inventory-tab', function() {
+        const tab = $(this).data('tab') || 'all';
+        activeTab = tab;
+        currentPage = 1;
+        $('#inventoryTabs .inventory-tab').removeClass('active');
+        $(this).addClass('active');
+        render();
+      });
 
       // Delegated double-click to ensure modal opens reliably
       tableBody.off('dblclick').on('dblclick', 'tr', function(e) {
